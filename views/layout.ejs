@@ -11,7 +11,7 @@
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap"
-    rel="stylesheet">
+    rel="stylesheet"> 
     <!-- Css Styles -->
     <link rel="stylesheet" href="/stylesheets/bootstrap.min.css" type="text/css">
     <link rel="stylesheet" href="/stylesheets/elegant-icons.css" type="text/css">
@@ -35,19 +35,9 @@
     <!-- Page Preloder -->
 
 
-    <% if (signup) { %>
-
+    
+      <%- include('partials/userHeader') %>
         <%- body %>
-      <% } else if(login){ %>
-
-        <%- body %>
-
-        <% } else{ %>
-
-        <%- include('partials/userHeader') %>
-        <%- body %>
-
-      <% } %>
       
 
     <!-- Js Plugins -->

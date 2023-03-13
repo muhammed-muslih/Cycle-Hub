@@ -4,6 +4,10 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const expresslayout = require('express-ejs-layouts')
+const dotenv= require("dotenv").config()
+const db = require('./db')
+const colors = require('colors')
+const session = require('express-session')
 
 
 const adminRouter = require('./routes/admin');
@@ -14,13 +18,26 @@ const app = express();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
-
 app.use(expresslayout)
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(session({
+  secret:'your-secret-key',
+  resave:false,
+  saveUninitialized:true
+}))
+
+
+db.connect((err,db)=>{
+  if(err) {
+    console.log("database not connected",err);
+  }else{
+    console.log("dataBase connected successfully\n".cyan);
+  }
+})
 
 app.use('/', usersRouter);
 app.use('/admin', adminRouter);

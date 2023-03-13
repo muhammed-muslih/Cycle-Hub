@@ -1,0 +1,39 @@
+<div class="content">
+<table class="table table-hover table-fixed">
+  <!-- Table head  -->
+  <thead>
+    <tr>
+      <th>Number</th>
+      <th>firstName</th>
+      <th>lastName</th>
+      <th>Email</th>
+      <th>Phone Number</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+    
+
+    <!-- Table body  -->
+  <tbody>
+    <% for(var i =0;i<users.length;i++){ %>
+    <tr>
+      <th scope="row"><%= i+1 %></th>
+      <td><%= users[i].firstName %></td>
+      <td><%= users[i].lastName %></td>
+      <td><%= users[i].email %></td>
+      <td><%= users[i].phoneno %></td>
+      
+      <td> <% if(users[i].isBlocked){ %>
+        <a href="/admin/user-status/<%= users[i]._id %>" class="btn  btn-success">unblock</a>
+        <% }else{%>
+          <a href="/admin/user-status/<%= users[i]._id %>" class="btn btn-danger">block</a>
+        <% } %>
+      </td>
+
+    </tr>
+    <% } %>
+  </tbody>
+
+</table>
+       
+</div>

@@ -13,18 +13,22 @@
           </a>
         </div>
         <ul class="nav">
-          <li class="active ">
+
+          <li onclick="activeClass(this)">
             <a href="#">
               <i class="tim-icons icon-chart-pie-36"></i>
               <p>Dashboard</p>
             </a>
           </li>
-          <li>
-            <a href="#">
-              <i class="tim-icons icon-atom"></i>
-              <p>Icons</p>
+
+          <li onclick="activeClass(this)">
+            <a href="/admin/user-list">
+              <i class="tim-icons icon-single-02"></i>
+              <!-- <i class="tim-icons icon-atom"></i> -->
+              <p>User List</p>
             </a>
           </li>
+
           <li>
             <a href="#">
               <i class="tim-icons icon-pin"></i>
@@ -148,3 +152,8 @@
         </div>
       </div>
       <!-- End Navbar -->
+      <script>
+        function activeClass(element){
+          element.classList.add('active')
+        }
+      </script>

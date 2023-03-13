@@ -11,10 +11,10 @@
             <div class="tab-content" id="myTabContent">
                 <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
                         <h1 class="register-heading"> <b>Cycle Hub</b> </h1>
-                   
+                       
                         <div class="row register-form">
                            <div class="col-md-9">
-                               <form action="" id="loginSubmit">
+                               <form action="/login" method="post" id="loginSubmit">
                                    <div class="form-group">
                                      <input type="email" class="form-control" placeholder="Your Email *" name="email" id="email" value=""/>
                                      <span id="email-error" style="color: #F90A0A;"></span>
@@ -34,8 +34,18 @@
                                     <!-- <a href="" style="color:#495057 ;text-align: center;margin-left: 12.5rem;" >login with otp</a> -->
                                   <div class="form-group">
                                    <a href="/signup" style="color:#495057 ;" >create account </a>
-                                 
                                  </div>
+                                 <% if(message){%>
+                                  <span class="text-danger error-message"><%=message%></span>
+                                  <script>
+                                      setTimeout(()=>{
+                                          var message = document.querySelector('.error-message');
+                                          if(message){
+                                              message.style.display="none"
+                                          }
+                                      },5000)
+                                  </script>
+                                  <% } %>
                               </form>
                               <!-- <hr style="margin-top: 1.5rem;"><br> -->
                             
