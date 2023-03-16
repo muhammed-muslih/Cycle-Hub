@@ -8,6 +8,7 @@ const dotenv= require("dotenv").config()
 const db = require('./db')
 const colors = require('colors')
 const session = require('express-session')
+const nocache = require('nocache')
 
 
 const adminRouter = require('./routes/admin');
@@ -24,11 +25,18 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(nocache())
+app.use((req, res, next)=> {
+  res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+  next();
+});
 app.use(session({
-  secret:'your-secret-key',
-  resave:false,
-  saveUninitialized:true
-}))
+  secret: 'my-secret-key',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { maxAge: 1800000 } // session expires after 30 minutes of inactivity
+}));
+
 
 
 db.connect((err,db)=>{
@@ -55,7 +63,7 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  res.render('error');  
 });
 
 module.exports = app;

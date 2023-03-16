@@ -1,0 +1,63 @@
+<div class="content">
+
+    <h1 style="text-align: center;font-weight: 900;">BRAND LIST</h1>
+
+<!-- Button trigger modal -->
+<button type="button" class="btn" data-toggle="modal" data-target="#exampleModalLong">
+    ADD BRANDS
+  </button>
+  
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title" id="exampleModalLongTitle">Add Brand</h2>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+
+          
+                
+                  <form action="/admin/addBrand" method="post" >
+                      <div class="form-group">
+                        <label  for="forProductName" style="color: black;">Brand Name</label>  
+                        <input type="text" class="form-control" id="" name="brandName" style="color: black;">
+                      </div>
+
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" style="margin-left: 15rem;">Close</button>
+                        <button type="submit" class="btn btn-secondary">Submit</button>
+                      </div>
+
+                    </form> 
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+   
+  <table class="table table-hover table-fixed mt-5">
+    <thead>
+        <tr>
+          <th>Number</th>
+          <th>BRAND NAME</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% for(var i =0;i<brands.length;i++) { %>
+        <tr>
+        <td><%= i+1 %></td>
+        <td><%=brands[i].brandName %></td>
+        </tr>
+        <% } %>
+      </tbody>
+    </table>
+
+
+   </div>

@@ -11,9 +11,9 @@
 
 
 <!-- Page Preloder -->
-<div id="preloder">
+<!-- <div id="preloder">
     <div class="loader"></div>
-</div>
+</div> -->
 
 <!-- Offcanvas Menu Begin -->
 <div class="offcanvas-menu-overlay"></div>
@@ -50,7 +50,7 @@
         <div class="row">
             <div class="col-lg-3 col-md-3">
                 <div class="header__logo">
-                    <a href=""  style="text-decoration: none;"><p style="color: black;font-size: xxx-large;font-weight: 800;">Cycle Hub.</p></a>
+                    <a href="/"  style="text-decoration: none;"><p style="color: black;font-size: xxx-large;font-weight: 800;">Cycle Hub.</p></a>
                 </div>
             </div>
 
@@ -59,7 +59,7 @@
 
                 <nav class="header__menu mobile-menu">
                     <ul>
-                        <li class="active"><a href="./index.html"  style="text-decoration: none;">Home</a></li>
+                        <li class="active"><a href="/"  style="text-decoration: none;">Home</a></li>
 
                         <li><a href="./shop.html"  style="text-decoration: none;"> <i class="fa-solid fa-tricycle"> </i> Shop</a>
                         
@@ -127,11 +127,13 @@
                     <div class="dropdown">
                        
                         <ul>
-                            <% if(user) { %>
+                            <% if(locals.loggedIn) { %>
                             <li><a href="/"><%= user %></a></li>
                             <li><a href="/logout">logout</a></li>
                             <% }else{ %>
                                 <li><a href="/login">login</a></li>
+                                <li><a href="/signup">create account</a></li>
+
                             <% } %>
 
                         

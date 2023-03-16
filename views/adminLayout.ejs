@@ -21,17 +21,20 @@
 </head>
 <body class="">
 
+   <% if(locals.adminLogin) { %>
+    <%- body %>
+
+  <% } else { %>
 
     <%- include('partials/adminHeader') %>
     <%- body %>
 
-
-
-
-
+  <% } %>
+   
     <!--   Core JS Files   -->
   <script src="/javascripts/core/jquery.min.js"></script>
   <script src="/javascripts/core/popper.min.js"></script>
+  <script src="/javascripts/core/bootstrap.min.js"></script>
 
   <!-- <script src="/javascripts/core/bootstrap.min.js"></script> -->
   <script src="/javascripts/plugins/perfect-scrollbar.jquery.min.js"></script>

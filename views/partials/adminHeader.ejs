@@ -1,21 +1,18 @@
 <div class="wrapper">
     <div class="sidebar">
-      <!--
-        Tip 1: You can change the color of the sidebar using: data-color="blue | green | orange | red"
-    -->
-      <div class="sidebar-wrapper">
+   
+      <div class="sidebar-wrapper" style="background-color: #1e1e2f;">
         <div class="logo">
-          <a href="javascript:void(0)" class="simple-text logo-mini">
-            CT
-          </a>
-          <a href="javascript:void(0)" class="simple-text logo-normal">
-            Creative Tim
+        
+          <a href="/admin" class="simple-text active" style="margin-left: .5rem;">
+            <H4 style="font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+            font-weight: 800;text-align: center;">ADMIN PANEL</H4>
           </a>
         </div>
         <ul class="nav">
 
           <li onclick="activeClass(this)">
-            <a href="#">
+            <a href="/admin">
               <i class="tim-icons icon-chart-pie-36"></i>
               <p>Dashboard</p>
             </a>
@@ -29,31 +26,36 @@
             </a>
           </li>
 
-          <li>
-            <a href="#">
-              <i class="tim-icons icon-pin"></i>
-              <p>Maps</p>
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              <i class="tim-icons icon-bell-55"></i>
-              <p>Notifications</p>
-            </a>
-          </li>
-          <li>
-            <a href="#">
+          <li onclick="activeClass(this)">
+            <a href="/admin/productList">
               <i class="tim-icons icon-single-02"></i>
-              <p>User Profile</p>
+              <!-- <i class="tim-icons icon-atom"></i> -->
+              <p>PRODUCT VIEW</p>
+            </a>
+          </li>
+
+          <li onclick="activeClass(this)">
+            <a href="/admin/categoryList">
+              <i class="tim-icons icon-bell-55"></i>
+              <!-- <i class="tim-icons icon-atom"></i> -->
+              <p>Category</p>
             </a>
           </li>
           <li>
-            <a href="#">
+            <a href="/admin/addBrand">
+              <i class="tim-icons icon-single-02"></i>
+              <p>Brand</p>
+            </a>
+          </li>
+
+          <li>
+            <a href="">
               <i class="tim-icons icon-puzzle-10"></i>
-              <p>Table List</p>
+              <p>samples</p>
             </a>
           </li>
           <li>
+
             <a href="#">
               <i class="tim-icons icon-align-center"></i>
               <p>Typography</p>
@@ -76,18 +78,19 @@
     </div>
     <div class="main-panel">
       <!-- Navbar -->
-    
-      <nav class="navbar navbar-expand-lg navbar-absolute navbar-transparent">
+    <section >
+      <nav class="navbar navbar-expand-lg navbar-absolute navbar-transparent" style="background-color: b1e1e2f;position: fixed;width: 100%;
+       z-index: 100;height: 10%;">
         <div class="container-fluid">
           <div class="navbar-wrapper">
             <div class="navbar-toggle d-inline">
               <button type="button" class="navbar-toggler">
-                <span class="navbar-toggler-bar bar1"></span>
+                <span class="navbar-toggler-bar bar1">hello</span>
                 <span class="navbar-toggler-bar bar2"></span>
                 <span class="navbar-toggler-bar bar3"></span>
               </button>
             </div>
-            <a class="navbar-brand" href="javascript:void(0)">Dashboard</a>
+            <a class="navbar-brand" href="/admin/logout"><H2 style="font-weight: 900;margin-top: 2rem;">CYCLEHUB</H2></a>
           </div>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-bar navbar-kebab"></span>
@@ -96,27 +99,11 @@
           </button>
           <div class="collapse navbar-collapse" id="navigation">
             <ul class="navbar-nav ml-auto">
-              <li class="search-bar input-group">
+              <!-- <li class="search-bar input-group">
                 <button class="btn btn-link" id="search-button" data-toggle="modal" data-target="#searchModal"><i class="tim-icons icon-zoom-split" ></i>
                   <span class="d-lg-none d-md-block">Search</span>
                 </button>
-              </li>
-              <li class="dropdown nav-item">
-                <a href="javascript:void(0)" class="dropdown-toggle nav-link" data-toggle="dropdown">
-                  <div class="notification d-none d-lg-block d-xl-block"></div>
-                  <i class="tim-icons icon-sound-wave"></i>
-                  <p class="d-lg-none">
-                    Notifications
-                  </p>
-                </a>
-                <ul class="dropdown-menu dropdown-menu-right dropdown-navbar">
-                  <li class="nav-link"><a href="#" class="nav-item dropdown-item">Mike John responded to your email</a></li>
-                  <li class="nav-link"><a href="javascript:void(0)" class="nav-item dropdown-item">You have 5 more tasks</a></li>
-                  <li class="nav-link"><a href="javascript:void(0)" class="nav-item dropdown-item">Your friend Michael is in town</a></li>
-                  <li class="nav-link"><a href="javascript:void(0)" class="nav-item dropdown-item">Another notification</a></li>
-                  <li class="nav-link"><a href="javascript:void(0)" class="nav-item dropdown-item">Another one</a></li>
-                </ul>
-              </li>
+              </li> -->
               <li class="dropdown nav-item">
                 <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
                   <div class="photo">
@@ -128,7 +115,7 @@
                   </p>
                 </a>
                 <ul class="dropdown-menu dropdown-navbar">
-                  <li class="nav-link"><a href="javascript:void(0)" class="nav-item dropdown-item">Profile</a></li>
+                  <li class="nav-link"><a href="javascript:void(0)" class="nav-item dropdown-item">Admin</a></li>
                   <li class="nav-link"><a href="javascript:void(0)" class="nav-item dropdown-item">Settings</a></li>
                   <li class="dropdown-divider"></li>
                   <li class="nav-link"><a href="javascript:void(0)" class="nav-item dropdown-item">Log out</a></li>
@@ -139,7 +126,8 @@
           </div>
         </div>
       </nav>
-      <div class="modal modal-search fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchModal" aria-hidden="true">
+    </section>
+      <!-- <div class="modal modal-search fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchModal" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
@@ -150,10 +138,12 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> -->
       <!-- End Navbar -->
+      <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
       <script>
         function activeClass(element){
           element.classList.add('active')
         }
       </script>
+      

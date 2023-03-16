@@ -15810,9 +15810,9 @@ img {
   z-index: 1050;
 }
 
-.navbar.navbar-transparent {
+/* .navbar.navbar-transparent {
   background: transparent !important;
-}
+} */
 
 .navbar.bg-white .navbar-nav .search-bar.input-group i {
   color: #222a42;
@@ -19247,8 +19247,8 @@ textarea.form-control:active {
   overflow: hidden !important;
   overflow-anchor: none;
   -ms-overflow-style: none;
-  touch-action: auto;
   -ms-touch-action: auto;
+  touch-action: auto;
 }
 
 /*
@@ -19257,8 +19257,8 @@ textarea.form-control:active {
 .ps__rail-x {
   display: none;
   opacity: 0;
-  transition: background-color .2s linear, opacity .2s linear;
   -webkit-transition: background-color .2s linear, opacity .2s linear;
+  transition: background-color .2s linear, opacity .2s linear;
   height: 15px;
   /* there must be 'bottom' or 'top' for ps__rail-x */
   bottom: 0px;
@@ -19269,8 +19269,8 @@ textarea.form-control:active {
 .ps__rail-y {
   display: none;
   opacity: 0;
-  transition: background-color .2s linear, opacity .2s linear;
   -webkit-transition: background-color .2s linear, opacity .2s linear;
+  transition: background-color .2s linear, opacity .2s linear;
   width: 15px;
   /* there must be 'right' or 'left' for ps__rail-y */
   right: 0;
@@ -19321,8 +19321,8 @@ textarea.form-control:active {
 .ps__thumb-y {
   background-color: #aaa;
   border-radius: 6px;
-  transition: background-color .2s linear, width .2s ease-in-out;
   -webkit-transition: background-color .2s linear, width .2s ease-in-out;
+  transition: background-color .2s linear, width .2s ease-in-out;
   width: 6px;
   /* there must be 'right' for ps__thumb-y */
   right: 2px;

@@ -1,0 +1,62 @@
+<div class="content" id="addProductModal">
+    <form action="/admin/add-product"  method="post" enctype="multipart/form-data">
+        <div class="form-group">
+          <!-- <label for="exampleInputEmail1">Email address</label> -->
+          <label  for="forProductName" class="text-white">PRODUCT NAME</label>  
+          <input type="text" class="form-control" id="" name="productName">
+          <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
+        </div>
+
+        <div class="form-group">
+           <label  for="product_description" class="text-white">PRODUCT DESCRIPTION</label>
+            <textarea type="" class="form-control" id="" style="border:solid 1px #2b3553;" name="productDescription"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label  for="product_category" class="text-white">PRODUCT CATEGORY</label>
+            <select id="product_category" name="category" class="form-control">
+              <option selected>Select Category</option>
+              <% for(var i =0;i<category.length;i++){ %>
+              <option style="background-color: black;" value="<%= category[i]._id %>"><%= category[i].categoryName %></option>
+              <% } %>
+            </select>
+           </div>
+
+           <div class="form-group">
+            <label  for="product_category" class="text-white">PRODUCT BRAND</label>
+            <select id="product_category" name="brand" class="form-control">
+              <option selected >Select Brand</option>
+              <% for(var i =0;i<brand.length;i++){ %>
+              <option style="background-color: black;" value="<%= brand[i]._id %>"><%= brand[i].brandName %></option>
+              <% } %>
+            </select>
+           </div>
+
+           <div class="form-group">
+            <label  for="product_categorie" class="text-white">PRODUCT PRICE</label>
+            <input type="number" class="form-control" id="" name="price">
+           </div>
+
+           <div class="form-group">
+            <label  for="product_categorie" class="text-white">QUANTITY</label>
+            <input type="number" class="form-control" id="" name="quantity" >
+           </div>
+           <div class="form-group">
+            <label  for="product_categorie" class="text-white">PRODUCT IMAGES</label>
+              <div class="custom-file">
+                <input type="file" class="custom-file-input" id="customFile" name="image" multiple>
+                <label class="custom-file-label" for="customFile">Choose file</label>
+              </div>
+           </div>
+        <button type="submit" class="btn btn-primary ">Submit</button>
+        <a href="/admin/productList" class="btn submit text-white" id="btn">close</a>
+      </form> 
+</div>
+<script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
+<script>
+    // Add the following code if you want the name of the file appear on select
+    $(".custom-file-input").on("change", function() {
+      var fileName = $(this).val().split("\\").pop();
+      $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+    });
+    </script>

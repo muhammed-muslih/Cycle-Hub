@@ -1,5 +1,4 @@
 const db = require('../db')
-const dotenv= require("dotenv").config()
 const ObjectId= require("mongodb-legacy").ObjectId
 
 module.exports= {
@@ -12,6 +11,12 @@ module.exports= {
     emailExistOrNot : async (email)=>{
         const emailExistOrNot = await db.getDB().collection(process.env.user_collection).findOne({email:email});
         return emailExistOrNot;
+    },
+    phoneNoExistOrNOt : async (phoneno)=>{
+        const phoneNoExistOrNot = db.getDB().collection(process.env.user_collection).findOne({phoneno:phoneno})
+        console.log("phone  : ",phoneNoExistOrNot);
+        return phoneNoExistOrNot
+
     },
     findAllUser : async()=>{
         const users = await db.getDB().collection(process.env.user_collection).find({}).toArray()

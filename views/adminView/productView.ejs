@@ -1,0 +1,90 @@
+<div class="content">
+
+<h1 style="text-align: center;font-weight: 900;">PRODUCT LIST</h1>
+
+<div style="position: fixed;">
+    <a href="/admin/add-product" class="btn submit">Add Product</a>
+</div>
+  <div style="margin-top: 6rem;">
+    <table class="table table-hover table-fixed mt-5">
+        <!-- Table head  -->
+        <thead>
+          <tr>
+            <th>NUBER</th>
+            <th>PRODUCT NAME</th>
+            <th>PRODUCT DESCRIPTION</th>
+            <th>CATEGORY</th>
+            <th>BRAND</th>
+            <th>PRICE</th>
+            <th>QUANTITY</th>
+            <th>Image</th>
+            <th>EDIT</th>
+            <th>DELETE</th>
+          </tr>
+        </thead>
+          
+      
+          <!-- Table body  -->
+        <tbody>
+          <% for(var i =0;i<products.length;i++){ %>
+          <tr>
+            <th scope="row"><%= i+1 %></th>
+            <td><%= products[i].productName %></td>
+            <td><%= products[i].productDescription %></td>
+            <td><%= products[i]. categoryDetails[0].categoryName %></td>
+            <td><%= products[i].brandDetails[0].brandName%></td>
+            <td><%= products[i]. price %></td>
+            <td><%= products[i]. quantity %></td>
+            <td><img src="<%= products[i].images[0] %>" alt="" srcset="" style="width: 4rem;height: 3.5rem;"></td>
+
+
+
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Delete product!</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <p style="color: black;">Are You Sure,Do You Want to Delete this Product ? </p>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn " data-dismiss="modal" style="margin-left: 18rem;">No</button>
+                    <a href="/admin/deleteProduct/<%=products[i]._id %>" class="btn" id="cnfrmBtn">yes</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+            <td><a href="/admin/editProduct/<%=products[i]._id %>" class="btn btn-success">EDIT</a></td>
+            <td><a href="" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal" id="deletmodal">DELETE</a> </td>
+          </tr>
+          <% } %>
+        </tbody>
+      </table>
+
+    </div>
+</div>
+
+<!-- <script>
+ 
+
+var deleteButton = document.getElementById("deletmodal");
+
+// Add a click event listener to the button
+ deleteButton.addEventListener("click", function() {
+  // Get the value of the "data-my-attribute" attribute
+  var myAttributeValue = deleteButton.getAttribute("href");
+  
+  // Get the element where you want to set the attribute value
+  var setElement = document.getElementById("cnfrmBtn");
+  
+  // Set the value of the "data-my-attribute" attribute of the element
+  myElement.setAttribute("href",setElement);
+});
+
+</script> -->
