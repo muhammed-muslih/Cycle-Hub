@@ -98,6 +98,29 @@ module.exports={
             }
         })
         console.log(result);
+    },
+    findShopPageProduct : async(categoryId)=>{
+        const products = await db.getDB().collection(process.env.product_collection).aggregate([
+            {
+                $lookup:{
+                    from:"category",
+                    localField:"category",
+                    foreignField:"_id",
+                    as:"categoryDetails"
+
+                }
+
+            },{
+                $lookup:{
+                    from:"brand",
+                    localField:"brand",
+                    foreignField:"_id",
+                    as:"brandDetails"
+                }
+            }
+        ]).toArray()
+
+        return products
     }
 
 

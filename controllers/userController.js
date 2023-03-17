@@ -1,5 +1,9 @@
+const productServices = require('../services/productServices')
+const categoryServices = require('../services/categoryService')
+
+
 module.exports = {
-    homePageRender:(req,res,next)=>{
+    homePageRender:async(req,res,next)=>{
         const user=req.session.userName
         console.log(user);
         if(req.session.loggedIn){
@@ -30,6 +34,13 @@ module.exports = {
         req.session.userName=null
         req.session.loggedIn=false
         res.redirect('/')
+    },
+
+    renderShopePage :  async (req,res)=>{
+        const categoryId=req.params.id
+        const products=await productServices.findShopPageProduct(categoryId)
+        console.log(products);
+        res.render('userView/shopePage',{products})
     }
     
 }

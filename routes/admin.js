@@ -42,6 +42,19 @@ router.route('/editProduct/:id')
 .get(adminController.renderEditproductPage)
 .post(upload.array('image',4),adminController.editProduct)
 
+//productListOrUnlist
+router.get('/categoryListOrUnlist/:id',adminController.categoryListorunlist)
+//edit category
+router.post('/editCategory/:id',adminController.editCategory)
+router.get('/editCategory/:id',adminController.editCategory)
+
+//brand list or unlist
+router.get("/brandListorunlist/:id",adminController.brandListOrUnlist)
+
+//edit brand
+router.post('/editbrand/:id',adminController.updateBrand)
+
+
 
 
 

@@ -17,6 +17,8 @@ router.route('/login')
 
 router.get('/logout',userController.sessionDestroy)
 
+router.get('/shopepage/',userController.renderShopePage)
+
 
 
 

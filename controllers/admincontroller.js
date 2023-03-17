@@ -42,8 +42,8 @@ module.exports={
 
     },
     renderProductAddPage : async (req,res)=>{
-        const category = await categoryService.findAllCategory()
-        const brand = await brandService.findAllBrand()
+        const category = await categoryService.findListedAllCategory()
+        const brand = await brandService.findListedBrand()
         res.render('adminView/addProduct',{layout:"adminLayout",category,brand})
     },
 
@@ -67,14 +67,22 @@ module.exports={
    },
    addCategory: async(req,res)=>{
     let {categoryName} = req.body
-    await categoryService.addCategory(categoryName)
-    res.redirect('/admin/categoryList')
+    const iscategoryAlreadyExist = await categoryService.isCategoryAlreadyExist(categoryName)
+    if(iscategoryAlreadyExist){
+        res.redirect('/admin/categoryList?message=Category name already exist')
+    }else{
+        await categoryService.addCategory(categoryName)
+        res.redirect('/admin/categoryList')
+    }
 
    },
 
    renderCategoryList:async (req,res)=>{
+    const message = req.query.message
+    console.log(message);
     const category= await categoryService.findAllCategory()
-    res.render('adminview/CategoryList',{layout:"adminLayout",category})
+    // const oneCategory = await categoryService.findoneCategory(id)
+    res.render('adminview/CategoryList',{layout:"adminLayout",category,message})
 
    },
 
@@ -85,14 +93,22 @@ module.exports={
    },
 
    renderBrandList : async (req,res)=>{
+    let message = req.query.message
+    console.log(message);
     const brands = await brandService.findAllBrand()
-    res.render('adminView/brandList',{layout:"adminLayout",brands})
+    res.render('adminView/brandList',{layout:"adminLayout",brands,message})
    },
 
    addBrand:async (req,res)=>{
     let {brandName}=req.body
-    await brandService.addBrand(brandName)
-    res.redirect('/admin/addBrand')
+    const isBfrandExist = await brandService.isBrandExist(brandName)
+    if(isBfrandExist){
+        res.redirect('/admin/addBrand?message=brand name already exist')
+
+    }else{
+        await brandService.addBrand(brandName)
+        res.redirect('/admin/addBrand')
+    }
    },
    deleteProduct : async(req,res)=>{
 
@@ -141,7 +157,45 @@ module.exports={
         console.log(err);
     }
     
+   },
+   categoryListorunlist: async (req,res)=>{
+
+    const categoryId= req.params.id
+    await categoryService.categoryListOrUnlist(categoryId)
+    res.redirect('/admin/CategoryList')
+
+   },
+   editCategory:async(req,res)=>{
+    const categoryId = req.params.id
+    let {categoryName}=req.body
+    const iscategoryAlreadyExist = await categoryService.isCategoryAlreadyExist(categoryName)
+    if(iscategoryAlreadyExist){
+        res.redirect('/admin/categoryList?message=Category name already exist')
+    }else{
+        await categoryService.updateCategory(categoryId,categoryName)
+        res.redirect('/admin/categoryList')
+    }
+    
+
+   },
+   brandListOrUnlist : async (req,res)=>{
+    const brandId = req.params.id
+    await brandService.brandListorunlist(brandId)
+    res.redirect('/admin/addBrand')
+   },
+   updateBrand : async (req,res)=>{
+    const brandId = req.params.id
+    let {brandName}=req.body
+    const isBrandExist = await brandService.isBrandExist(brandName)
+    if(isBrandExist){
+        res.redirect('/admin/addBrand?message=brand name already exist')
+
+    }else{
+        await brandService.updateBrand(brandId,brandName)
+        res.redirect('/admin/addBrand')
+    }
    }
+   
    
    
         

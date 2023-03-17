@@ -6,12 +6,22 @@
  <div style="position: fixed;">
   <a class="btn submit text-white" id="btn">Add Category</a>
 </div>
-
+<div style="align-items: center;">
+  <!-- <% if(locals.message){%> -->
+<span class="text-danger message" style="margin-left: 13rem;"><%=locals.message%></span>
+<script>
+  setTimeout(()=>{
+    var message = document.querySelector('.message')
+    message.style.display="none"
+  },3000)
+</script>
+<!-- <%}%> -->
+</div>
 <!-- modal add category start -->
 
 <div id="categoryModal" style="display: none;">
   <div style="text-align: center;">
-    <h1>ADD CATEGORY</h1>
+    <h4 style="font-weight: 400;">ADD CATEGORY</h4>
   </div>
     <form action="/admin/addCategory"  method="post" >
         <div class="form-group">
@@ -27,11 +37,13 @@
 
 <!-- modal add category end -->
 
-    <table class="table table-hover table-fixed mt-5">
+    <table class="table table-hover table-fixed" style="margin-top: 7rem;">
     <thead>
         <tr>
           <th>Number</th>
           <th>CATEGORY NAME</th>
+          <th>LIST OR UNLIST</th>
+          <th>DELETE</th>
         </tr>
       </thead>
       <tbody>
@@ -39,10 +51,59 @@
         <tr>
         <td scope="row"><%= i+1 %></td>
         <td><%= category[i].categoryName %></td>
+        <td>
+       <%  if(category[i].isList) {%>
+        <a href="/admin/categoryListOrUnlist/<%=category[i]._id%>" class="btn btn-danger">UNLIST</a>
+        <%} else {%>
+        <a href="/admin/categoryListOrUnlist/<%=category[i]._id%>" class="btn btn-success">LIST</a>
+      <%}%>
+        </td>
+        <td> <a href="/admin/editCategory/<%=category[i]._id %>" class="btn btn-info" data-toggle="modal" data-target="#modal<%=category[i]._id %>">EDIT</a></td>
         </tr>
         <%}%>
       </tbody>
     </table>
+
+
+
+
+<% for(var i=0;i<category.length;i++) {%>
+<!-- Modal -->
+<div class="modal fade" id="modal<%=category[i]._id %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle"></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+
+       
+            <h3 style="text-align: center; color: black;font-weight: 900;" >Edit Category</h3>
+            <form action="/admin/editCategory/<%=category[i]._id %>"  method="post" id="editCategoryForm">
+                <div class="form-group">
+                  <label  for="forProductName" style="color: black;">CATEGORY NAME</label>  
+                  <input type="text" class="form-control" id="" name="categoryName" value="<%=category[i].categoryName%>" style="color: black;">
+                </div>
+
+                <div class="form-group">
+                  <button type="submit" class="btn btn-success">Edit</button>
+                  <a href="" class="btn btn-danger" data-dismiss="modal">Cancel</a>
+                </div>
+              </form> 
+
+      
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+<%}%>
+
 </div>
 
 
