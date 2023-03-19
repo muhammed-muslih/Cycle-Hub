@@ -1,7 +1,7 @@
 <div class="container register">
     <div class="row">
         <div class="col-md-3 register-left">
-            <img src="https://image.ibb.co/n7oTvU/logo_white.png" alt=""/>
+            <img src="https:/image.ibb.co/n7oTvU/logo_white.png" alt=""/>
             <h1 style="color: white;font-weight: 900;margin-top: 4rem;">Welcome</h1>
             <h4 style="color: white;">Keep Healthy,
                 Ride Your Cycle</h4>
@@ -19,13 +19,14 @@
                                      <input type="email" class="form-control" placeholder="Your Email *" name="email" id="email" value=""/>
                                      <span id="email-error" style="color: #F90A0A;"></span>
                                   </div>
-                                  <div>
-                                      <a href="#" style="color:#495057 ;">forgot password?</a>
-                                   </div>
+                                  
                                    <div class="form-group">
                                      <input type="password" class="form-control" placeholder="Password *" name="password" id="password" value=""/>
                                      <span id="password-error" style="color: #F90A0A;"></span>
                                   </div>
+                                  <div style="margin-left: 22rem; margin-top: -1rem;">
+                                    <a href="" style="color:#495057 ;" data-toggle="modal" data-target="#exampleModalCenter">forgot password?</a>
+                                 </div>
                                   <div>
                                     <div  class="form-group">
                                     <button type="submit" class="btnRegister" style="margin-top: 0rem;">Sign In</button>
@@ -40,9 +41,7 @@
                                   <script>
                                       setTimeout(()=>{
                                           var message = document.querySelector('.error-message');
-                                          if(message){
                                               message.style.display="none"
-                                          }
                                       },5000)
                                   </script>
                                   <% } %>
@@ -59,6 +58,67 @@
         </div>
     </div>
 </div>
+
+
+  
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+
+
+
+
+            <form action="" method="post" >
+
+                <div class="form-group">
+                  <input type="email" class="form-control" placeholder="Your Email *" name="email"  value=""/>
+                  <span id="email-error" style="color: #F90A0A;"></span>
+               </div>
+               
+                <div class="form-group">
+                  <input type="text" class="form-control" placeholder="PHONE *" name="phoneno"  value=""/>
+                  <span id="phoneno-error" style="color: #F90A0A;"></span>
+               </div>
+
+               <div class="form-group">
+                 <input type="text" class="form-control" placeholder="OTP *" name="otp"  value=""/>
+                 <span id="otp-error" style="color: #F90A0A;"></span>
+               </div>
+
+               <div class="form-group">
+                   <input type="text" class="form-control" placeholder="Reset Password *" name="password"  value=""/>
+                    <span id="repassword-error" style="color: #F90A0A;"></span>
+               </div>
+
+               
+               <div class="form-group">
+                 <input type="text" class="form-control" placeholder="Confirm Reset Password *" name="cnfrmrepassword"  value=""/>
+                 <span id="cnfrmrepassword-error" style="color: #F90A0A;"></span>
+              </div>
+
+               <!-- <div>
+                 <div  class="form-group">
+                 <button type="submit" class="btnRegister" style="margin-top: 0rem;">Sign In</button>
+                </div> -->
+
+           </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Reset Password</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 
 <script src="/validation/userLogin.js"></script>
 

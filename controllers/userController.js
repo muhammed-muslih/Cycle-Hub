@@ -1,5 +1,6 @@
 const productServices = require('../services/productServices')
-const categoryServices = require('../services/categoryService')
+const categoryServices = require('../services/categoryService');
+const brandService = require('../services/brandService');
 
 
 module.exports = {
@@ -37,10 +38,38 @@ module.exports = {
     },
 
     renderShopePage :  async (req,res)=>{
-        const categoryId=req.params.id
-        const products=await productServices.findShopPageProduct(categoryId)
-        console.log(products);
-        res.render('userView/shopePage',{products})
+        const categoryId = req.query.categoryId
+        const brandId = req.query.brandId
+        console.log(categoryId);
+        console.log("brand....",brandId);
+        if(categoryId){
+            const products = await productServices.findCategoryProduct(categoryId)
+            const category = await categoryServices.findListedAllCategory()
+            const brands = await brandService.findListedBrand()
+            res.render('userView/shopePage',{products,category,brands})
+
+        }else if(brandId){
+            const products = await productServices.findBrandProduct(brandId)
+            const category = await categoryServices.findListedAllCategory()
+            const brands = await brandService.findListedBrand()
+            res.render('userView/shopePage',{products,category,brands})
+
+        }else{
+            const brands = await brandService.findListedBrand()
+            const products=await productServices.findAllProduct()
+            const category = await categoryServices.findListedAllCategory()
+            res.render('userView/shopePage',{products,category,brands})
+
+        }
+            
+    },
+    renderSingleProductView : async(req,res)=>{
+        const productId = req.params.id
+        console.log(productId);
+        const product = await productServices.findSingleProduct(productId)
+        console.log(product);
+        res.render('userView/singleproductView',{product})
+
     }
     
 }

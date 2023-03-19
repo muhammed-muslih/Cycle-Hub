@@ -17,7 +17,10 @@ router.route('/login')
 
 router.get('/logout',userController.sessionDestroy)
 
-router.get('/shopepage/',userController.renderShopePage)
+router.get('/shopepage',userController.renderShopePage)
+router.get('/categoryProducts',userController.renderShopePage)
+router.get('/brandProducts',userController.renderShopePage)
+router.get('/singleProductView/:id',userController.renderSingleProductView)
 
 
 

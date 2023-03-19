@@ -34,7 +34,7 @@ app.use(session({
   secret: 'my-secret-key',
   resave: false,
   saveUninitialized: true,
-  cookie: { maxAge: 1800000 } // session expires after 30 minutes of inactivity
+  cookie: { maxAge: 18000000 } 
 }));
 
 

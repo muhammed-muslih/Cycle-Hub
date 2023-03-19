@@ -55,7 +55,7 @@ module.exports={
         const product = await db.getDB().collection(process.env.product_collection).findOne({_id:new ObjectId(productId)})
         return product
     },
-    findEditProduct:async (productid)=>{
+    findSingleProduct:async (productid)=>{
        const product= await db.getDB().collection(process.env.product_collection).aggregate([
             {
                 $match:{
@@ -99,27 +99,12 @@ module.exports={
         })
         console.log(result);
     },
-    findShopPageProduct : async(categoryId)=>{
-        const products = await db.getDB().collection(process.env.product_collection).aggregate([
-            {
-                $lookup:{
-                    from:"category",
-                    localField:"category",
-                    foreignField:"_id",
-                    as:"categoryDetails"
-
-                }
-
-            },{
-                $lookup:{
-                    from:"brand",
-                    localField:"brand",
-                    foreignField:"_id",
-                    as:"brandDetails"
-                }
-            }
-        ]).toArray()
-
+    findCategoryProduct : async(categoryId)=>{
+        const products = await db.getDB().collection(process.env.product_collection).find({category:new ObjectId(categoryId)}).toArray()
+        return products
+    },
+    findBrandProduct : async(brandId)=>{
+        const products= await db.getDB().collection(process.env.product_collection).find({brand:new ObjectId(brandId)}).toArray()
         return products
     }
 

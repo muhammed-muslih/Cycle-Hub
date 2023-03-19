@@ -7,11 +7,8 @@ const brandService = require('../services/brandService')
 
 module.exports={
     adminDashboardRender:(req,res)=>{
-        if(req.session.adminLoggedIn){
             res.render('adminView/dashBoard',{layout:"adminLayout"})
-        }else{
-            res.redirect('/admin/adminLogin')
-        }
+       
     },
     renderUserList : async (req,res)=>{
         const users = await userService.findAllUser()
@@ -124,7 +121,7 @@ module.exports={
     console.log("product",productId);
     const [product,category,brand] = await Promise.all([
 
-        await productService.findEditProduct(productId),
+        await productService.findSingleProduct(productId),
         await categoryService.findAllCategory(),
         await brandService.findAllBrand()
     ])
