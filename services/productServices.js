@@ -1,28 +1,21 @@
 const db = require("../db")
 const ObjectId = require('mongodb-legacy').ObjectId
+const collecton = require('../config/collections')
 
 module.exports={
 
-    addProduct : async (productName,productDescription,category,brand,price,quantity,isDelete,images)=>{
-
+    addProduct : async (productName,productId,productDescription,category,brand,price,quantity,isDelete,images,variants)=>{
+        
         price=parseInt(price)
         quantity=parseInt(quantity)
         category = new ObjectId(category)
         brand = new ObjectId(brand)
-        await db.getDB().collection(process.env.product_collection).insertOne({productName,productDescription,category,brand,price,quantity,isDelete,images})
+        await db.getDB().collection(collecton.product_collection).insertOne({productName,productId,productDescription,category,brand,price,quantity,isDelete,images,variants})
     },
 
     findAllProduct:async()=>{
-    const  product  =  await db.getDB().collection(process.env.product_collection).aggregate([
+    const  product  =  await db.getDB().collection(collecton.product_collection).aggregate([
 
-        {
-            $match:{
-                isDelete:{
-                    $ne:true
-                }
-            }
-
-        },
         {
             $lookup:{
                 from :"category",
@@ -44,19 +37,32 @@ module.exports={
     return product
 
     },
-    deleteProduct: async (productId)=>{
-        await db.getDB().collection(process.env.product_collection).updateOne({_id:new ObjectId(productId)},{
-            $set:{
-                isDelete:true
-            }
-        })
+    productStatus: async (productId)=>{
+        const product = await db.getDB().collection(collecton.product_collection).findOne({_id:new ObjectId(productId)})
+        if(product.isDelete){
+            await db.getDB().collection(collecton.product_collection).updateOne({_id: new ObjectId(productId)},{
+                $set:{
+                    isDelete:false
+                }
+
+            })
+
+        }else{
+
+            await db.getDB().collection(collecton.product_collection).updateOne({_id:new ObjectId(productId)},{
+                $set:{
+                    isDelete:true
+                }
+            })
+
+        }
     },
-    findProduct: async (productId)=>{
-        const product = await db.getDB().collection(process.env.product_collection).findOne({_id:new ObjectId(productId)})
+    findProduct: async (productID)=>{
+        const product = await db.getDB().collection(collecton.product_collection).findOne({_id:new ObjectId(productID)})
         return product
     },
     findSingleProduct:async (productid)=>{
-       const product= await db.getDB().collection(process.env.product_collection).aggregate([
+       const product= await db.getDB().collection(collecton.product_collection).aggregate([
             {
                 $match:{
                     _id:new ObjectId(productid)
@@ -83,7 +89,7 @@ module.exports={
         return product
 
     },
-    editProduct : async (productId,productName,productDescription,category,brand,price,quantity,newImages)=>{
+    editProduct : async (productID,productName,productId,productDescription,category,brand,price,quantity,newImages,variants)=>{
 
         category= new ObjectId(category)
         brand = new ObjectId(brand)
@@ -91,21 +97,25 @@ module.exports={
         price=parseInt(price)
 
 
-       const result = await db.getDB().collection(process.env.product_collection).updateOne({_id:new ObjectId(productId)},{
+       await db.getDB().collection(collecton.product_collection).updateOne({_id:new ObjectId(productID)},{
             $set:{
 
-                productName: productName,productDescription:productDescription,category:category,brand:brand,price:price,quantity:quantity,images:newImages
+                productName: productName,productId,productDescription:productDescription,category:category,brand:brand,price:price,quantity:quantity,images:newImages,variants
             }
         })
-        console.log(result);
+      
     },
     findCategoryProduct : async(categoryId)=>{
-        const products = await db.getDB().collection(process.env.product_collection).find({category:new ObjectId(categoryId)}).toArray()
+        const products = await db.getDB().collection(collecton.product_collection).find({category:new ObjectId(categoryId)}).toArray()
         return products
     },
     findBrandProduct : async(brandId)=>{
-        const products= await db.getDB().collection(process.env.product_collection).find({brand:new ObjectId(brandId)}).toArray()
+        const products= await db.getDB().collection(collecton.product_collection).find({brand:new ObjectId(brandId)}).toArray()
         return products
+    },
+    productIdExist : async(productId)=>{
+        const product = await db.getDB().collection(collecton.product_collection).findOne({productId:productId})
+        return  product
     }
 
 

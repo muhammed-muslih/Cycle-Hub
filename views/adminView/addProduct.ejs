@@ -8,12 +8,17 @@
         </div>
 
         <div class="form-group">
-           <label  for="product_description" class="text-white">PRODUCT DESCRIPTION</label>
+          <label  for="forProductId" class="text-white">PRODUCT ID</label>  
+          <input type="text" class="form-control" id="" name="productId">
+        </div>
+
+        <div class="form-group">
+           <label  for="product_description" class="text-white">DESCRIPTION</label>
             <textarea type="" class="form-control" id="" style="border:solid 1px #2b3553;" name="productDescription"></textarea>
           </div>
 
           <div class="form-group">
-            <label  for="product_category" class="text-white">PRODUCT CATEGORY</label>
+            <label  for="product_category" class="text-white">CATEGORY</label>
             <select id="product_category" name="category" class="form-control">
               <option selected>Select Category</option>
               <% for(var i =0;i<category.length;i++){ %>
@@ -23,7 +28,7 @@
            </div>
 
            <div class="form-group">
-            <label  for="product_category" class="text-white">PRODUCT BRAND</label>
+            <label  for="product_category" class="text-white">BRAND</label>
             <select id="product_category" name="brand" class="form-control">
               <option selected >Select Brand</option>
               <% for(var i =0;i<brand.length;i++){ %>
@@ -31,6 +36,17 @@
               <% } %>
             </select>
            </div>
+           <div class="form-group">
+            <label  for="product_category" class="text-white">VARIANTS</label><br>
+           <input type="checkbox" id="variant1" name="variants" value="red">
+           <label for="variant1" class="text-white"> RED</label>&nbsp;&nbsp;&nbsp;&nbsp;
+           <input type="checkbox" id="variant2" name="variants" value="blue">
+           <label for="variant2" class="text-white"> BLUE</label>&nbsp;&nbsp;&nbsp;&nbsp;
+           <input type="checkbox" id="variant3" name="variants" value="white">
+           <label for="variant3" class="text-white"> WHITE</label>&nbsp;&nbsp;&nbsp;&nbsp;
+           <input type="checkbox" id="variant4" name="variants" value="black">
+           <label for="variant4" class="text-white"> BLACK</label>&nbsp;&nbsp;&nbsp;&nbsp;
+          </div>
 
            <div class="form-group">
             <label  for="product_categorie" class="text-white">PRODUCT PRICE</label>

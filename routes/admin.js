@@ -4,7 +4,7 @@ var router = express.Router();
 const adminController = require('../controllers/admincontroller')
 const authController = require('../controllers/authController')
 const upload = require('../util/multer')
-const adminAuth=require('../middleWares/adminAuth')
+const adminAuth=require('../middlewares/adminAuth')
 
 
 
@@ -38,7 +38,7 @@ router.route('/addBrand')
 .post(adminAuth.adminAuth,adminController.addBrand)
 
 //delete product 
-router.get('/deleteProduct/:id',adminAuth.adminAuth,adminController.deleteProduct)
+router.get('/productStatus/:id',adminAuth.adminAuth,adminController.deleteProduct)
 
 //edit product
 router.route('/editProduct/:id')
@@ -56,6 +56,8 @@ router.get("/brandListorunlist/:id",adminAuth.adminAuth,adminController.brandLis
 
 //edit brand
 router.post('/editbrand/:id',adminAuth.adminAuth,adminController.updateBrand)
+
+router.get('/productdetails/:id',adminAuth.adminAuth,adminController.productdetails)
 
 
 

@@ -18,6 +18,8 @@ module.exports={
         try {
             const userId = req.params.id
             await userService.ChangeUserStatus(userId)
+            req.session.userName=null
+            req.session.loggedIn=false
             res.redirect('/admin/user-list')
         } catch(err){
             console.log(err);
@@ -45,22 +47,34 @@ module.exports={
     },
 
     addProduct: async (req,res)=>{
-        try{
-            // console.log("ctaegory add",req.files);
-            let {productName,productDescription,category,brand,price,quantity}=req.body
-            console.log(brand[0]);
-            let isDelete = false
-            const images=[]
-            for(let i=0;i<req.files.length;i++){
-                const {url} = (await cloudinary.uploader.upload(req.files[i].path))
-                images.push(url)
-            }
-            await productService.addProduct(productName,productDescription,category,brand,price,quantity,isDelete,images)
-            res.redirect('/admin/productList')
-        }catch(err){
-            console.log(err);
 
-        }   
+        const productIdExist = await productService.productIdExist(req.body.productId)
+        if(productIdExist){
+            
+            res.redirect('/admin/productList?message=productId already exist')
+        }else{
+
+            try{
+                // console.log("ctaegory add",req.files);
+                console.log(req.body);
+                let {productName,productId,productDescription,category,brand,price,quantity,variants}=req.body
+                console.log(variants);
+                console.log(brand[0]);
+                let isDelete = false
+                const images=[]
+                for(let i=0;i<req.files.length;i++){
+                    const {url} = (await cloudinary.uploader.upload(req.files[i].path))
+                    images.push(url)
+                }
+                await productService.addProduct(productName,productId,productDescription,category,brand,price,quantity,isDelete,images,variants)
+                res.redirect('/admin/productList')
+            }catch(err){
+                console.log(err);
+    
+            } 
+
+        }
+          
    },
    addCategory: async(req,res)=>{
     let {categoryName} = req.body
@@ -84,8 +98,13 @@ module.exports={
    },
 
    renderproductList : async(req,res)=>{
+    const message = req.query.message
+    console.log(message);
     const products = await productService.findAllProduct()
-    res.render('adminView/productView',{layout:"adminLayout", products})
+    for(var i=0;i<products.length;i++){
+        products[i].price = products[i].price.toLocaleString('en-IN', { style: 'currency', currency: 'INR' });
+    }
+    res.render('adminView/productView',{layout:"adminLayout", products,message})
 
    },
 
@@ -111,7 +130,7 @@ module.exports={
 
     const productId = req.params.id
     console.log(productId);
-    await productService.deleteProduct(productId)
+    await productService.productStatus(productId)
     res.redirect('/admin/productList')
 
    },
@@ -134,8 +153,8 @@ module.exports={
    },
    editProduct : async (req,res)=>{
     try{
-        const productId=req.params.id
-    let {productName,productDescription,category,brand,price,quantity} = req.body
+    const productID=req.params.id
+    let {productName,productId,productDescription,category,brand,price,quantity,variants} = req.body
     const images=[]
     console.log(req.files.image);
 
@@ -144,12 +163,11 @@ module.exports={
         images.push(url)
     }
     console.log(images);
-    const product = await productService.findProduct(productId)
+    const product = await productService.findProduct(productID)
     const newImages=[...product.images.slice(images.length),...images]
 
-    await productService.editProduct(productId,productName,productDescription,category,brand,price,quantity, newImages)
+    await productService.editProduct(productID,productName,productId,productDescription,category,brand,price,quantity, newImages,variants)
     res.redirect('/admin/productList')
-
     }catch(err){
         console.log(err);
     }
@@ -191,6 +209,14 @@ module.exports={
         await brandService.updateBrand(brandId,brandName)
         res.redirect('/admin/addBrand')
     }
+   },
+   productdetails : async(req,res)=>{
+    const productId = req.params.id
+    const product = await productService.findSingleProduct(productId)
+    console.log(product);
+    product[0].price=product[0].price.toLocaleString('en-IN',{style:'currency',currency:'INR'})
+    res.render('adminView/singleProduct',{layout:"adminlayout",product})
+
    }
    
    

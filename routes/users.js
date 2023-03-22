@@ -6,7 +6,6 @@ const authController = require('../controllers/authController')
 
 
 router.get('/',userController.homePageRender)
-
 router.route('/signup')
 .get(userController.signupPageRender)
 .post(authController.userRegister)
@@ -21,12 +20,6 @@ router.get('/shopepage',userController.renderShopePage)
 router.get('/categoryProducts',userController.renderShopePage)
 router.get('/brandProducts',userController.renderShopePage)
 router.get('/singleProductView/:id',userController.renderSingleProductView)
-
-
-
-
-
-
 
 
 
