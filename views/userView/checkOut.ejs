@@ -1,0 +1,241 @@
+     
+
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalCenterTitle"><span style="font-weight: 900;">ADD ADDRESS</span></h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <form  action="/add-Address" method="post" class="p-4">
+                <div class="form-row">
+                  <div class="form-group col-md-6">
+                    <label for="first Name">First Name</label>
+                    <input type="text" class="form-control" name="firstName" id="firstName" placeholder="first name">
+                  </div>
+                  <div class="form-group col-md-6">
+                    <label for="last Name">Last Name</label>
+                    <input type="text" class="form-control" name="lastName" placeholder="last name">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="inputAddress">Address</label>
+                  <input type="text" class="form-control" id="inputAddress" name="address" placeholder="address">
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="inputState">District</label>
+                        <select id="" class="form-control" name="district" required>
+                          <option value="">...........................select district..........................</option>
+                                <option >Calicut</option>
+                                <option >Malappuaram</option>
+                                <option >Palakkad</option>
+                                <option >Thrissur</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                      <label for="inputZip">City</label>
+                      <input type="text" class="form-control" name="city">
+                    </div>
+                  </div>
+
+
+                <div class="form-row">
+                  <div class="form-group col-md-6">
+                    <label for="forPincode">pincode</label>
+                    <input type="text" class="form-control" name="pincode">
+                  </div>
+                  <div class="form-group col-md-6">
+                    <label for="phone">phone</label>
+                    <input type="text" class="form-control" name="phone" minlength="10" maxlength="10">
+                  </div>
+                </div>
+                <hr>
+                 <div style="margin-left: 73%;">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+              </form>
+        </div>
+      </div>
+    </div>
+  </div>
+     
+     
+     <!-- Breadcrumb Section Begin -->
+     <section class="breadcrumb-option">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb__text">
+                        <h4>Check Out</h4>
+                        <div class="breadcrumb__links">
+                            <a href="">Home</a>
+                            <a href="">Shop</a>
+                            <span>Check Out</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Breadcrumb Section End -->
+
+    <!-- Checkout Section Begin -->
+    <section class="" style="margin-top: 10px;margin-bottom:55px ;" >
+        <div class="container-fluid ">
+            <div class="checkout__form">
+                <form action="#">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6">
+                            <button type="submit" class="site-btn" data-toggle="modal" data-target="#exampleModalCenter">ADD ADDRESS</button>
+                            <!-- <h6 class="coupon__code"><span class="icon_tag_alt"></span> Have a coupon? <a href="#">Click
+                            here</a> to enter your code</h6> -->
+
+                            <table class="table mt-3">
+                                <thead>
+                                  <tr>
+                                    <th scope="col">Select</th>
+                                    <th scope="col" style="text-align: center;">Select  Shipping Address</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                <%for(var j = 0;j<address.length;j++){%>
+                                    <tr>
+                                      <th scope="row"><input type="radio"name="address" style="width: 20px;height: 20px; accent-color: black; cursor: pointer;" value="<%=address[j].address._id%>" checked></th>
+                                      <td><span><b> Name :  </b> <%=address[j].address.firstName%> <%=address[j].address.lastName%>,</span><br>
+                                      <span><b> Address :  </b> <%=address[j].address.address %>,<%=address[j].address.city%>,<%=address[j].address.district%>,<%=address[j].address. pincode%>(po),</span><br>
+                                      <span><b> Phone :  </b> <%=address[j].address.phone%></span>
+
+                                      </td>
+                                     
+                                    </tr>
+        
+                               <% }%>
+                                  
+                                </tbody>
+                              </table>
+
+
+                            
+                              <hr>
+                        </div>
+                        <div class="col-lg-6 col-md-6">
+                            <div class="checkout__order">
+                                <table class="table">
+                                    <h4 style="font-weight: 800;">Your order</h4>
+                                    <thead>
+                                      <tr>
+                                        <th scope="col">No</th>
+                                        <th scope="col">Product</th>
+                                        <th scope="col">quantity</th>
+                                        <th scope="col">price</th>
+                                        <th scope="col">subtotal</th>
+
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                        <%for(var i = 0;i<product.length;i++ ){%>
+                                            <tr>
+                                              <th scope="row"><%=i+1%></th>
+                                              <td><%=product[i].productDetails.productName%></td>
+                                              <td><%=product[i].products.quantity%></td>
+                                              <td><%=product[i].productDetails.price%></td>
+                                              <td><%=product[i].subTotal%></td>
+                                            </tr>
+
+                                       <% }%>
+                                    </tbody>
+                                  </table>
+                                <ul class="checkout__total__all">
+                                    <li>Subtotal <span><%=locals.totalPrice%></span></li>
+                                    <li>Total <span><%=locals.totalPrice%></span></li>
+                                </ul>
+                                <div class="checkout__input__checkbox">
+                                    
+                                    <input type="radio"name="payment" style="width: 16px;height: 16px; accent-color: black; cursor: pointer;" value="cash on delivery" checked>
+                                   <span class="mt-2">cash on delivery</span> <br>
+                                   <input type="radio"name="payment" style="width: 16px;height: 16px; accent-color: black; cursor: pointer;" value="" >
+                                   <span class="mt-2">online payment</span> 
+
+                                </div>
+                                <button type="submit" class="site-btn">PLACE ORDER</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+    <!-- Checkout Section End -->
+
+    <!-- Footer Section Begin -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="footer__about">
+                        <div class="footer__logo">
+                            <a href="#"><img src="" alt=""></a>
+                        </div>
+                        <p>The customer is at the heart of our unique business model, which includes design.</p>
+                        <a href="#"><img src="" alt=""></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 offset-lg-1 col-md-3 col-sm-6">
+                    <div class="footer__widget">
+                        <h6>Shopping</h6>
+                        <ul>
+                            <li><a href="#">Clothing Store</a></li>
+                            <li><a href="#">Trending Shoes</a></li>
+                            <li><a href="#">Accessories</a></li>
+                            <li><a href="#">Sale</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-3 col-sm-6">
+                    <div class="footer__widget">
+                        <h6>Shopping</h6>
+                        <ul>
+                            <li><a href="#">Contact Us</a></li>
+                            <li><a href="#">Payment Methods</a></li>
+                            <li><a href="#">Delivary</a></li>
+                            <li><a href="#">Return & Exchanges</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-3 offset-lg-1 col-md-6 col-sm-6">
+                    <div class="footer__widget">
+                        <h6>NewLetter</h6>
+                        <div class="footer__newslatter">
+                            <p>Be the first to know about new arrivals, look books, sales & promos!</p>
+                            <form action="#">
+                                <input type="text" placeholder="Your email">
+                                <button type="submit"><span class="icon_mail_alt"></span></button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <div class="footer__copyright__text">
+                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                        <p>Copyright ©
+                            <script>
+                                document.write(new Date().getFullYear());
+                            </script>2020
+                            All rights reserved | This template is made with <i class="fa fa-heart-o"
+                            aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+                        </p>
+                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Footer Section End -->

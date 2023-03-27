@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
-
+const userAuth = require('../middlewares/userAuth')
 const userController = require('../controllers/userController');
-const authController = require('../controllers/authController')
+const authController = require('../controllers/authController');
 
 
-router.get('/',userController.homePageRender)
+router.get('/',userAuth.userAuth,userController.homePageRender)
 router.route('/signup')
 .get(userController.signupPageRender)
 .post(authController.userRegister)
@@ -20,7 +20,18 @@ router.get('/shopepage',userController.renderShopePage)
 router.get('/categoryProducts',userController.renderShopePage)
 router.get('/brandProducts',userController.renderShopePage)
 router.get('/singleProductView/:id',userController.renderSingleProductView)
+//cart pages
+router.get('/cart',userAuth.userAuth,userController.cartpagerender)
+router.get('/add-to-cart/:id',userAuth.userAuth,userController.addToCart)
+router.post('/change-product-quantity',userAuth.userAuth,userController.changeCartProductQuantity)
+router.get('/delete-cart-product/:id',userAuth.userAuth,userController.deleteCartProduct)
 
+//checkouts
+router.get('/checkout',userAuth.userAuth,userController.checkoutPageRender)
+
+
+
+router.post('/add-Address',userAuth.userAuth,userController.addAddress)
 
 
 module.exports = router;

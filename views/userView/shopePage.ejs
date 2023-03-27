@@ -181,9 +181,11 @@
                                     </label>
                                 </div>
                             </div>
+                            <!-- <a href="/add-to-cart/" class="btn btn-dark" id="addtocart" >add to cart</a> -->
+                            <button  class="btn btn-dark addTocart" data-productid="<%=products[i]._id%>">add to Cart</button>
+                           
                         </div>
                     </div>
-
                     <%}%>
 
                 </div>
@@ -281,3 +283,60 @@
     </div>
 </div>
 <!-- Search End -->
+
+  <!-- axios -->
+<script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+<script type="text/javascript">
+   document.querySelectorAll('.addTocart').forEach(function(button){
+    button.addEventListener('click',function(event){
+        event.preventDefault()
+        //to prevent default actions
+        // console.log("button clicked");
+        console.log(this.dataset.productid);
+        addToCart(this.dataset.productid)
+
+    })
+
+    const addToCart = async(productId)=>{
+        try{
+            console.log(productId);
+            const res = await axios({
+                method:'get',
+                url:`/add-to-cart/${productId}`
+            })
+            console.log(res);
+            if(res.data.status==='success'){
+                Toastify({
+                    text: res.data.message,
+                    duration: 3000,
+                    // close: true,
+                    gravity: "top", // `top` or `bottom`
+                    position: "right", // `left`, `center` or `right`
+                    stopOnFocus: true, // Prevents dismissing of toast on hover
+                    style: {
+                        background: "linear-gradient(to right, #00b09b, #96c93d)",
+                    },
+                }).showToast()
+            }else{
+                // location.assign('/login')
+                Toastify({
+                    text: "login to add cart",
+                    duration: 3000,
+                    // close: true,
+                    gravity: "top", // `top` or `bottom`
+                    position: "right", // `left`, `center` or `right`
+                    stopOnFocus: true, // Prevents dismissing of toast on hover
+                    style: {
+                        background: "linear-gradient(to right, #00b09b, #96c93d)",
+                    },
+                }).showToast()
+            }
+
+        }catch(err){
+            console.log(err);
+        }
+
+    }
+   })
+   
+</script>

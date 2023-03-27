@@ -41,6 +41,25 @@ module.exports= {
         }
     },
 
+    addAddress : async (address,userId)=>{
+        address._id=new ObjectId()
+        await db.getDB().collection(collecton.user_collection).updateOne({_id:userId},{
+            $push:{address:address}
+        })
+
+
+    },
+    findAddress : async (userId)=>{
+        const address = await db.getDB().collection(collecton.user_collection).aggregate([
+
+            { $match:{_id:userId }},
+            {$unwind:{path:"$address"}},
+            {$project:{address:1}}
+            
+        ]).toArray()
+        return address
+    }
+
 
 
 

@@ -137,7 +137,6 @@ module.exports={
    renderEditproductPage :async (req,res)=>{
     try{
         const productId= req.params.id
-    console.log("product",productId);
     const [product,category,brand] = await Promise.all([
 
         await productService.findSingleProduct(productId),
@@ -156,7 +155,7 @@ module.exports={
     const productID=req.params.id
     let {productName,productId,productDescription,category,brand,price,quantity,variants} = req.body
     const images=[]
-    console.log(req.files.image);
+    // console.log(req.files.image);
 
     for(let i=0;i<req.files.length;i++){
         const {url} = await cloudinary.uploader.upload(req.files[i].path)

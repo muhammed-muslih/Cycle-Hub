@@ -1,3 +1,70 @@
+ 
+ <style>
+    .qty .count {
+    color: #000;
+    display: inline-block;
+    vertical-align: top;
+    font-size: 25px;
+    font-weight: 700;
+    line-height: 30px;
+    padding: 0 2px
+    ;min-width: 35px;
+    text-align: center;
+}
+.qty .plus {
+    cursor: pointer;
+    display: inline-block;
+    vertical-align: top;
+    color: white;
+    width: 30px;
+    height: 30px;
+    font: 30px/1 Arial,sans-serif;
+    text-align: center;
+    border-radius: 50%;
+    }
+.qty .minus {
+    cursor: pointer;
+    display: inline-block;
+    vertical-align: top;
+    color: white;
+    width: 30px;
+    height: 30px;
+    font: 30px/1 Arial,sans-serif;
+    text-align: center;
+    border-radius: 50%;
+    background-clip: padding-box;
+}
+div {
+    text-align: center;
+}
+.minus:hover{
+    background-color: #717fe0 !important;
+}
+.plus:hover{
+    background-color: #717fe0 !important;
+}
+/*Prevent text selection*/
+/* span{
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+} */
+input{  
+    border: 0;
+    width: 2%;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+input:disabled{
+    background-color:white;
+}
+         
+ </style>
+ 
+ 
  <!-- Page Preloder -->
  <div id="preloder">
     <div class="loader"></div>
@@ -157,32 +224,27 @@
                         <h3><%=product[0].price%></h3>
                         <p><%= product[0].productDescription%>.</p>
                         <div class="product__details__cart__option">
-                            <div class="quantity">
+                            <!-- <div class="quantity">
                                 <div class="pro-qty">
-                                    <input type="text" value="1">
+                                    <input type="text" value="1" id="quantityBtn">
                                 </div>
+                            </div> -->
+                            <!-- <a href="/add-to-cart/" class="primary-btn">add to cart</a> -->
+                          <!-- <div class="quantity">
+
+                            <div class="qty mt-5">
+                                <span class="minus bg-dark" style="text-align: center;"> + </span>
+                                <input type="number" class="count" name="qty" value="1">
+                                <span class="plus bg-dark"> - </span>
                             </div>
-                            <a href="#" class="primary-btn">add to cart</a>
+                          </div> -->
+
+                            <button class="primary-btn addTOCart" data-product="<%=product[0]._id%>">add to cart</button>
                         </div>
                         <div class="product__details__btns__option">
                             <a href="#"><i class="fa fa-heart"></i> add to wishlist</a>
                             <a href="#"><i class="fa fa-exchange"></i> Add To Compare</a>
                         </div>
-                        <!-- <div>
-                            <h3>Available Colours</h3>
-                            <% product[0].variants.forEach(function(variant) { %>
-                                <div class="color-box" style="background-color:var(<%=variant.color %>)"></div>
-                              <% }); %>
-                        </div> -->
-                        <!-- <div class="product__details__last__option">
-                            <h5><span>Guaranteed Safe Checkout</span></h5>
-                            <img src="/image/shop-details/details-payment.png" alt="">
-                            <ul>
-                                <li><span>SKU:</span> 3812912</li>
-                                <li><span>Categories:</span> Clothes</li>
-                                <li><span>Tag:</span> Clothes, Skin, Body</li>
-                            </ul>
-                        </div> -->
                     </div>
                 </div>
             </div>
@@ -263,7 +325,7 @@
 <!-- Search Begin -->
 <div class="search-model">
     <div class="h-100 d-flex align-items-center justify-content-center">
-        <div class="search-close-switch">+</div>
+        <div class="search-close-switch ">+</div>
         <form class="search-model-form">
             <input type="text" id="search-input" placeholder="Search here.....">
         </form>
@@ -271,18 +333,13 @@
 </div>
 <!-- Search End -->
 
-<!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
-<!-- <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script> -->
+ <!-- axios -->
+ <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
 <script type="text/javascript" src="https://www.elevateweb.co.uk/wp-content/themes/radial/jquery.elevatezoom.min.js"></script>
 
 <script type="text/javascript">
 
-// $(".zoom_05").elevateZoom({
-   
-//     zoomType: 'inner',
-//     cursor: 'crosshair',
-//     easing : true,
-// });
+
 
 
 $(".zoom_03").elevateZoom({
@@ -291,5 +348,58 @@ $(".zoom_03").elevateZoom({
     easing : true,
 });
 
+document.querySelector('.addTOCart').addEventListener('click',event=>{
+    event.preventDefault()
+    console.log("hello");
+    const productId = document.querySelector('.addTOCart').dataset.product;
+    // console.log(productId);
+   
+        addToCart(productId)
+    
+    
+})
+
+const addToCart = async(productId)=>{
+    try{
+        console.log(productId);
+        const res = await axios({
+            method:'get',
+            url:`/add-to-cart/${productId}`
+        })
+        console.log(res);
+        if(res.data.status ==='success'){
+            Toastify({
+                    text: res.data.message,
+                    duration: 3000,
+                    // close: true,
+                    gravity: "top", // `top` or `bottom`
+                    position: "right", // `left`, `center` or `right`
+                    stopOnFocus: true, // Prevents dismissing of toast on hover
+                    style: {
+                        background: "linear-gradient(to right, #00b09b, #96c93d)",
+                    },
+                }).showToast()
+        }else{
+            // location.assign('/login')
+            Toastify({
+                    text: "login to add product",
+                    duration: 3000,
+                    // close: true,
+                    gravity: "top", // `top` or `bottom`
+                    position: "right", // `left`, `center` or `right`
+                    stopOnFocus: true, // Prevents dismissing of toast on hover
+                    style: {
+                        background: " #f1c40f;",
+                    },
+                }).showToast()
+        }
+
+    }catch(err){
+        console.log(err);
+    }
+
+}
 
 </script>
+
+

@@ -19,6 +19,8 @@ module.exports = {
             let user= await userService.addUser(firstName,lastName,email, password, phoneno)
             console.log(user);
             req.session.userName=firstName
+            req.session.lastName=lastName
+            req.session.email=email
             req.session.loggedIn=true
             if(user){
                 res.redirect('/')
@@ -40,6 +42,9 @@ module.exports = {
                 let ispasswordCorrect= await bcrypt.compare(password,user.password)
                 if(ispasswordCorrect){
                     req.session.userName=user.firstName
+                    req.session.lastName=user.lastName
+                    req.session.userId=user._id
+                    req.session.email=email
                     req.session.loggedIn=true
                     console.log(req.session.userName);
                     console.log("user is exist");

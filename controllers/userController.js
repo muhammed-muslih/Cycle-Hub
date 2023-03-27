@@ -1,17 +1,16 @@
 const productServices = require('../services/productServices')
 const categoryServices = require('../services/categoryService');
 const brandService = require('../services/brandService');
+const cartServices = require("../services/cartService");
+const { user_collection } = require('../config/collections');
+const userService = require('../services/userService');
 
 
 module.exports = {
     homePageRender:async(req,res,next)=>{
         const user=req.session.userName
-        console.log(user);
-        if(req.session.loggedIn){
-            res.render('userView/homePage',{user,loggedIn:true});
-        }else{
-            res.render('userView/homePage',{loggedIn:false});
-        }
+        // console.log(user);
+        res.render('userView/homePage',{user,loggedIn:req.session.loggedIn});
     },
     loginPageRender:(req,res)=>{
         const message= req.query.message
@@ -41,8 +40,6 @@ module.exports = {
         const user=req.session.userName
         const categoryId = req.query.categoryId
         const brandId = req.query.brandId
-        console.log(categoryId);
-        console.log("brand....",brandId);
         if(categoryId){
             const products = await productServices.findCategoryProduct(categoryId)
             const category = await categoryServices.findListedAllCategory()
@@ -50,7 +47,7 @@ module.exports = {
             for (let i = 0; i < products.length; i++) {
                 products[i].price = products[i].price.toLocaleString('en-IN', { style: 'currency', currency: 'INR' });
               }
-            res.render('userView/shopePage',{products,category,brands,user,loggedIn:true})
+            res.render('userView/shopePage',{products,category,brands,user,loggedIn:req.session.loggedIn})
 
         }else if(brandId){
             const products = await productServices.findBrandProduct(brandId)
@@ -59,7 +56,7 @@ module.exports = {
             for (let i = 0; i < products.length; i++) {
                 products[i].price = products[i].price.toLocaleString('en-IN', { style: 'currency', currency: 'INR' });
               }
-            res.render('userView/shopePage',{products,category,brands,user,loggedIn:true})
+            res.render('userView/shopePage',{products,category,brands,user,loggedIn:req.session.loggedIn})
 
         }else{
             const brands = await brandService.findListedBrand()
@@ -68,7 +65,7 @@ module.exports = {
             for (let i = 0; i < products.length; i++) {
                 products[i].price = products[i].price.toLocaleString('en-IN', { style: 'currency', currency: 'INR' })
               }
-            res.render('userView/shopePage',{products,category,brands,user,loggedIn:true})
+            res.render('userView/shopePage',{products,category,brands,user,loggedIn:req.session.loggedIn})
 
         }
             
@@ -79,7 +76,92 @@ module.exports = {
         const product = await productServices.findSingleProduct(productId)
         product[0].price=product[0].price.toLocaleString('en-IN',{style:'currency',currency:'INR'})
         console.log(product);
-        res.render('userView/singleproductView',{product,user,loggedIn:true})
+        res.render('userView/singleproductView',{product,user,loggedIn:req.session.loggedIn})
+
+    },
+    cartpagerender : async(req,res)=>{
+        const user=req.session.userName
+        const userId= req.session.userId
+        const cart = await cartServices.getCart(userId)
+        let totalPrice =0
+        for(var i=0;i<cart.length;i++){
+            totalPrice=totalPrice+cart[i].subTotal
+            cart[i].productDetails.price = cart[i].productDetails.price.toLocaleString('en-IN', { style: 'currency', currency: 'INR' })
+            cart[i].subTotal = cart[i].subTotal.toLocaleString('en-IN',{ style: 'currency', currency:'INR' })
+        }
+        // console.log(cart);
+        totalPrice=totalPrice.toLocaleString('en-IN',{ style: 'currency', currency:'INR' })
+        res.render('userView/cart',{loggedIn:req.session.loggedIn,user,cart,totalPrice})
+    },
+    addToCart:async (req,res)=>{
+        const productId = req.params.id
+        const userId = req.session.userId
+        const iscartExist = await cartServices.findCart(userId)
+        if(iscartExist){
+            await cartServices.updateCart(userId,productId)
+
+        }else{
+            await cartServices.addToCart(userId,productId)
+        }
+        res.json({
+            status: "success",
+            message: "product added to cart"
+          })
+    },
+    changeCartProductQuantity:async(req,res)=>{
+        let {cartId,productId,count}=req.body
+        // console.log(req.body);
+        const quantityChange = await cartServices.changeCartProductQuantity(cartId,productId,count)
+        console.log(quantityChange);
+        if(quantityChange.modifiedCount===1){
+            res.json({
+                status:'removed',
+                mesasge:'item removed',
+            })
+        }else{
+            res.json({
+                status:"changed",
+                message:"product quantity changedd",
+            })
+        }
+
+
+    },
+    deleteCartProduct:async(req,res)=>{
+        const productId = req.params.id
+        console.log(productId);
+        const userId = req.session.userId
+        console.log(userId);
+        await cartServices.deleteCartProduct(userId,productId)
+        res.json({
+            status:"delete",
+            message:"item deleted"
+        })
+
+    },
+    checkoutPageRender : async (req,res)=>{
+        const user=req.session.userName
+        const userId = req.session.userId
+        const product = await cartServices.getCart(userId)
+
+        let totalPrice =0
+        for(var i=0;i<product.length;i++){
+            totalPrice=totalPrice+product[i].subTotal
+            product[i].productDetails.price = product[i].productDetails.price.toLocaleString('en-IN', { style: 'currency', currency: 'INR' })
+            product[i].subTotal = product[i].subTotal.toLocaleString('en-IN',{ style: 'currency', currency:'INR' })
+        }
+        totalPrice=totalPrice.toLocaleString('en-IN',{ style: 'currency', currency:'INR' })
+        const address = await userService.findAddress(userId)
+        // console.log(address[0].address.firstName);
+       
+        res.render('userView/checkOut',{loggedIn:req.session.loggedIn,user,product,totalPrice,address})
+    },
+    addAddress : async(req,res)=>{
+        console.log( "address",req.body);
+        console.log(req.session.userId);
+        await userService.addAddress(req.body,req.session.userId)
+
+        res.redirect('/checkout')
 
     }
     
