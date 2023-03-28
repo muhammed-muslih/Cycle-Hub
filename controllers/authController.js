@@ -81,6 +81,44 @@ module.exports = {
             console.log("email not match");
             res.redirect('/admin/adminLogin?message=invalid email or password')
         }
+    },
+    verifyPhoneNumber : async (req,res)=>{
+      let=  { verifyNumber}=req.body;
+      console.log(verifyNumber);
+    const isPhoneNoisExist = await userService.phoneNoExistOrNOt(verifyNumber)
+    console.log(isPhoneNoisExist);
+    if(isPhoneNoisExist){
+        res.json({
+            status:"phoneExists"
+        })
+    }else{
+
+        res.json({
+            status:"phoneNotExists"
+        })
+
+    }
+    
+    },
+    otpSuccess : async (req,res)=>{
+        let {verifyNumber} = req.body
+        console.log("body",req.body);
+        console.log(verifyNumber);
+        const user = await userService.phoneNoExistOrNOt(verifyNumber)
+        console.log(user);
+        if(user){
+            req.session.userName=user.firstName
+            req.session.userId=user._id
+            req.session.lastName=user.lastName
+            req.session.loggedIn=true
+            req.session.email=user.email
+            console.log("user is exist");
+            res.json({
+                status:'verified',
+                email:req.session.email
+            })
+        }
+           
     }
    
 }

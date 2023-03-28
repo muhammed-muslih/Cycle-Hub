@@ -15,6 +15,9 @@ router.route('/login')
 .post(authController.verifyUser)
 
 router.get('/logout',userController.sessionDestroy)
+router.get('/otp-login',userController.otpLoginPagerender)
+router.post('/phone-verify',authController.verifyPhoneNumber)
+router.post('/otp-success',authController.otpSuccess)
 
 router.get('/shopepage',userController.renderShopePage)
 router.get('/categoryProducts',userController.renderShopePage)
@@ -28,6 +31,7 @@ router.get('/delete-cart-product/:id',userAuth.userAuth,userController.deleteCar
 
 //checkouts
 router.get('/checkout',userAuth.userAuth,userController.checkoutPageRender)
+router.post('/place-order',userAuth.userAuth,userController.placeOrder)
 
 
 

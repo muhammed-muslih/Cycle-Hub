@@ -74,8 +74,9 @@
                     <div class="breadcrumb__text">
                         <h4>Check Out</h4>
                         <div class="breadcrumb__links">
-                            <a href="">Home</a>
-                            <a href="">Shop</a>
+                            <a href="/">Home</a>
+                            <a href="/shopepage">Shop</a>
+                            <a href="/cart">cart</a>
                             <span>Check Out</span>
                         </div>
                     </div>
@@ -106,7 +107,7 @@
                                 <tbody>
                                 <%for(var j = 0;j<address.length;j++){%>
                                     <tr>
-                                      <th scope="row"><input type="radio"name="address" style="width: 20px;height: 20px; accent-color: black; cursor: pointer;" value="<%=address[j].address._id%>" checked></th>
+                                      <th scope="row"><input type="radio"name="address" style="width: 20px;height: 20px; accent-color: black; cursor: pointer;" value="<%=address[j].address._id%>" class="address"></th>
                                       <td><span><b> Name :  </b> <%=address[j].address.firstName%> <%=address[j].address.lastName%>,</span><br>
                                       <span><b> Address :  </b> <%=address[j].address.address %>,<%=address[j].address.city%>,<%=address[j].address.district%>,<%=address[j].address. pincode%>(po),</span><br>
                                       <span><b> Phone :  </b> <%=address[j].address.phone%></span>
@@ -141,9 +142,9 @@
                                     <tbody>
                                         <%for(var i = 0;i<product.length;i++ ){%>
                                             <tr>
-                                              <th scope="row"><%=i+1%></th>
+                                              <th scope="row" class="productId" data-productid="<%=product[i].productDetails._id%>"><%=i+1%></th>
                                               <td><%=product[i].productDetails.productName%></td>
-                                              <td><%=product[i].products.quantity%></td>
+                                              <td class="quantity" data-quantity="<%=product[i].products.quantity%>"><%=product[i].products.quantity%></td>
                                               <td><%=product[i].productDetails.price%></td>
                                               <td><%=product[i].subTotal%></td>
                                             </tr>
@@ -152,18 +153,18 @@
                                     </tbody>
                                   </table>
                                 <ul class="checkout__total__all">
-                                    <li>Subtotal <span><%=locals.totalPrice%></span></li>
+                                    <li>Subtotal <span id="total"><%=locals.totalPrice%></span></li>
                                     <li>Total <span><%=locals.totalPrice%></span></li>
                                 </ul>
                                 <div class="checkout__input__checkbox">
                                     
-                                    <input type="radio"name="payment" style="width: 16px;height: 16px; accent-color: black; cursor: pointer;" value="cash on delivery" checked>
+                                    <input type="radio"name="payment" style="width: 16px;height: 16px; accent-color: black; cursor: pointer;" class="payment" value="cod">
                                    <span class="mt-2">cash on delivery</span> <br>
-                                   <input type="radio"name="payment" style="width: 16px;height: 16px; accent-color: black; cursor: pointer;" value="" >
+                                   <input type="radio"name="payment" style="width: 16px;height: 16px; accent-color: black; cursor: pointer;" class="payment" value="online payment" >
                                    <span class="mt-2">online payment</span> 
 
                                 </div>
-                                <button type="submit" class="site-btn">PLACE ORDER</button>
+                                <button type="submit" class="site-btn" id="placeorder"  >PLACE ORDER</button>
                             </div>
                         </div>
                     </div>
@@ -239,3 +240,94 @@
         </div>
     </footer>
     <!-- Footer Section End -->
+
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+
+
+       document.getElementById('placeorder').addEventListener('click',function(event){
+        event.preventDefault()
+        console.log("hello");
+        placeOrder()
+       })
+      
+         const placeOrder = async ()=>{
+        
+           const res = await  axios({
+           method:"post",
+           url:'/place-order',
+           data :{products,addressid,paymentMethod,total}
+        })
+
+        if(res.data.status==='success'){
+                Swal.fire({
+                  title: 'order placed success fully',
+                  showClass: {
+                   popup: 'animate__animated animate__fadeInDown'
+                  },
+                  hideClass: {
+                  popup: 'animate__animated animate__fadeOutUp'
+                  }
+                })
+
+               }
+        }
+
+      var addressid
+      const addressId = document.querySelectorAll('.address')
+      addressId.forEach(function(address){
+        address.addEventListener('click',function(){
+          addressid=this.value
+          console.log(addressid);
+        
+        })
+      })
+    
+
+
+
+        const productId=[]
+        const quantity=[]
+        document.querySelectorAll(".productId").forEach(function(product){
+          //  console.log(product.dataset.productid);
+           productId.push(product.dataset.productid)
+
+        })
+        // console.log(productId);
+
+        document.querySelectorAll(".quantity").forEach(function(product){
+          //  console.log(product.dataset.quantity);
+           quantity.push(Number(product.dataset.quantity))
+
+        })
+        // console.log(quantity);
+
+
+       const products=[] 
+        for(var i=0;i<productId.length;i++){
+         product= {productId:productId[i],quantity:quantity[i]}
+          products.push(product)
+        }
+        console.log(products);
+
+
+
+        
+        var paymentMethod
+        document.querySelectorAll('.payment').forEach(function(payment){
+          payment.addEventListener('click',function(){
+          // console.log(this.value);
+          paymentMethod=this.value
+          console.log(paymentMethod);
+        })
+        })
+
+        var total = document.querySelector('#total').innerText
+        total=total.replace(/,/g,"")
+        total=total.replace('₹','')
+        total = parseInt(total)
+        console.log(total);
+
+    </script>

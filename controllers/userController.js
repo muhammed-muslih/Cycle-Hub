@@ -2,8 +2,10 @@ const productServices = require('../services/productServices')
 const categoryServices = require('../services/categoryService');
 const brandService = require('../services/brandService');
 const cartServices = require("../services/cartService");
-const { user_collection } = require('../config/collections');
 const userService = require('../services/userService');
+const orderService = require('../services/orderServices')
+const ObjectId = require('mongodb').ObjectId
+
 
 
 module.exports = {
@@ -35,7 +37,9 @@ module.exports = {
         req.session.loggedIn=false
         res.redirect('/')
     },
-
+    otpLoginPagerender:(req,res)=>{
+        res.render('userView/otplogin')
+    },
     renderShopePage :  async (req,res)=>{
         const user=req.session.userName
         const categoryId = req.query.categoryId
@@ -163,6 +167,30 @@ module.exports = {
 
         res.redirect('/checkout')
 
+    },
+    placeOrder : async(req,res)=>{
+       let {products,addressid,paymentMethod,total}=req.body
+       let userId=req.session.userId
+       let address = await userService.findOneAddress(userId,addressid)
+       address=address[0].address
+       for(var i = 0;i<products.length;i++){
+        products[i].productId = new ObjectId(products[i].productId )
+       }
+       let status
+       if(paymentMethod === 'cod'){
+        status="placed"
+       }
+       const date = new Date().toLocaleString({timeZone: 'Asia/Kolkata'});
+       const result = await orderService.addOrder(userId,address,paymentMethod,total,products,date,status)
+       if(result){
+        res.json({
+            status:"success",
+            message:"order placed successfuly"
+
+        })
+
+       }
+        
     }
     
 }

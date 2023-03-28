@@ -1,0 +1,161 @@
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+    #recaptcha-container {
+      margin-bottom: 5px;
+    }
+    .p-conf,.n-conf{
+      width: 100%;
+      border-radius: 2px solid green;
+    }
+</style>
+
+<section class="ftco-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 text-center mb-5">
+                <h2 class="heading-section">Login</h2>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-5">
+                <div class="login-wrap p-4 p-md-5">
+              <div class="icon d-flex align-items-center justify-content-center">
+                  <span class="fa fa-user-o"></span>
+              </div>
+              <h3 class="text-center mb-4">Have an account?</h3>
+              <form action="" method="post" >
+
+           
+                <div class="form-group" id="sender">
+                  <input type="text" class="form-control" placeholder="PHONE *" name="phoneno" id="number" value=""/>
+                  <div id="recaptcha-container"></div>
+                  <input type="button"  style="background-color: black;" class='form-control' id="send" value="send" onclick="phoneAuth()">
+               </div>
+            
+               <div class="form-group" id="verifier" style="display: none;"> 
+                 <input type="text" class="form-control " placeholder="OTP CODE *" name="otp"  id="verificationcode" value=""/>
+                 <input type="button" id="verify"   value="verify" class='form-control'style="margin-top:.3rem;background-color: #b7afaf;color:white;" onclick="codeverify()">
+                 <div class="p-conf" style="border: solid 2px green;border-radius: 8px;margin-top: 0.5rem;text-align: center;background: #71bf71;color: white;">Number Verified</div>
+                 <div class="n-conf" style="border: solid 2px  #6d0404;;border-radius: 8px;margin-top: 0.5rem;text-align: center;background: #b20b41;;color: white;">Otp Error</div>
+
+                
+               </div> 
+            
+               <!-- <div class="form-group">
+                   <input type="text" class="form-control" placeholder="Reset Password *" name="password"  value=""/>
+                    <span id="repassword-error" style="color: #F90A0A;"></span>
+               </div> -->
+            
+               
+               <!-- <div class="form-group">
+                 <input type="text" class="form-control" placeholder="Confirm Reset Password *" name="cnfrmrepassword"  value=""/>
+                 <span id="cnfrmrepassword-error" style="color: #F90A0A;"></span>
+              </div> -->
+            
+               <!-- <div>
+                 <div  class="form-group">
+                 <button type="submit"   class="btn btn-primary rounded submit p-3 px-5">Sign In</button>
+                 <button type="submit"   class="btn btn-primary rounded submit p-3 px-5">close</button> 
+                </div> -->
+            
+            </form>
+          </form>
+        </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://www.gstatic.com/firebasejs/9.12.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.12.1/firebase-auth-compat.js"></script>
+<script>
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyD8mehGny0U394hBwLt1Xt0tvVl0SFmVSE",
+  authDomain: "cyclehub-f7030.firebaseapp.com",
+  projectId: "cyclehub-f7030",
+  storageBucket: "cyclehub-f7030.appspot.com",
+  messagingSenderId: "843579840644",
+  appId: "1:843579840644:web:d8b9d6a6b33a2f91ca4ad1",
+  measurementId: "G-960BK72BK5"
+};
+// initializing firebase SDK
+firebase.initializeApp(firebaseConfig);
+
+// render recaptcha verifier
+render();
+function render() {
+    window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container');
+    recaptchaVerifier.render();
+}
+
+// function for send OTP
+
+var verifyNumber
+async function phoneAuth() {
+    verifyNumber=document.getElementById('number').value
+    console.log(verifyNumber);
+     number = '+91 '
+     number = number+document.getElementById('number').value;
+
+    const res = await axios({
+        method:"post",
+        url:'/phone-verify',
+        data :{verifyNumber}
+    })
+    if(res.data.status==='phoneExists'){
+
+        firebase.auth().signInWithPhoneNumber(number, window.recaptchaVerifier).then(function (confirmationResult) {
+        window.confirmationResult = confirmationResult;
+        coderesult = confirmationResult;
+        console.log('OTP Sent');
+        document.getElementById('sender').style.display="none"
+        document.getElementById('verifier').style.display="block"
+        document.getElementsByClassName('p-conf')[0].style.display='none'
+        document.getElementsByClassName('n-conf')[0].style.display='none'
+    }).catch(function (error) {
+        // error in sending OTP
+        // alert(error.message);
+        console.log('error in sending OTP');
+    });
+
+    }else{
+        Swal.fire({
+            title: 'number is not exist',
+            showClass: {
+                popup: 'animate__animated animate__fadeInDown'
+            },
+            hideClass: {
+                popup: 'animate__animated animate__fadeOutUp'
+            }
+        })
+    }
+
+    
+}
+
+// function for OTP verify
+function codeverify() {
+    console.log("verify",verifyNumber);
+    var code = document.getElementById('verificationcode').value;
+    coderesult.confirm(code).then(async function () {
+        console.log('OTP Verified');
+        document.getElementsByClassName('p-conf')[0].style.display='block'
+        document.getElementsByClassName('n-conf')[0].style.display='none'
+
+    const res=  await axios({
+        method:"post",
+        url:'/otp-success',
+        data :{verifyNumber}
+       
+    })
+    location.assign('/')
+   
+    }).catch(function () {
+        console.log('OTP Not correct');
+        document.getElementsByClassName('p-conf')[0].style.display='none'
+        document.getElementsByClassName('n-conf')[0].style.display='block'
+    })
+}
+</script>

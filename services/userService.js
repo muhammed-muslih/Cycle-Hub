@@ -15,7 +15,7 @@ module.exports= {
     },
     phoneNoExistOrNOt : async (phoneno)=>{
         const phoneNoExistOrNot = db.getDB().collection(collecton.user_collection).findOne({phoneno:phoneno})
-        console.log("phone  : ",phoneNoExistOrNot);
+        // console.log("phone  : ",phoneNoExistOrNot);
         return phoneNoExistOrNot
 
     },
@@ -58,6 +58,17 @@ module.exports= {
             
         ]).toArray()
         return address
+    },
+    findOneAddress : async(userId,addressId)=>{
+        const address = await db.getDB().collection(collecton.user_collection).aggregate([
+            {$match:{_id:userId}},
+            {$unwind:{path:'$address'}},
+            {$match:{'address._id': new ObjectId(addressId)}},
+            {$project:{address:1,_id:0}}
+
+        ]).toArray()
+        return address
+
     }
 
 
