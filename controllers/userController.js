@@ -182,6 +182,7 @@ module.exports = {
        }
        const date = new Date().toLocaleString({timeZone: 'Asia/Kolkata'});
        const result = await orderService.addOrder(userId,address,paymentMethod,total,products,date,status)
+       await cartServices.deleteCart(userId)
        if(result){
         res.json({
             status:"success",
@@ -191,6 +192,32 @@ module.exports = {
 
        }
         
+    },
+    orderListPageRender : async (req,res)=>{
+        const user=req.session.userName
+        const userId = req.session.userId
+        const orders = await orderService.findUserAllOrders(userId)
+        console.log("...........",orders);
+        for(var i= 0;i<orders.length;i++){
+            orders[i]. grandTotal = orders[i]. grandTotal.toLocaleString('en-IN',{ style: 'currency', currency:'INR' })
+        }
+        res.render('userView/orderList',{user,loggedIn:req.session.loggedIn,orders})
+    },
+    orderDetailspageRender : async (req,res)=>{
+        const user=req.session.userName
+        const orderId = req.params.id
+        const orders = await orderService.findOrderDetails(orderId)
+        console.log(orders);
+        for(var i=0;i<orders.length;i++){
+            orders[i].productDetails.price = orders[i].productDetails.price.toLocaleString('en-IN',{ style: 'currency', currency:'INR' })
+            orders[i].subtotal = orders[i].subtotal.toLocaleString('en-IN',{ style: 'currency', currency:'INR' })
+            orders[i].grandTotal = orders[i].grandTotal.toLocaleString('en-IN',{ style: 'currency', currency:'INR' })
+        }
+        res.render('userView/orderDetails',{user,loggedIn:req.session.loggedIn,orders})
+    },
+    orderSuccessPage :(req,res)=>{
+        const user=req.session.userName
+        res.render('userView/orderSuccess',{user,loggedIn:req.session.loggedIn})
     }
     
 }

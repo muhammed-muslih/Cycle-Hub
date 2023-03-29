@@ -33,9 +33,13 @@ router.get('/delete-cart-product/:id',userAuth.userAuth,userController.deleteCar
 router.get('/checkout',userAuth.userAuth,userController.checkoutPageRender)
 router.post('/place-order',userAuth.userAuth,userController.placeOrder)
 
-
+//order pages
+router.get('/order-list',userAuth.userAuth,userController.orderListPageRender)
+router.get('/order-details/:id',userAuth.userAuth,userController.orderDetailspageRender)
+router.get('/order-success',userAuth.userAuth,userController.orderSuccessPage)
 
 router.post('/add-Address',userAuth.userAuth,userController.addAddress)
+
 
 
 module.exports = router;

@@ -1,0 +1,86 @@
+<div id="preloder">
+    <div class="loader"></div>
+</div>
+
+<section class="breadcrumb-option">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb__text">
+                    <h4>Orders</h4>
+                    <div class="breadcrumb__links">
+                        <a href="/">Home</a>
+                        <!-- <a href="/order-list">orders</a> -->
+                        <span>orders</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<Section class="p-5">
+<div class="pl-5 pr-5">
+    <table class="table table-hover">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">INDEX</th>
+            <th scope="col">ORDER ID</th>
+            <th scope="col">DATE</th>
+            <th scope="col">PAYMENT</th>
+            <th scope="col">TOTAL PRICE</th>
+            <th scope="col">STATUS</th>
+            <th scope="col">CHANGE STATUS</th>
+            <th scope="col">DETAILS</th>
+            
+          </tr>
+        </thead>
+        <tbody>
+            <%for(var i=0;i<orders.length;i++){%>
+                <tr>
+                  <th scope="row"><%=i+1%></th>
+                  <td><b><%=orders[i]._id%></b></td>
+                  <td><b><%=orders[i].date%></b></td>
+                  <td><b><%=orders[i].paymentMethod%></b></td>
+                  <td><b><%=orders[i].grandTotal%></b></td>
+                  <td><b><%=orders[i].status%></b></td>
+                  <td>
+                    <% if(orders[i].status == 'cancelled'){ %>
+                        <b class="text-danger">cancelled</b>
+                    <% }else if(orders[i].status == 'returned'){%> 
+                        <b class="text-primary">returned</b>
+                    <% }else if(orders[i].status == 'deliverd'){%> 
+                        <a class="btn btn-primary text-white" onclick="changeStatus('<%=orders[i]._id%>','returned')" ><b>Return</b></a>
+                     <% }else{%>
+                        <a class="btn btn-danger text-white" onclick="changeStatus('<%=orders[i]._id%>','cancelled')" ><b>Cancel</b></a>
+                    <%}%> 
+                    
+                </td>
+                  <td><a href="/order-details/<%=orders[i]._id%>" class="btn btn-dark"><b>Details</b></a></td>
+                </tr>
+
+           <% } %>
+        </tbody>
+      </table>
+      
+      
+
+    </div>
+</Section>
+<script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+<script>
+    const changeStatus = async(orderId,status)=>{
+
+        const res = await axios({
+            method:'post',
+            url:'/admin/change-order-status',
+            data:{orderId,status}
+
+           })
+           if(res.data.status ='status changed'){
+            location.reload()
+           }
+
+    }
+</script>

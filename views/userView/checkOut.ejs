@@ -254,26 +254,36 @@
        })
       
          const placeOrder = async ()=>{
-        
-           const res = await  axios({
+
+          if(products && addressid && paymentMethod && total){
+
+            var res = await  axios({
            method:"post",
            url:'/place-order',
            data :{products,addressid,paymentMethod,total}
         })
 
+          }else{
+            window.alert('allfield required')
+          }
+        
+           
+
         if(res.data.status==='success'){
-                Swal.fire({
-                  title: 'order placed success fully',
-                  showClass: {
-                   popup: 'animate__animated animate__fadeInDown'
-                  },
-                  hideClass: {
-                  popup: 'animate__animated animate__fadeOutUp'
-                  }
-                })
+                // Swal.fire({
+                //   title: 'order placed success fully',
+                //   showClass: {
+                //    popup: 'animate__animated animate__fadeInDown'
+                //   },
+                //   hideClass: {
+                //   popup: 'animate__animated animate__fadeOutUp'
+                //   }
+                // })
+                location.assign('/order-success')
 
                }
         }
+       
 
       var addressid
       const addressId = document.querySelectorAll('.address')

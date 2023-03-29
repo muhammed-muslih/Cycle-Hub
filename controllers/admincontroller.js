@@ -3,6 +3,8 @@ const productService = require('../services/productServices')
 const categoryService = require('../services/categoryService')
 const cloudinary = require('../util/cloudinary')
 const brandService = require('../services/brandService')
+const orderService = require('../services/orderServices')
+
 
 
 module.exports={
@@ -216,6 +218,24 @@ module.exports={
     product[0].price=product[0].price.toLocaleString('en-IN',{style:'currency',currency:'INR'})
     res.render('adminView/singleProduct',{layout:"adminlayout",product})
 
+   },
+   renderOrderList : async(req,res)=>{
+    const orders = await orderService.findAllOrders()
+    console.log(orders);
+    for(var i=0;i<orders.length;i++){
+        orders[i].grandTotal = orders[i].grandTotal.toLocaleString('en-IN',{style:'currency',currency:'INR'})
+    }
+    res.render('adminView/orders',{layout:"adminlayout",orders})
+   },
+   changeOrderStatus : async(req,res)=>{
+    let {orderId,status}=req.body
+    console.log(orderId);
+    console.log(status);
+     await orderService.orderStatusChange(orderId,status)
+    
+        res.json({
+            status:"status changed"
+        })
    }
    
    

@@ -102,5 +102,10 @@ module.exports={
             $pull:{products:{productId:new ObjectId(productId)}}
         })
 
+    },
+    deleteCart: async (userId)=>{
+        console.log("user",userId);
+        const result = await db.getDB().collection(collection.cart_collection).deleteOne({user:userId})
+        console.log(result);
     }
 }
