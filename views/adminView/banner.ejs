@@ -1,0 +1,194 @@
+<div class="content">
+
+    <h1 style="text-align: center;font-weight: 900;">BANNER</h1>
+    <button type="button" class="btn" data-toggle="modal" data-target="#addBanner">
+        ADD BANNER
+      </button>
+
+      <!-- Modal -->
+        <div class="modal fade" id="addBanner" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h6 class="modal-title" id="exampleModalLongTitle"><b>Add Banner</b></h6>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+
+                  <form action="/admin/add-banner" method="post" enctype="multipart/form-data">
+                    <!-- Name input -->
+                    <div class="form-outline mb-4">
+                      <label class="form-label" for="bannertext"><b>Banner Text</b></label>
+                      <input type="text" id="bannertext" class="form-control  form-control-lg" name="bannerText" style="color: black;"/>
+                    </div>
+                    
+                    <!-- Email input -->
+                    <div class="form-outline mb-4">
+                      <label class="form-label" for="form7Example2"><b>Banner Images</b></label>
+                      <input type="file" class="form-control-file" id="banners" name="banners" style="color: black;" multiple>
+                    </div>
+
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+
+                  </form>
+                     
+                  
+                </div>
+                <!-- <div class="modal-footer">
+                  
+                </div> -->
+              </div>
+            </div>
+          </div>
+
+
+        
+          <table class="table table-hover table-fixed mt-5">
+            <thead>
+                <tr>
+                  <th>NUMBER</th>
+                  <th>CHOOSE</th>
+                  <th>BANNER TEXT</th>
+                  <th>IMAGES</th>
+                  <th>EDIT</th>
+                  <th>REMOVE</th>
+                </tr>
+              </thead>
+              <tbody>
+              <% for(var i=0;i<banners.length;i++){%>
+                <tr>
+                  <td><%=i+1%></td>
+                  <td><input type="radio" name="banner" style="width: 16px;height: 16px; cursor: pointer;" value="<%=banners[i]._id%>"></td>
+                  <td><%=banners[i].bannerText%></td>
+                  <td>
+                    <img src="<%=banners[i].banners[0]%>" alt="" width="200">
+                    <img src="<%=banners[i].banners[1]%>" alt="" width="200">
+                  </td>
+                  <td><a href="" class="btn btn-info" data-toggle="modal" data-target="#banner<%=banners[i]._id%>">Edit</a></td>
+                  <td><a href="" class="btn btn-danger" data-toggle="modal" data-target="#Modal<%=banners[i]._id%>">Remove</a></td>
+                </tr>
+               <% }%>
+              </tbody>
+            </table>
+
+
+
+        <% for(var i=0;i<banners.length;i++){%>
+
+            <!-- Modal -->
+        <div class="modal fade" id="banner<%=banners[i]._id%>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+          <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h6 class="modal-title" id="exampleModalLongTitle"><b>Edit Banner</b>  </h6>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+
+                <form action="/admin/edit-banner/<%=banners[i]._id%>" method="post" enctype="multipart/form-data">
+                  <!-- Name input -->
+                  <div class="form-outline mb-4">
+                    <label class="form-label" for="bannertext"><b>Banner Text</b></label>
+                    <input type="text" id="bannertext" class="form-control  form-control-lg" name="bannerText" value="<%=banners[i].bannerText%>" style="color: black;"/>
+                  </div>
+                  
+
+                  <%for(var j=0;j<banners[i].banners.length;j++){%>
+                      <div style="display: inline-block;">
+                        <img src="<%=banners[i].banners[j]%>" alt="" width="150">
+                      </div>
+                   <% }%>
+                  
+                  <!-- Email input -->
+                  <div class="form-outline mb-4">
+                    <label class="form-label" for="form7Example2"><b>Banner Images</b></label>
+                    <input type="file" class="form-control-file" id="banners" name="banners" style="color: black;" multiple>
+                  </div>
+
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button type="submit" class="btn btn-primary">Save</button>
+
+                </form>
+                   
+                
+              </div>
+              <!-- <div class="modal-footer">
+                
+              </div> -->
+            </div>
+          </div>
+        </div>
+        <% }%>
+
+
+<% for(var i=0;i<banners.length;i++){%>
+
+<!-- Modal -->
+<div class="modal fade" id="Modal<%=banners[i]._id%>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body text-dark">
+
+        <h4 class="text-dark">Are you sure ! Do you want to remove this banner</h4>
+
+        <div class="">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+        <a href="/admin/remove-banner/<%=banners[i]._id%>" class="btn btn-secondary">Yes</a>
+        <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+<% }%>
+        
+</div>
+<script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+<script>
+function changeImage(event){
+      document.getElementById('banners').src=URL.createObjectURL(event.target.files[0])
+   }
+
+const banners = document.querySelectorAll('input[name="banner"]')
+console.log(banners);
+banners.forEach((banner) => {
+      banner.addEventListener("change", function() {
+        const bnr = this.value;
+        console.log(bnr);
+        localStorage.setItem("banner", bnr);
+      });
+    });
+const selectedBanner = localStorage.getItem('banner')
+console.log("selected",selectedBanner);
+if (selectedBanner) {
+      const banner = document.querySelector(`input[value="${selectedBanner}"]`);
+      banner.checked = true;
+      // console.log(banner);
+    }
+
+    banners.forEach((bnr) => {
+      bnr.addEventListener("click", async function() {
+        const banner = this.value;
+        console.log();
+        await axios({
+          method :'get',
+          url:`/change-banner/${banner}`
+        })
+      });
+    });
+
+   
+    
+
+</script>

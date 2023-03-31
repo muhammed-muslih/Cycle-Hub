@@ -4,6 +4,7 @@ const categoryService = require('../services/categoryService')
 const cloudinary = require('../util/cloudinary')
 const brandService = require('../services/brandService')
 const orderService = require('../services/orderServices')
+const bannerService = require('../services/bannerServices')
 
 
 
@@ -236,11 +237,68 @@ module.exports={
         res.json({
             status:"status changed"
         })
-   }
+   },
+   orderDetails : async(req,res)=>{
+    const orderId = req.params.id
+    console.log(orderId);
+    const orders = await orderService.orderandUserDetails(orderId)
+    for(var i=0;i<orders.length;i++){
+        orders[i].grandTotal = orders[i].grandTotal.toLocaleString('en-IN',{style:'currency',currency:'INR'})
+        orders[i].productDetails.price =  orders[i].productDetails.price.toLocaleString('en-IN',{style:'currency',currency:'INR'})
+    }
+    res.render('adminView/orderdetail',{layout:"adminlayout",orders})
    
-   
-   
-        
+   },
+   renderAddBanner : async (req,res)=>{
+    const banners = await bannerService.findAllBanner()
+    res.render('adminView/banner',{layout:"adminlayout",banners})
+   },
+   addBanner:async(req,res)=>{
+    try{
 
+        console.log(req.body);
+        let {bannerText} = req.body
+         console.log(req.files);
+         const banners=[]
+         for(var i=0;i<req.files.length;i++){
+            const {url} = await cloudinary.uploader.upload(req.files[i].path)
+            banners.push(url)
+         }
+         console.log(banners);
+         await bannerService.addBanner(bannerText,banners)
+        res.redirect('/admin/add-banner')
+
+    }catch(err){
+        console.log(err);
+    }
     
+
+   },
+   editBanner : async (req,res)=>{
+    try{
+        let {bannerText} = req.body
+        const bannerId= req.params.id
+        const editBanners=[]
+        for(var i=0;i<req.files.length;i++){
+            const {url}=await cloudinary.uploader.upload(req.files[i].path)
+            editBanners.push(url)
+        }
+        console.log(editBanners);
+     const banner=await bannerService.findOneBanner(bannerId)
+     console.log(banner);
+     const banners=[...banner.banners.slice(editBanners.length),...editBanners]
+     await bannerService.editbanner(bannerId,bannerText,banners)
+     res.redirect('/admin/add-banner')
+    }catch(err){
+        console.log(err);
+    }
+
+   },
+   removeBanner : async (req,res)=>{
+    const bannerId = req.params.id
+    await bannerService.removeBanner(bannerId)
+    res.redirect('/admin/add-banner')
+   }
+
+   
 }

@@ -1,5 +1,5 @@
 const userServices = require('../services/userService')
-const cartServices = require('../services/cartService')
+const bannerServices = require('../services/bannerServices')
 
 module.exports={
     userAuth: async(req,res,next)=>{
@@ -10,7 +10,10 @@ module.exports={
         
         next()
       }else{
-        res.render('userView/homePage',{loggedIn:req.session.loggedIn});
+        const banner = await bannerServices.findBanner()
+        console.log("...............",banner);
+        res.render('userView/homePage',{loggedIn:req.session.loggedIn,banner});
       }
     },
+    
 }

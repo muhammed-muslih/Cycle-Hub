@@ -64,6 +64,16 @@ router.get('/order-list',adminAuth.adminAuth,adminController.renderOrderList )
 
 router.post('/change-order-status',adminAuth.adminAuth,admincontroller.changeOrderStatus)
 
+router.get('/order-details/:id',adminAuth.adminAuth,adminController.orderDetails)
+
+router.route('/add-banner')
+.get(adminAuth.adminAuth,adminController.renderAddBanner )
+.post(adminAuth.adminAuth,upload.array('banners',2),adminController.addBanner)
+
+router.post('/edit-banner/:id',adminAuth.adminAuth,upload.array('banners',2),adminController.editBanner)
+router.get('/remove-banner/:id',adminAuth.adminAuth,)
+
+
 
 
 

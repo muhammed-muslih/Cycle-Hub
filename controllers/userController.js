@@ -5,6 +5,8 @@ const cartServices = require("../services/cartService");
 const userService = require('../services/userService');
 const orderService = require('../services/orderServices')
 const ObjectId = require('mongodb').ObjectId
+const bannerServices = require('../services/bannerServices')
+const whishListServices = require('../services/whishListService')
 
 
 
@@ -12,7 +14,8 @@ module.exports = {
     homePageRender:async(req,res,next)=>{
         const user=req.session.userName
         // console.log(user);
-        res.render('userView/homePage',{user,loggedIn:req.session.loggedIn});
+        const banner = await bannerServices.findBanner()
+        res.render('userView/homePage',{user,loggedIn:req.session.loggedIn,banner});
     },
     loginPageRender:(req,res)=>{
         const message= req.query.message
@@ -183,10 +186,12 @@ module.exports = {
        const date = new Date().toLocaleString({timeZone: 'Asia/Kolkata'});
        const result = await orderService.addOrder(userId,address,paymentMethod,total,products,date,status)
        await cartServices.deleteCart(userId)
+       console.log(result);
        if(result){
         res.json({
             status:"success",
-            message:"order placed successfuly"
+            message:"order placed successfuly",
+            orderId:result.insertedId
 
         })
 
@@ -217,7 +222,52 @@ module.exports = {
     },
     orderSuccessPage :(req,res)=>{
         const user=req.session.userName
-        res.render('userView/orderSuccess',{user,loggedIn:req.session.loggedIn})
+        console.log("...........",req.query.orderId);
+        const orderId = req.query.orderId
+        res.render('userView/orderSuccess',{user,loggedIn:req.session.loggedIn,orderId})
+    },
+    ChangeBanner :async(req,res)=>{
+        const bannerId = req.params.id
+        console.log(bannerId);
+        await bannerServices.updateBanner(bannerId)
+        res.json({
+            status:'banner changed'
+        })
+    },
+    renderWhislist : async(req,res)=>{
+        const user = req.session.userName
+        const userId = req.session.userId
+        const products = await whishListServices.getWhishList(userId)
+        console.log(products);
+        res.render('userView/whishList',{user,loggedIn:req.session.loggedIn,products})
+    },
+
+    addWhishList : async (req,res)=>{
+        let {productId}=req.body
+        console.log(productId);
+        const userId = req.session.userId
+        const whishList = await whishListServices.isWhishListExist(userId)
+        if(whishList){
+           const result=  await whishListServices.updateWhishList(userId,productId)
+           if(result === 'added'){
+            res.json({
+                status:"added",
+                message:"item added to the whishList"
+            })
+           }else{
+            res.json({
+                status:"removed",
+                message:"item added to the whishList"
+            })
+           }
+        }else{
+         await whishListServices.addWhishList(userId,productId)
+         res.json({
+            status:"added",
+            message:"item added to the whishList"
+        })
+        }
+       
     }
     
 }

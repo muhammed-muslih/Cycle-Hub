@@ -19,7 +19,7 @@ module.exports={
         await db.getDB().collection(collection.cart_collection).insertOne({user:userId,products})
     },
 
-    updateCart : async (userId,productId)=>{
+        updateCart : async (userId,productId)=>{
         const isproductExist = await db.getDB().collection(collection.cart_collection).findOne({user:userId,
             products:{
                 $elemMatch:{

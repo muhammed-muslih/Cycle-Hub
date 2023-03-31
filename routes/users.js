@@ -10,6 +10,8 @@ router.route('/signup')
 .get(userController.signupPageRender)
 .post(authController.userRegister)
 
+router.get('/change-banner/:id',userController.ChangeBanner)
+
 router.route('/login')
 .get(userController.loginPageRender)
 .post(authController.verifyUser)
@@ -39,6 +41,10 @@ router.get('/order-details/:id',userAuth.userAuth,userController.orderDetailspag
 router.get('/order-success',userAuth.userAuth,userController.orderSuccessPage)
 
 router.post('/add-Address',userAuth.userAuth,userController.addAddress)
+
+//whisList
+router.get('/whishlist',userAuth.userAuth,userController.renderWhislist)
+router.post('/add-to-whishlist',userAuth.userAuth,userController.addWhishList)
 
 
 

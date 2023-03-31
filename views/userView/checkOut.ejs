@@ -97,7 +97,7 @@
                             <!-- <h6 class="coupon__code"><span class="icon_tag_alt"></span> Have a coupon? <a href="#">Click
                             here</a> to enter your code</h6> -->
 
-                            <table class="table mt-3">
+                            <table class="table mt-3 p-3 table-bordered table-secondary">
                                 <thead>
                                   <tr>
                                     <th scope="col">Select</th>
@@ -127,7 +127,7 @@
                         </div>
                         <div class="col-lg-6 col-md-6">
                             <div class="checkout__order">
-                                <table class="table">
+                                <table class="table table-bordered ">
                                     <h4 style="font-weight: 800;">Your order</h4>
                                     <thead>
                                       <tr>
@@ -270,17 +270,8 @@
            
 
         if(res.data.status==='success'){
-                // Swal.fire({
-                //   title: 'order placed success fully',
-                //   showClass: {
-                //    popup: 'animate__animated animate__fadeInDown'
-                //   },
-                //   hideClass: {
-                //   popup: 'animate__animated animate__fadeOutUp'
-                //   }
-                // })
-                location.assign('/order-success')
-
+          console.log(res.data.orderId);
+                location.assign(`/order-success?orderId=${res.data.orderId}`)
                }
         }
        

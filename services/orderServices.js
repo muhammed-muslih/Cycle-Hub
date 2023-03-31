@@ -57,6 +57,50 @@ module.exports={
             $set:{status:status}
         })
         // console.log(result);
+    },
+    orderandUserDetails : async (orderId)=>{
+        const orderDetails = await db.getDB().collection(collecton.order_collection).aggregate([
+            
+                {
+                  '$match': {
+                    '_id': new ObjectId(orderId)
+                  }
+                },
+                 {
+                  '$unwind': {
+                    'path': '$products'
+                  }
+                },
+                 {
+                  '$lookup': {
+                    'from': 'product', 
+                    'localField': 'products.productId', 
+                    'foreignField': '_id', 
+                    'as': 'productDetails'
+                  }
+                },
+                 {
+                  '$unwind': {
+                    'path': '$productDetails'
+                  }
+                },
+                 {
+                  '$lookup': {
+                    'from': 'userData', 
+                    'localField': 'userId', 
+                    'foreignField': '_id', 
+                    'as': 'userDetails'
+                  }
+                },
+                 {
+                  '$unwind': {
+                    'path': '$userDetails'
+                  }
+                }
+              
+        ]).toArray()
+        return orderDetails
+
     }
 
    

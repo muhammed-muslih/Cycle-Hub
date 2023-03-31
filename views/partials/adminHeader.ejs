@@ -1,3 +1,11 @@
+<style>
+  .active2{
+    font-size: larger;
+    font-weight: 900;
+  }
+</style>
+
+
 <div class="wrapper">
     <div class="sidebar">
    
@@ -11,14 +19,14 @@
         </div>
         <ul class="nav">
 
-          <li onclick="activeClass(this)">
+          <li class="btns">
             <a href="/admin">
               <i class="tim-icons icon-chart-pie-36"></i>
               <p>DASHBOARD</p>
             </a>
           </li>
 
-          <li onclick="activeClass(this)">
+          <li class="btns">
             <a href="/admin/user-list">
               <i class="tim-icons icon-single-02"></i>
               <!-- <i class="tim-icons icon-atom"></i> -->
@@ -26,7 +34,7 @@
             </a>
           </li>
 
-          <li onclick="activeClass(this)">
+          <li class="btns">
             <a href="/admin/productList">
               <i class="tim-icons icon-single-02"></i>
               <!-- <i class="tim-icons icon-atom"></i> -->
@@ -34,44 +42,44 @@
             </a>
           </li>
 
-          <li onclick="activeClass(this)">
+          <li class="btns">
             <a href="/admin/categoryList">
               <i class="tim-icons icon-bell-55"></i>
               <!-- <i class="tim-icons icon-atom"></i> -->
               <p>CATEGORIES</p>
             </a>
           </li>
-          <li>
+          <li class="btns">
             <a href="/admin/addBrand">
               <i class="tim-icons icon-single-02"></i>
               <p>BRANDS</p>
             </a>
           </li>
 
-          <li>
+          <li class="btns">
             <a href="/admin/order-list">
               <i class="tim-icons icon-single-02"></i>
               <p>ORDERS</p>
             </a>
           </li>
-          <li>
-            <a href="#">
-              <i class="tim-icons icon-align-center"></i>
-              <p>Typography</p>
+          <li class="btns">
+            <a href="/admin/add-banner">
+              <i class="tim-icons icon-single-02"></i>
+              <p>BANNER</p>
             </a>
           </li>
-          <li>
+          <!-- <li>
             <a href="#">
               <i class="tim-icons icon-world"></i>
               <p>RTL Support</p>
             </a>
-          </li>
-          <li class="active-pro">
+          </li> -->
+          <!-- <li class="active-pro">
             <a href="#">
               <i class="tim-icons icon-spaceship"></i>
               <p>Upgrade to PRO</p>
             </a>
-          </li>
+          </li> -->
         </ul>
       </div>
     </div>
@@ -140,8 +148,21 @@
       <!-- End Navbar -->
       <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
       <script>
-        function activeClass(element){
-          element.classList.add('active')
-        }
+      const buttons = document.querySelectorAll('.btns')
+      buttons.forEach(btn=>{
+        btn.addEventListener('click',(event)=>{
+          // event.preventDefault(); // prevent default behavior of button
+
+          //remove active class
+          buttons.forEach(b=>{
+            b.classList.remove('active')
+          })
+
+          //add active class
+          btn.classList.add('active')
+
+        })
+      })
+        
       </script>
       
