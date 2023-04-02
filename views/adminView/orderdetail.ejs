@@ -83,7 +83,7 @@
                                 <td><%=orders[i].productDetails.productName%></td>
                                 <td><%=orders[i].products.quantity%></td>
                                 <td><%=orders[i].productDetails.price%></td>
-                                <td><%=orders[i].grandTotal%></td>
+                                <td><%=orders[i].subtotal%></td>
                                 <td><img src="<%=orders[i].productDetails.images[0]%>" alt="" width="150"> </td>
                             </tr>
                         <%}%>
@@ -100,8 +100,12 @@
                       <!-- <li class="text-muted ms-3"><span class="text-black me-4">SubTotal</span>$1110</li> -->
                       <!-- <li class="text-muted ms-3 mt-2"><span class="text-black me-4">Tax(15%)</span>$111</li> -->
                     </ul>
-                    <p class="text-black float-start "style="margin-left: -3rem;"><span class="text-black me-3" style="font-weight: 800; font-size: larger;"> <b>Total Amount</b></span><span
-                        style="font-size: 25px;"> : <%=locals.orders[0].grandTotal%></span></p>
+                    <p class="text-black float-start "style="margin-left: -3rem;"><span class="text-black me-3" style="font-weight: 800; font-size: larger;"> <b>SUB TOTAL</b></span><span
+                      style="font-size: 18px;"> : <%=locals.total%></span></p>
+                    <p class="text-black float-start "style="margin-left: -3rem;"><span class="text-black me-3" style="font-weight: 800; font-size: larger;"> <b>OFFER PRICE</b></span><span
+                      style="font-size: 18px;"> : <%=locals.orders[0].offerPrice%></span></p>
+                    <p class="text-black float-start "style="margin-left: -3rem;"><span class="text-black me-3" style="font-weight: 800; font-size: larger;"> <b>GRAND TOTAL</b></span><span
+                        style="font-size: 18px;"> : <%=locals.orders[0].grandTotal%></span></p>
                   </div>
                 </div>
         
@@ -110,5 +114,4 @@
           </div>
         </div>
         </section>
-    
         </div>

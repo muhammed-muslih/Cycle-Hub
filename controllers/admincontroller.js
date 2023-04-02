@@ -5,18 +5,26 @@ const cloudinary = require('../util/cloudinary')
 const brandService = require('../services/brandService')
 const orderService = require('../services/orderServices')
 const bannerService = require('../services/bannerServices')
+const couponService = require("../services/couponServices")
 
 
 
 module.exports={
     adminDashboardRender:(req,res)=>{
-            res.render('adminView/dashBoard',{layout:"adminLayout"})
+
+       const dashBoardClass='active'
+        res.render('adminView/dashBoard',{layout:"adminLayout",dashBoardClass})
        
     },
+
+
     renderUserList : async (req,res)=>{
+        const userClass='active'
         const users = await userService.findAllUser()
-        res.render('adminView/userView',{layout:"adminLayout",users})
+        res.render('adminView/userView',{layout:"adminLayout",users,userClass})
     },
+
+
     userBlockAndUnBlock: async (req,res)=>{
         try {
             const userId = req.params.id
@@ -28,6 +36,8 @@ module.exports={
             console.log(err);
         }
     },
+
+
     renderAdminLoginPage : (req,res)=>{
         const message = req.query.message
         if(req.session.adminLoggedIn){
@@ -37,17 +47,22 @@ module.exports={
         }
 
     },
+
+
     sessionDestroy : (req,res)=>{
         req.session.admin=null
         req.session.adminLoggedIn = false
         res.redirect('/admin')
 
     },
+
+
     renderProductAddPage : async (req,res)=>{
         const category = await categoryService.findListedAllCategory()
         const brand = await brandService.findListedBrand()
         res.render('adminView/addProduct',{layout:"adminLayout",category,brand})
     },
+
 
     addProduct: async (req,res)=>{
 
@@ -79,6 +94,8 @@ module.exports={
         }
           
    },
+
+
    addCategory: async(req,res)=>{
     let {categoryName} = req.body
     const iscategoryAlreadyExist = await categoryService.isCategoryAlreadyExist(categoryName)
@@ -91,32 +108,39 @@ module.exports={
 
    },
 
+
    renderCategoryList:async (req,res)=>{
+    const categoryClass='active'
     const message = req.query.message
     console.log(message);
     const category= await categoryService.findAllCategory()
     // const oneCategory = await categoryService.findoneCategory(id)
-    res.render('adminview/CategoryList',{layout:"adminLayout",category,message})
+    res.render('adminview/CategoryList',{layout:"adminLayout",category,message,categoryClass})
 
    },
 
+
    renderproductList : async(req,res)=>{
+    const productClass='active'
     const message = req.query.message
     console.log(message);
     const products = await productService.findAllProduct()
     for(var i=0;i<products.length;i++){
         products[i].price = products[i].price.toLocaleString('en-IN', { style: 'currency', currency: 'INR' });
     }
-    res.render('adminView/productView',{layout:"adminLayout", products,message})
+    res.render('adminView/productView',{layout:"adminLayout", products,message,productClass})
 
    },
 
+
    renderBrandList : async (req,res)=>{
+    const brandClass='active'
     let message = req.query.message
     console.log(message);
     const brands = await brandService.findAllBrand()
-    res.render('adminView/brandList',{layout:"adminLayout",brands,message})
+    res.render('adminView/brandList',{layout:"adminLayout",brands,message,brandClass})
    },
+
 
    addBrand:async (req,res)=>{
     let {brandName}=req.body
@@ -129,6 +153,8 @@ module.exports={
         res.redirect('/admin/addBrand')
     }
    },
+
+
    deleteProduct : async(req,res)=>{
 
     const productId = req.params.id
@@ -137,6 +163,8 @@ module.exports={
     res.redirect('/admin/productList')
 
    },
+
+
    renderEditproductPage :async (req,res)=>{
     try{
         const productId= req.params.id
@@ -153,6 +181,8 @@ module.exports={
     }
     
    },
+
+
    editProduct : async (req,res)=>{
     try{
     const productID=req.params.id
@@ -175,6 +205,8 @@ module.exports={
     }
     
    },
+
+
    categoryListorunlist: async (req,res)=>{
 
     const categoryId= req.params.id
@@ -182,6 +214,8 @@ module.exports={
     res.redirect('/admin/CategoryList')
 
    },
+
+
    editCategory:async(req,res)=>{
     const categoryId = req.params.id
     let {categoryName}=req.body
@@ -195,11 +229,15 @@ module.exports={
     
 
    },
+
+
    brandListOrUnlist : async (req,res)=>{
     const brandId = req.params.id
     await brandService.brandListorunlist(brandId)
     res.redirect('/admin/addBrand')
    },
+
+
    updateBrand : async (req,res)=>{
     const brandId = req.params.id
     let {brandName}=req.body
@@ -212,6 +250,8 @@ module.exports={
         res.redirect('/admin/addBrand')
     }
    },
+
+
    productdetails : async(req,res)=>{
     const productId = req.params.id
     const product = await productService.findSingleProduct(productId)
@@ -220,14 +260,20 @@ module.exports={
     res.render('adminView/singleProduct',{layout:"adminlayout",product})
 
    },
+
+
    renderOrderList : async(req,res)=>{
+    const orderClass='active'
     const orders = await orderService.findAllOrders()
-    console.log(orders);
+    // console.log(orders);
     for(var i=0;i<orders.length;i++){
         orders[i].grandTotal = orders[i].grandTotal.toLocaleString('en-IN',{style:'currency',currency:'INR'})
+        orders[i].date =  orders[i].date.toLocaleString()
     }
-    res.render('adminView/orders',{layout:"adminlayout",orders})
+    res.render('adminView/orders',{layout:"adminlayout",orders,orderClass})
    },
+
+
    changeOrderStatus : async(req,res)=>{
     let {orderId,status}=req.body
     console.log(orderId);
@@ -238,21 +284,36 @@ module.exports={
             status:"status changed"
         })
    },
+
+
    orderDetails : async(req,res)=>{
     const orderId = req.params.id
+    const orderClass='active'
     console.log(orderId);
     const orders = await orderService.orderandUserDetails(orderId)
+    var total =0
     for(var i=0;i<orders.length;i++){
+        total = total+orders[i].subtotal
         orders[i].grandTotal = orders[i].grandTotal.toLocaleString('en-IN',{style:'currency',currency:'INR'})
         orders[i].productDetails.price =  orders[i].productDetails.price.toLocaleString('en-IN',{style:'currency',currency:'INR'})
+        orders[i].subtotal = orders[i].subtotal.toLocaleString('en-IN',{style:'currency',currency:'INR'})
+        orders[i].offerPrice = orders[i].offerPrice.toLocaleString('en-IN',{style:'currency',currency:'INR'})
+        orders[i].date =  orders[i].date.toLocaleString()
+
     }
-    res.render('adminView/orderdetail',{layout:"adminlayout",orders})
+    total=total.toLocaleString('en-IN',{style:'currency',currency:'INR'})
+    res.render('adminView/orderdetail',{layout:"adminlayout",orders,orderClass,total})
    
    },
+
+
    renderAddBanner : async (req,res)=>{
+    const bannerClass='active'
     const banners = await bannerService.findAllBanner()
-    res.render('adminView/banner',{layout:"adminlayout",banners})
+    res.render('adminView/banner',{layout:"adminlayout",banners,bannerClass})
    },
+
+
    addBanner:async(req,res)=>{
     try{
 
@@ -274,6 +335,8 @@ module.exports={
     
 
    },
+
+
    editBanner : async (req,res)=>{
     try{
         let {bannerText} = req.body
@@ -294,11 +357,56 @@ module.exports={
     }
 
    },
+
+
    removeBanner : async (req,res)=>{
     const bannerId = req.params.id
     await bannerService.removeBanner(bannerId)
     res.redirect('/admin/add-banner')
+   },
+
+
+   renderCouponPage : async (req,res)=>{
+    let message = req.query.message
+    const couponClass = "active"
+    await couponService.checkCouponExpired()
+    const coupons =  await couponService.findAllCoupon()
+    console.log(coupons);
+    for(var i=0;i<coupons.length;i++){
+        coupons[i].createdDate = coupons[i].createdDate.toLocaleString()
+        coupons[i].expiryDate =   coupons[i].expiryDate.toLocaleString()
+    }
+    res.render('adminView/coupons',{layout:'adminlayout',couponClass,coupons,message})
+
+   },
+
+
+   addCoupon : async(req,res)=>{
+    let {couponCode,min_amount,discount,expiryDate}=req.body
+    console.log(req.body);
+    const coupon =  await couponService.isCouponExist(couponCode)
+
+    if(coupon){
+        res.redirect('/admin/coupon-list?message="coupon already exist"')
+
+    }else{
+
+    min_amount=parseInt(min_amount)
+    discount=parseInt(discount)
+    await couponService.addCoupon(couponCode,min_amount,discount,expiryDate)
+    res.redirect('/admin/coupon-list')
+
+    }
+   },
+
+   deleteCoupon : async (req,res)=>{
+    const couponId = req.params.id
+    await couponService.deleteCoupon(couponId)
+    res.redirect('/admin/coupon-list')
    }
+
+
+
 
    
 }

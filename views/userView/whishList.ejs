@@ -198,6 +198,8 @@
            })
        console.log(res);
        if(res.data.status==='removed'){
+            // document.getElementById(productId).style.backgroundColor='white'  
+            localStorage.setItem(productId,'white')
            Toastify({
                    text: "product removed from whishList",
                    duration: 3000,

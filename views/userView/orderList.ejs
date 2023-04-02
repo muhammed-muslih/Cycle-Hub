@@ -29,7 +29,9 @@
             <th scope="col">ORDER ID</th>
             <th scope="col">DATE</th>
             <th scope="col">PAYMENT</th>
-            <th scope="col">TOTAL PRICE</th>
+            <th scope="col">SUBTOTAL</th>
+            <th scope="col">OFFER</th>
+            <th scope="col">GRAND TOTAL</th>
             <th scope="col">STATUS</th>
             <th scope="col">CHANGE STATUS</th>
             <th scope="col">DETAILS</th>
@@ -43,6 +45,8 @@
                   <td><b><%=orders[i]._id%></b></td>
                   <td><b><%=orders[i].date%></b></td>
                   <td><b><%=orders[i].paymentMethod%></b></td>
+                  <td><b><%=orders[i].subtotal%></b></td>
+                  <td><b><%=orders[i].offerPrice%></b></td>
                   <td><b><%=orders[i].grandTotal%></b></td>
                   <td><b><%=orders[i].status%></b></td>
                   <td>

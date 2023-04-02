@@ -11,11 +11,9 @@ const admincontroller = require('../controllers/admincontroller');
 
 router.get('/',adminAuth.adminAuth,adminController.adminDashboardRender)
 
-
 router.route('/adminLogin')
 .get(adminController.renderAdminLoginPage)
 .post(authController.verifyAdmin)
-
 
 router.get('/logout',adminAuth.adminAuth,adminController.sessionDestroy)
 
@@ -30,6 +28,7 @@ router.route('/add-product')
 router.post('/addCategory',adminAuth.adminAuth,adminController.addCategory)
 
 router.get('/categoryList',adminAuth.adminAuth,adminController.renderCategoryList)
+
 //product view
 router.get('/productList',adminAuth.adminAuth,adminController.renderproductList)
 
@@ -48,8 +47,10 @@ router.route('/editProduct/:id')
 
 //productListOrUnlist
 router.get('/categoryListOrUnlist/:id',adminAuth.adminAuth,adminController.categoryListorunlist)
+
 //edit category
 router.post('/editCategory/:id',adminAuth.adminAuth,adminController.editCategory)
+
 router.get('/editCategory/:id',adminAuth.adminAuth,adminController.editCategory)
 
 //brand list or unlist
@@ -71,7 +72,14 @@ router.route('/add-banner')
 .post(adminAuth.adminAuth,upload.array('banners',2),adminController.addBanner)
 
 router.post('/edit-banner/:id',adminAuth.adminAuth,upload.array('banners',2),adminController.editBanner)
+
 router.get('/remove-banner/:id',adminAuth.adminAuth,)
+
+router.get('/coupon-list',adminAuth.adminAuth,adminController.renderCouponPage)
+
+router.post('/add-coupon',adminAuth.adminAuth,adminController.addCoupon)
+
+router.get('/delete-coupon/:id',adminAuth.adminAuth,adminController.deleteCoupon)
 
 
 

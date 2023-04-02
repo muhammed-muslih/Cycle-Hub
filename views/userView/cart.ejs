@@ -105,18 +105,11 @@
                 </div>
             </div>
             <div class="col-lg-4">
-                <div class="cart__discount">
-                    <h6>Discount codes</h6>
-                    <form action="#">
-                        <input type="text" placeholder="Coupon code">
-                        <button type="submit">Apply</button>
-                    </form>
-                </div>
                 <div class="cart__total">
-                    <h6>Cart total</h6>
+                    <h5 style="font-weight: 900;">Cart total</h5>
                     <ul>
-                        <li >Subtotal <span class="totalAmount"><%=locals.totalPrice%></span></li>
-                        <li >Total <span class="totalAmount"><%=locals.totalPrice%></span></li>
+                        <li >Subtotal <span class="totalAmount text-dark" id="subtotal"><%=locals.totalPrice%></span></li>
+                        <li >Total <span class="totalAmount text-dark" id="cartTotal"><%=locals.totalPrice%></span></li>
                     </ul>
                     <a href="/checkout" style="text-decoration: none;" class="primary-btn">Proceed to checkout</a>
                 </div>
@@ -254,3 +247,4 @@ function confirmDelete(productName,productId) {
 
 
 </script>
+

@@ -87,8 +87,8 @@
     <!-- Breadcrumb Section End -->
 
     <!-- Checkout Section Begin -->
-    <section class="" style="margin-top: 10px;margin-bottom:55px ;" >
-        <div class="container-fluid ">
+    <section class="container" style="margin-top: 10px;margin-bottom:55px ;" >
+        <div class="">
             <div class="checkout__form">
                 <form action="#">
                     <div class="row">
@@ -97,7 +97,7 @@
                             <!-- <h6 class="coupon__code"><span class="icon_tag_alt"></span> Have a coupon? <a href="#">Click
                             here</a> to enter your code</h6> -->
 
-                            <table class="table mt-3 p-3 table-bordered table-secondary">
+                            <table class="table mt-3 p-3 table-bordered " style="background-color: #f3f2ee;;">
                                 <thead>
                                   <tr>
                                     <th scope="col">Select</th>
@@ -120,12 +120,25 @@
                                   
                                 </tbody>
                               </table>
-
-
                             
                               <hr>
                         </div>
+                            
+                       
                         <div class="col-lg-6 col-md-6">
+                          <div class="cart__discount" style="margin-bottom: 25px; margin-left: 0rem;">
+                            <h6 style="margin-bottom: 1rem;">Discount codes</h6>
+                            <form >
+                                <input type="text" placeholder="Coupon code" id="coupon" style="width: 18rem;padding: 0.6rem;">
+                                <button type="button" class="btn-dark" id="applyCoupon" style="padding: 0.6rem;width: 7rem;font-weight: 700;">Apply</button>
+                            </form>
+
+                            <div style="display: none;" id="errorCoupon">
+                              <h5 class="text-danger">invalid coupon</h5>
+                            </div>
+                        </div>
+                        
+
                             <div class="checkout__order">
                                 <table class="table table-bordered ">
                                     <h4 style="font-weight: 800;">Your order</h4>
@@ -153,8 +166,9 @@
                                     </tbody>
                                   </table>
                                 <ul class="checkout__total__all">
-                                    <li>Subtotal <span id="total"><%=locals.totalPrice%></span></li>
-                                    <li>Total <span><%=locals.totalPrice%></span></li>
+                                    <li>Subtotal <span class=" text-dark" id="total"><%=locals.totalPrice%></span></li>
+                                    <li >OfferPrice <span class=" text-dark" id="offerPrice">₹000.00</span></li>
+                                    <li>Total <span class=" text-dark" id="grandTotal"><%=locals.totalPrice%></span></li>
                                 </ul>
                                 <div class="checkout__input__checkbox">
                                     
@@ -254,25 +268,48 @@
        })
       
          const placeOrder = async ()=>{
+          let offerPrice = document.getElementById('offerPrice').innerText
+          offerPrice=offerPrice.replace(/,/g,"")
+          offerPrice=offerPrice.replace('₹','')
+          offerPrice = parseInt(offerPrice)
+          let grandTotal = document.getElementById('grandTotal').innerText
+          grandTotal=grandTotal.replace(/,/g,"")
+          grandTotal=grandTotal.replace('₹','')
+          grandTotal = parseInt(grandTotal)
 
-          if(products && addressid && paymentMethod && total){
+          if(products && addressid && paymentMethod && subtotal){
 
             var res = await  axios({
            method:"post",
            url:'/place-order',
-           data :{products,addressid,paymentMethod,total}
+           data :{products,addressid,paymentMethod,subtotal,offerPrice,grandTotal,couponCode}
         })
 
           }else{
             window.alert('allfield required')
           }
+          
+
+          if(res.data.iscouponExist){
+          
+            Swal.fire({
+            position: 'top-end',
+             icon: 'success',
+            title: 'you get new coupon check your reward page',
+           showConfirmButton: false,
+            timer: 3000
+            })
+          }
         
+          setTimeout(function(){
+            if(res.data.status==='success'){
+                console.log(res.data.orderId);
+                location.assign(`/order-success?orderId=${res.data.orderId}`)
+               } 
+          },2500)
            
 
-        if(res.data.status==='success'){
-          console.log(res.data.orderId);
-                location.assign(`/order-success?orderId=${res.data.orderId}`)
-               }
+       
         }
        
 
@@ -325,10 +362,65 @@
         })
         })
 
-        var total = document.querySelector('#total').innerText
-        total=total.replace(/,/g,"")
-        total=total.replace('₹','')
-        total = parseInt(total)
-        console.log(total);
+        var subtotal = document.querySelector('#total').innerText
+        subtotal=subtotal.replace(/,/g,"")
+        subtotal=subtotal.replace('₹','')
+        subtotal = parseInt(subtotal)
+        console.log("subtotal",subtotal);
 
+
+
+
+
+
+        var isclicked = false
+        var couponCode 
+       document.getElementById('applyCoupon').addEventListener('click',function(){
+        couponCode  = document.getElementById('coupon').value
+           console.log(couponCode);
+         if(!isclicked){
+           applyCoupon(couponCode)
+         }  
+       
+       
+       })
+       
+       const applyCoupon =async(couponCode)=>{
+           console.log("hello");
+           const res = await  axios({
+           method:"post",
+           url:'/apply-coupon',
+           data :{couponCode}
+        })
+        var offerPrice
+        var grandTotal
+        if(res.data.status ==="success"){
+           isclicked=true
+           document.getElementById('errorCoupon').style.display='none'
+          console.log(res.data.percentage);
+          let percentage = res.data.percentage
+          let total= document.getElementById('total').innerText
+          total=total.replace(/,/g,"")
+          total=total.replace('₹','')
+          total=Number(total)
+          console.log(total);
+          offerPrice = (total*percentage)/100
+          console.log(offerPrice);
+          document.getElementById('offerPrice').innerText=offerPrice.toLocaleString('en-IN',{style:'currency',currency:'INR'})
+          grandTotal = total-offerPrice
+          console.log(grandTotal);
+          document.getElementById('grandTotal').innerText = grandTotal.toLocaleString('en-IN',{style:'currency',currency:'INR'})
+        }else{
+         
+           document.getElementById('errorCoupon').style.display='block'
+        }
+        console.log(res);
+       }
+       
+               
     </script>
+
+
+<script>
+ 
+</script>

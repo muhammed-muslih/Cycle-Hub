@@ -4,16 +4,16 @@ const collecton = require('../config/collections')
 const collections = require("../config/collections")
 
 module.exports={
-    addOrder: async(userId,address,paymentMethod,grandTotal,products,date,status)=>{
+    addOrder: async(userId,address,paymentMethod,subtotal,offerPrice,grandTotal,products,date,status)=>{
         const paymentStatus = 'pending'
        const result= await db.getDB().collection(collections.order_collection).insertOne(
-            {userId:userId,deliveryDetails:address,products:products,grandTotal:grandTotal,paymentMethod,date,status,paymentStatus}
+            {userId:userId,deliveryDetails:address,products:products,subtotal:subtotal,offerPrice,grandTotal,paymentMethod,paymentStatus,date,status}
         )
         return result
     },
     findUserAllOrders : async (userId)=>{
 
-        const orders = await db.getDB().collection(collections.order_collection).find({userId:userId}).toArray()
+        const orders = await db.getDB().collection(collections.order_collection).find({userId:userId}).sort({date:-1}).toArray() 
         return orders
 
     },
@@ -48,7 +48,7 @@ module.exports={
        
     },
     findAllOrders : async()=>{
-        const orders = await db.getDB().collection(collecton.order_collection).find({}).toArray()
+        const orders = await db.getDB().collection(collecton.order_collection).find({}).sort({date:-1}).toArray() 
         return orders
     },
     orderStatusChange : async (orderId,status)=>{
@@ -96,7 +96,11 @@ module.exports={
                   '$unwind': {
                     'path': '$userDetails'
                   }
-                }
+                },
+                {
+                  $addFields:{'subtotal':{$multiply:['$products.quantity','$productDetails.price']}}
+  
+              }
               
         ]).toArray()
         return orderDetails

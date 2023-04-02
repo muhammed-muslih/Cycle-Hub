@@ -1,0 +1,125 @@
+<div class="content">
+
+    <h1 style="text-align: center;font-weight: 900;">COUPONS</h1>
+    <button type="button" class="btn" data-toggle="modal" data-target="#addCoupon">
+        ADD COUPONS
+      </button>
+
+      <span class="text-danger message"><%=locals.message%></span>
+
+      <script>
+        setTimeout(()=>{
+          const message = document.querySelector('.message')
+          message.style.display="none"
+        },3000)
+      </script>
+
+      <!-- Modal -->
+        <div class="modal fade" id="addCoupon" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+            <div class="modal-dialog " role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h6 class="modal-title" id="exampleModalLongTitle"><b>Add Coupon</b></h6>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+
+                  <form action="/admin/add-coupon" method="post">
+                    <!-- Name input -->
+                    <div class="row">
+                    <div class=" mb-4 text-dark col-lg-12">
+                      <label class="form-label" for="bannertext"><b>Coupon Code</b></label>
+                      <input type="text" id="couponCode" class="form-control  form-control-lg" name="couponCode" style="color: black;"/>
+                    </div>
+
+                    <div class=" mb-4 text-dark col-lg-12">
+                        <label class="form-label" for="bannertext"><b>Minimum Amount of Purchase</b></label>
+                        <input type="number" id="couponDiscount" class="form-control  form-control-lg" name="min_amount" style="color: black;"/>
+                      </div>
+
+                    <div class=" mb-4 text-dark col-lg-6">
+                        <label class="form-label" for="bannertext"><b>Discount</b></label>
+                        <input type="number" id="couponDiscount" class="form-control  form-control-lg" name="discount" style="color: black;"/>
+                      </div>
+
+                      <div class=" mb-4 text-dark col-lg-6">
+                        <label class="form-label" for="bannertext"><b>Expiry Date</b></label>
+                        <input type="date" id="expiryDate" class="form-control text-dark form-control-lg" style="line-height: 1;" name="expiryDate" />
+                      </div>
+                    
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="margin-left: 18rem;">Close</button>
+                        <button type="submit" class="btn btn-secondary" style="margin-left: 1rem;">Add</button>
+                    </div>
+                </div>
+                  </form>
+                     
+                  
+                </div>
+                <!-- <div class="modal-footer">
+                  
+                </div> -->
+              </div>
+            </div>
+          </div>
+
+
+        
+          <table class="table table-hover table-fixed mt-5">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Coupon Code</th>
+                    <th scope="col">min_amount</th>
+                    <th scope="col">Discount</th>
+                    <th scope="col">Created On</th>
+                    <th scope="col">Expire On</th>
+                    <th scope="col">Remove</th>
+                </tr>
+              </thead>
+              <tbody>
+                <%for(var i=0;i<coupons.length;i++){%>
+
+              
+                <tr>
+                    <td><%=i+1%></td>
+                    <td><%=coupons[i].couponCode%></td>
+                    <td><%=coupons[i].min_amount%></td>
+                    <td><%=coupons[i].discount%>%</td>
+                    <td><%=coupons[i].createdDate%></td>
+                    <td><%=coupons[i].expiryDate%></td>
+                    <td> <a href="" data-toggle="modal" data-target="#delete<%=coupons[i]._id%>"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
+                </tr>
+                <%}%> 
+              </tbody>
+            </table>
+
+     </div>         
+
+
+
+<%for(var i=0;i<coupons.length;i++){%>
+<!-- Modal -->
+<div class="modal fade" id="delete<%=coupons[i]._id%>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Are you sure? do you want to delete this coupon!
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" style="margin-left: 18rem;"">NO</button>
+        <a href="/admin/delete-coupon/<%=coupons[i]._id%>" class="btn btn-secondary">YES</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%}%> 

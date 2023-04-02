@@ -7,6 +7,7 @@ const orderService = require('../services/orderServices')
 const ObjectId = require('mongodb').ObjectId
 const bannerServices = require('../services/bannerServices')
 const whishListServices = require('../services/whishListService')
+const couponService = require('../services/couponServices')
 
 
 
@@ -172,26 +173,43 @@ module.exports = {
 
     },
     placeOrder : async(req,res)=>{
-       let {products,addressid,paymentMethod,total}=req.body
+
+        console.log(".........",req.body);
+       let {products,addressid,paymentMethod,subtotal,offerPrice,grandTotal,couponCode}=req.body
        let userId=req.session.userId
        let address = await userService.findOneAddress(userId,addressid)
        address=address[0].address
        for(var i = 0;i<products.length;i++){
         products[i].productId = new ObjectId(products[i].productId )
        }
+
        let status
        if(paymentMethod === 'cod'){
         status="placed"
        }
-       const date = new Date().toLocaleString({timeZone: 'Asia/Kolkata'});
-       const result = await orderService.addOrder(userId,address,paymentMethod,total,products,date,status)
+       if(couponCode){
+         await couponService.usedCoupon(userId,couponCode)
+       }
+
+
+      var iscouponExist=false
+       const coupon = await couponService.getcoupon(userId,grandTotal)
+       console.log("coupon",coupon);
+       if(coupon){
+        iscouponExist=true
+       }
+
+
+       const date = new Date()
+       const result = await orderService.addOrder(userId,address,paymentMethod,subtotal,offerPrice,grandTotal,products,date,status)
        await cartServices.deleteCart(userId)
        console.log(result);
        if(result){
         res.json({
             status:"success",
             message:"order placed successfuly",
-            orderId:result.insertedId
+            orderId:result.insertedId,
+            iscouponExist:iscouponExist
 
         })
 
@@ -202,9 +220,12 @@ module.exports = {
         const user=req.session.userName
         const userId = req.session.userId
         const orders = await orderService.findUserAllOrders(userId)
-        console.log("...........",orders);
         for(var i= 0;i<orders.length;i++){
             orders[i]. grandTotal = orders[i]. grandTotal.toLocaleString('en-IN',{ style: 'currency', currency:'INR' })
+            orders[i]. offerPrice = orders[i].offerPrice.toLocaleString('en-IN',{ style: 'currency', currency:'INR' })
+            orders[i]. subtotal = orders[i]. subtotal.toLocaleString('en-IN',{ style: 'currency', currency:'INR' })
+            orders[i].date =  orders[i].date.toLocaleString()
+
         }
         res.render('userView/orderList',{user,loggedIn:req.session.loggedIn,orders})
     },
@@ -213,12 +234,17 @@ module.exports = {
         const orderId = req.params.id
         const orders = await orderService.findOrderDetails(orderId)
         console.log(orders);
+        var total = 0
         for(var i=0;i<orders.length;i++){
+            total = orders[i].subtotal+total
             orders[i].productDetails.price = orders[i].productDetails.price.toLocaleString('en-IN',{ style: 'currency', currency:'INR' })
             orders[i].subtotal = orders[i].subtotal.toLocaleString('en-IN',{ style: 'currency', currency:'INR' })
             orders[i].grandTotal = orders[i].grandTotal.toLocaleString('en-IN',{ style: 'currency', currency:'INR' })
+            orders[i]. offerPrice = orders[i].offerPrice.toLocaleString('en-IN',{ style: 'currency', currency:'INR' })
+            orders[i].date =  orders[i].date.toLocaleString()
         }
-        res.render('userView/orderDetails',{user,loggedIn:req.session.loggedIn,orders})
+        total=total.toLocaleString('en-IN',{ style: 'currency', currency:'INR' })
+        res.render('userView/orderDetails',{user,loggedIn:req.session.loggedIn,orders,total})
     },
     orderSuccessPage :(req,res)=>{
         const user=req.session.userName
@@ -268,6 +294,46 @@ module.exports = {
         })
         }
        
+    },
+    renderRewardPage : async(req,res)=>{
+        const user = req.session.userName
+        const userId = req.session.userId
+        await couponService.checkCouponExpired()
+        const coupons =  await couponService.findUsercoupon(userId)
+        for(var i=0;i<coupons.length;i++){
+            coupons[i].expiryDate =  coupons[i].expiryDate.toLocaleString().slice(0,9)
+        }
+        console.log(coupons);
+        res.render('userView/rewards',{user,loggedIn:req.session.loggedIn,coupons})
+
+    },
+    verifyCoupon : async (req,res)=>{
+        const userId = req.session.userId
+        console.log(req.body);
+        let { couponCode } = req.body
+        console.log(userId);
+        const coupon = await couponService.findOneCoupon(userId,couponCode)
+        console.log(coupon);
+        const currentDate = new Date()
+        if(!coupon){
+
+            res.json({status:"invalid"})
+
+        }else if(coupon.expiryDate < currentDate || coupon.isExpired){
+
+            res.json({status:"expired"})
+
+        }else{
+
+            res.json({
+                status:'success',
+                percentage: coupon.discount
+            })
+
+        }
+
+       
     }
+    
     
 }
