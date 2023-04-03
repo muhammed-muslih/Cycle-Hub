@@ -12,6 +12,7 @@
     "cloudinary": "^1.35.0",
     "colors": "^1.4.0",
     "cookie-parser": "~1.4.4",
+    "crypto": "^1.0.1",
     "debug": "~2.6.9",
     "dotenv": "^16.0.3",
     "ejs": "^3.1.8",
@@ -28,7 +29,8 @@
     "multer": "^1.4.5-lts.1",
     "nocache": "^3.0.4",
     "nodemon": "^2.0.21",
-    "otp-generator": "^4.0.1"
+    "otp-generator": "^4.0.1",
+    "razorpay": "^2.8.6"
   },
   "main": "app.js",
   "author": "",

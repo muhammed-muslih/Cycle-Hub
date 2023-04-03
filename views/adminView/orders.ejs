@@ -67,7 +67,7 @@
             </td>
             <td>
 
-                <% if(orders[i].status == 'placed'){ %>
+                <% if(orders[i].status=== 'placed'){ %>
                     <div class="dropdown">
                         <button class="dropOptions text-success"><%=orders[i].status%></button>
                         <div class="dropdown-content p-3 bg-white text-dark">
@@ -76,6 +76,7 @@
                             <!-- <a href="#" class="text-dark " style="font-weight:500;margin-bottom: 1rem;">Option 3</a> -->
                         </div>
                     </div>
+                    
                 <% }else if(orders[i].status == 'shipped'){%>
 
                     <div class="dropdown">
@@ -87,10 +88,30 @@
                         </div>
                     </div>
 
+                    <% }else if(orders[i].paymentStatus == 'paid'){%>
+                    
+                        <div class="dropdown">
+                            <button class="dropOptions text-success"><%=orders[i].status%></button>
+                            <div class="dropdown-content p-3 bg-white text-dark">
+                                <a  class="text-dark " style="font-weight:500;margin-bottom: 1rem;cursor: pointer;" onclick="changeStatus('<%=orders[i]._id%>','<%=orders[i].status%>')" >Shipped</a><hr style="border: solid 2px #1e1e2f ;">
+                                <a href="#" class="text-dark " style="font-weight:500;margin-bottom: 1rem;" onclick="changeStatus('<%=orders[i]._id%>','cancelled')">Cancel</a>
+                                <!-- <a href="#" class="text-dark " style="font-weight:500;margin-bottom: 1rem;">Option 3</a> -->
+                            </div>
+                        </div>
+
+                <% }else if(orders[i].status == 'pending'){%>
+                    <div class="dropdown">
+                        <button class="dropOptions text-primary"><%=orders[i].status%></button>
+                        <div class="dropdown-content p-3 bg-white text-dark">
+                            <a href="#" class="text-dark " style="font-weight:500;margin-bottom: 1rem;" onclick="changeStatus('<%=orders[i]._id%>','cancelled')">Cancel</a>
+                            <!-- <a href="#" class="text-dark " style="font-weight:500;margin-bottom: 1rem;">Option 3</a> -->
+                        </div>
+                    </div>
+
                 <% }else if(orders[i].status == 'deliverd'){%>
                     <button class="dropOptions text-white">deliverd</button>
                 <% }else if(orders[i].status == 'returned'){%> 
-                        <button class="dropOptions text-primary">returned</button>   
+                        <button class="dropOptions text-primary">returned</button>    
                 <%} else {%>
                     <button class="dropOptions text-danger">cancelled</button>
                   <%}%>  

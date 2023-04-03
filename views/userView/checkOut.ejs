@@ -174,8 +174,13 @@
                                     
                                     <input type="radio"name="payment" style="width: 16px;height: 16px; accent-color: black; cursor: pointer;" class="payment" value="cod">
                                    <span class="mt-2">cash on delivery</span> <br>
-                                   <input type="radio"name="payment" style="width: 16px;height: 16px; accent-color: black; cursor: pointer;" class="payment" value="online payment" >
-                                   <span class="mt-2">online payment</span> 
+                                   <input type="checkbox" id="onlinepaymentbtn" style="width: 16px;height: 16px; accent-color: rgb(5, 9, 27); cursor: pointer;"  value="online payment" >
+                                   <span class="mt-2">online payments</span> 
+                                   
+                                   <div class="mt-2" style="display: none;" id="onlinepay">
+                                    &nbsp;&nbsp;&nbsp; &nbsp; <input type="radio"name="payment" style="width: 16px;height: 16px; accent-color: black; cursor: pointer;" class="payment" value="razorpay">
+                                    <span class="mt-2 ">razorpay</span> 
+                                  </div>
 
                                 </div>
                                 <button type="submit" class="site-btn" id="placeorder"  >PLACE ORDER</button>
@@ -257,6 +262,25 @@
 
     <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+
+
+    <script>
+      var clicked = true
+       document.getElementById('onlinepaymentbtn').addEventListener('click',()=>{
+        
+         if(clicked){
+           document.getElementById('onlinepay').style.display='block'
+           clicked=false
+         }else{
+           document.getElementById('onlinepay').style.display='none'
+           clicked=true
+         }
+     
+       })
+      
+     </script>
 
     <script>
 
@@ -288,30 +312,44 @@
           }else{
             window.alert('allfield required')
           }
-          
-
+        
+         if(paymentMethod === 'cod'){
           if(res.data.iscouponExist){
           
-            Swal.fire({
-            position: 'top-end',
-             icon: 'success',
-            title: 'you get new coupon check your reward page',
-           showConfirmButton: false,
-            timer: 3000
-            })
-          }
-        
-          setTimeout(function(){
-            if(res.data.status==='success'){
-                console.log(res.data.orderId);
-                location.assign(`/order-success?orderId=${res.data.orderId}`)
-               } 
-          },2500)
-           
+          Swal.fire({
+          position: 'top-end',
+           icon: 'success',
+          title: 'you get new coupon check your reward page',
+         showConfirmButton: false,
+          timer: 3000
+          })
+        }
+      
+        setTimeout(function(){
+          if(res.data.status==='success'){
+              console.log(res.data.orderId);
+              location.assign(`/order-success?orderId=${res.data.orderId}`)
+             } 
+        },2500)
 
-       
+        localStorage.removeItem("coupencode")
+
+         }else if(paymentMethod==='razorpay'){
+
+          console.log("",res.data);
+
+          couponCode=localStorage.getItem('coupencode')
+          console.log(couponCode);
+          razorpayPayment(res.data,couponCode)
+      
+         }
+          
         }
        
+        // end of place order
+
+
+
 
       var addressid
       const addressId = document.querySelectorAll('.address')
@@ -323,8 +361,6 @@
         })
       })
     
-
-
 
         const productId=[]
         const quantity=[]
@@ -369,10 +405,6 @@
         console.log("subtotal",subtotal);
 
 
-
-
-
-
         var isclicked = false
         var couponCode 
        document.getElementById('applyCoupon').addEventListener('click',function(){
@@ -410,6 +442,7 @@
           grandTotal = total-offerPrice
           console.log(grandTotal);
           document.getElementById('grandTotal').innerText = grandTotal.toLocaleString('en-IN',{style:'currency',currency:'INR'})
+          localStorage.setItem('coupencode',couponCode)
         }else{
          
            document.getElementById('errorCoupon').style.display='block'
@@ -421,6 +454,90 @@
     </script>
 
 
+
+//razorpay
+
 <script>
- 
+
+  const razorpayPayment = (responses,couponCode)=>{
+
+    var options = {
+    "key": "rzp_test_VS752rixDIPgT0", // Enter the Key ID generated from the Dashboard
+    "amount": responses.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+    "currency": "INR",
+    "name": "cycle Hub",
+    "description": "Test Transaction",
+    // "image": "https://example.com/your_logo",
+    "order_id": responses.razorpayId, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+    "handler": function (response){
+
+        // alert(response.razorpay_payment_id);
+        // alert(response.razorpay_order_id);
+        // alert(response.razorpay_signature)
+
+        verifyRazoPayment(response,responses.orderId,responses.amount,couponCode)
+    },
+    "prefill": {
+        "name": responses.userName,
+        "email": responses.userEmail,
+        "contact": responses.userPhone
+    },
+    "notes": {
+        "address": "Razorpay Corporate Office"
+    },
+    "theme": {
+        "color": "#3399cc"
+    }
+    };
+    var rzp1 = new Razorpay(options);
+    rzp1.open();
+
+  }
+
+
+
+  const verifyRazoPayment = async (razorResponse,orderId,amount,couponCode)=>{
+    
+    try {
+
+      const res = await axios({
+      method:'POST',
+      url:'/verify-payment',
+      data:{razorResponse,orderId,amount,couponCode}
+    })
+    console.log(res);
+
+    if(res.data.status ==='success'){
+      if(res.data.iscouponExist){
+        Swal.fire({
+          position: 'top-end',
+           icon: 'success',
+          title: 'you get new coupon check your reward page',
+         showConfirmButton: false,
+          timer: 3000
+          })
+      }
+      setTimeout(function(){
+          console.log(res.data.orderId);
+          location.assign(`/order-success?orderId=${res.data.orderId}`)
+        },1000)
+    
+    }else{
+      Swal.fire({
+          position: 'top-end',
+           icon: 'error',
+          title: res.data.message,
+         showConfirmButton: false,
+          timer: 3000
+          })
+
+    }
+
+      
+    } catch (err) {
+      console.log(err);
+    }
+
+  }
+  
 </script>

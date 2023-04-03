@@ -8,6 +8,7 @@ const ObjectId = require('mongodb').ObjectId
 const bannerServices = require('../services/bannerServices')
 const whishListServices = require('../services/whishListService')
 const couponService = require('../services/couponServices')
+const razorpay = require('../util/razorpay')
 
 
 
@@ -183,39 +184,58 @@ module.exports = {
         products[i].productId = new ObjectId(products[i].productId )
        }
 
-       let status
-       if(paymentMethod === 'cod'){
-        status="placed"
-       }
-       if(couponCode){
-         await couponService.usedCoupon(userId,couponCode)
-       }
 
-
-      var iscouponExist=false
-       const coupon = await couponService.getcoupon(userId,grandTotal)
-       console.log("coupon",coupon);
-       if(coupon){
-        iscouponExist=true
-       }
-
-
+       let status = "pending"
        const date = new Date()
        const result = await orderService.addOrder(userId,address,paymentMethod,subtotal,offerPrice,grandTotal,products,date,status)
-       await cartServices.deleteCart(userId)
-       console.log(result);
-       if(result){
-        res.json({
-            status:"success",
-            message:"order placed successfuly",
-            orderId:result.insertedId,
-            iscouponExist:iscouponExist
+       var  orderId = result.insertedId
 
+       if(paymentMethod === 'cod'){
+
+        if(couponCode){
+            await couponService.usedCoupon(userId,couponCode)
+          }
+   
+         var iscouponExist=false
+          const coupon = await couponService.getcoupon(userId,grandTotal)
+          console.log("coupon",coupon);
+          if(coupon){
+           iscouponExist=true
+          }
+
+        status="placed"
+        await orderService.orderStatusChange(orderId,status)
+        await cartServices.deleteCart(userId)
+        console.log(result);
+        if(result){
+         res.json({
+             status:"success",
+             message:"order placed successfuly",
+             orderId:result.insertedId,
+             iscouponExist:iscouponExist
+         })
+ 
+        }
+
+       }else if(paymentMethod=== 'razorpay'){
+
+        const razoResOrder = await razorpay.generateRazorpay(orderId,grandTotal)
+        const user = await userService.getUser(userId)
+        console.log("razorpay",razoResOrder);
+        res.json({
+            orderId :orderId,
+            razorpayId :razoResOrder.id,
+            amount:razoResOrder.amount,
+            userName:user.firstName+" "+user.lastName,
+            userEmail:user.email,
+            userPhone:user.phoneno
         })
 
        }
         
     },
+
+
     orderListPageRender : async (req,res)=>{
         const user=req.session.userName
         const userId = req.session.userId
@@ -295,6 +315,7 @@ module.exports = {
         }
        
     },
+
     renderRewardPage : async(req,res)=>{
         const user = req.session.userName
         const userId = req.session.userId
@@ -307,6 +328,8 @@ module.exports = {
         res.render('userView/rewards',{user,loggedIn:req.session.loggedIn,coupons})
 
     },
+
+
     verifyCoupon : async (req,res)=>{
         const userId = req.session.userId
         console.log(req.body);
@@ -333,6 +356,46 @@ module.exports = {
         }
 
        
+    },
+
+    verifyPayment : async (req,res)=>{
+        
+        let {razorResponse, orderId,amount,couponCode}=req.body
+        console.log(" verifyPayment",req.body);
+        console.log("verify",couponCode);
+        const userId = req.session.userId
+        const isPaymentSuccess =  razorpay.verifyPayment(razorResponse)
+        if(isPaymentSuccess){
+          console.log("success");
+          await orderService.paymentStatusChange(orderId,'paid')
+          await cartServices.deleteCart(userId)
+         await orderService.orderStatusChange(orderId,"placed")
+        if(couponCode){
+            await couponService.usedCoupon(userId,couponCode)
+          }
+        var iscouponExist=false
+        const coupon = await couponService.getcoupon(userId,amount)
+        console.log("coupon",coupon);
+        if(coupon){
+         iscouponExist=true
+        }
+           
+            res.json({
+                status: "success",
+                message: "order placed",
+                orderId:orderId,
+                iscouponExist:iscouponExist
+              })
+
+        }else{
+            console.log(orderId);
+            await orderService.paymentStatusChange(orderId,"cancelled")
+            res.json({
+                status: "cancelled",
+                message: "payment failed"
+              })
+        }
+
     }
     
     

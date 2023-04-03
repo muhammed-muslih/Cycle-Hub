@@ -66,5 +66,7 @@ router.get('/rewards',userAuth.userAuth,userController.renderRewardPage)
 
 router.post('/apply-coupon',userAuth.userAuth,userController.verifyCoupon)
 
+router.post('/verify-payment',userAuth.userAuth,userController.verifyPayment)
+
 
 module.exports = router;

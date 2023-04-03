@@ -69,6 +69,12 @@ module.exports= {
         ]).toArray()
         return address
 
+    },
+
+    getUser : async (userId)=>{
+        const user = await db.getDB().collection(collecton.user_collection).findOne({_id:userId})
+        return user
+
     }
 
 

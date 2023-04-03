@@ -1,6 +1,6 @@
 const db = require("../db")
 const ObjectId = require('mongodb-legacy').ObjectId
-const collecton = require('../config/collections')
+const collection = require('../config/collections')
 const collections = require("../config/collections")
 
 module.exports={
@@ -48,18 +48,18 @@ module.exports={
        
     },
     findAllOrders : async()=>{
-        const orders = await db.getDB().collection(collecton.order_collection).find({}).sort({date:-1}).toArray() 
+        const orders = await db.getDB().collection(collection.order_collection).find({}).sort({date:-1}).toArray() 
         return orders
     },
     orderStatusChange : async (orderId,status)=>{
 
-        const result = await db.getDB().collection(collecton.order_collection).updateOne({_id:new ObjectId(orderId)},{
+        const result = await db.getDB().collection(collection.order_collection).updateOne({_id:new ObjectId(orderId)},{
             $set:{status:status}
         })
         // console.log(result);
     },
     orderandUserDetails : async (orderId)=>{
-        const orderDetails = await db.getDB().collection(collecton.order_collection).aggregate([
+        const orderDetails = await db.getDB().collection(collection.order_collection).aggregate([
             
                 {
                   '$match': {
@@ -104,6 +104,14 @@ module.exports={
               
         ]).toArray()
         return orderDetails
+
+    },
+    paymentStatusChange : async(orderId,status)=>{
+      await db.getDB().collection(collection.order_collection).updateOne({_id:new ObjectId(orderId)},{
+        $set:{
+          paymentStatus:status}
+      })
+  
 
     }
 
