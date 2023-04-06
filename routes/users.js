@@ -68,5 +68,19 @@ router.post('/apply-coupon',userAuth.userAuth,userController.verifyCoupon)
 
 router.post('/verify-payment',userAuth.userAuth,userController.verifyPayment)
 
+router.get('/user-profile',userAuth.userAuth,userController.userProfilePageRender)
+
+router.post('/check-password',userAuth.userAuth,authController.checkPassord)
+
+router.post('/update-password',userAuth.userAuth,authController.changePassword)
+
+router.post('/change-user-profile',userAuth.userAuth,userController.changeProfileDetails)
+
+router.get('/address-details',userAuth.userAuth,userController.userAddress)
+
+router.post('/edit-address/:id',userAuth.userAuth,userController.updateAddress)
+
+router.get('/delete-address/:id',userAuth.userAuth,userController.deleteAddress)
+
 
 module.exports = router;

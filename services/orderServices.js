@@ -56,6 +56,15 @@ module.exports={
         const result = await db.getDB().collection(collection.order_collection).updateOne({_id:new ObjectId(orderId)},{
             $set:{status:status}
         })
+
+        if(status==='deliverd'){
+
+          await db.getDB().collection(collection.order_collection).updateOne({_id:new ObjectId(orderId)},{
+            $set:{paymentStatus:'paid'}
+
+          })
+
+        }
         // console.log(result);
     },
     orderandUserDetails : async (orderId)=>{
@@ -112,6 +121,27 @@ module.exports={
           paymentStatus:status}
       })
   
+
+    },
+    deliverdOrders: async()=>{
+     const orders= await db.getDB().collection(collection.order_collection).aggregate([
+        {$match:{status:"deliverd"}},
+        {$project:{'deliveryDetails':0, 'products':0}},
+        {$sort:{date:-1}}
+      ]).toArray()
+      return orders
+    },
+
+    filterOrderDate : async(startDate,endDate)=>{
+
+      const orders = await db.getDB().collection(collection.order_collection).aggregate([
+        { $match : { status:"deliverd" } },
+        { $match: { $and : [ { date: { $gte: new Date(startDate) } } , { date : { $lte: new Date(endDate) } } ] } },
+        { $project : { 'deliveryDetails' :0 , 'products' : 0 } },
+        { $sort : { date:-1 } }
+
+      ]).toArray()
+      return orders
 
     }
 

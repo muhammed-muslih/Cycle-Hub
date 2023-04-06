@@ -1,0 +1,99 @@
+<style>
+    button{
+        height: 37px;
+        width: 100px;
+        margin-top: 21px;
+        border-radius: 8px;
+        background-color: #3f3f61;
+        border: none;
+        color: white;
+        font-weight: 600;
+    }
+    button :hover button{
+        background-color: #393954;
+    }
+</style>
+
+<div class="content">
+
+    <div class="mt-4">
+       <form action="/admin/filter-date" method="post">
+    
+        <div class="row">
+            <div class="col-md-2">
+                <i class="fas fa-calendar input-prefix" tabindex=0> <span class="text-white">Start Date </span> </i>
+                <input placeholder="Select date" type="date" name="startDate" id="startDate" class="form-control">
+            </div>
+    
+            <div class="col-md-2">
+                <i class="fas fa-calendar input-prefix" tabindex=0> <span class="text-white">End Date </span> </i>
+                <input placeholder="Select date" type="date" name="endDate"  id="endtDate" class="form-control">
+            </div>
+            <div class="col-md-2">
+            <button type="submit" id="submit">submit</button>
+            </div>
+          </div>
+    
+       </form>
+    </div>
+     
+
+ 
+
+
+    <table class="table table-hover table-striped table-fixed mt-5">
+        <thead>
+            <tr>
+              <th class="text-nowrap">#</th>
+              <th class="text-nowrap">OrderId</th>
+              <th class="text-nowrap">UserId</th>
+              <th class="text-nowrap">Total</th>
+              <th class="text-nowrap">Payment Method</th>
+              <th class="text-nowrap">Order Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <%for(var i=0;i<orders.length;i++){%>
+
+                <tr>
+                    <td class="text-nowrap"><%=i+1%></td>
+                    <td class="text-nowrap"><%=orders[i]._id%></td>
+                    <td class="text-nowrap"><%=orders[i].userId%></td>
+                    <td class="text-nowrap"><%=orders[i].grandTotal%></td>
+                    <td class="text-nowrap"><%=orders[i].paymentMethod%></td>
+                    <td class="text-nowrap"><%=orders[i].date%></td>
+                </tr>
+
+           <% }%>
+          </tbody>
+        </table>
+
+
+</div>
+<!-- <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+<script>
+    document.getElementById('submit').addEventListener('click',function(e){
+        e.preventDefault()
+        var startDate = document.getElementById('startDate').value
+        var endDate = document.getElementById('endtDate').value
+        console.log(startDate);
+        console.log(endDate);
+        
+        filterDate(startDate,endDate)
+        
+    })
+
+    const filterDate= async (startDate,endDate)=>{
+
+        const res = await axios({
+            method:'post',
+            url:'/admin/filter-date',
+            data :""
+        })
+
+
+
+    }
+</script> -->
+
+

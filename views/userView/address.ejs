@@ -1,0 +1,173 @@
+<style>
+.card-horizontal {
+    display: flex;
+    flex: 1 1 auto;
+}
+.head-text{
+    font-weight: 700;
+    font-size: 18px;
+}
+</style>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+
+<section  style="margin-top: 6rem;">
+
+    <div class="container-fluid" style="margin-top: 6rem;">
+        <div class="row " style=" padding-left: 17rem;">
+            <div class="col-9 mt-3">
+                <div class="card" style="border: none;">
+                    <div class="card-horizontal">
+                        <div class="card-body">
+                            <h4 class="card-title"> <a href="/user-profile" style="border: solid 2px black;padding: .5rem; color: black; border-radius: 6px; font-weight: 700;">
+                                <span class="text-dark"><i class="bi bi-caret-left-fill"></i></span> Back </a></h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <%if(address){%>
+
+    <%for(var i=0;i<address.length;i++){%>
+
+    <div class="container-fluid">
+        <div class="row ">
+          <div class="col-lg-2">
+
+          </div>
+            <div class="col-lg-7 mt-3">
+                <div class="card" style=" box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;">
+                    <div class="card-horizontal">
+                        <div class="card-body">
+                            <span class="head-text">Name &nbsp;&nbsp;&nbsp; :  </span> <span><%=address[i].address. firstName%> <%=address[i].address.lastName%></span><br>
+                            <span class="head-text">Address   :  </span> <span><%=address[i].address.address%>,<%=address[i].address.city%>,<%=address[i].address.district%>,<%=address[i].address.pincode%></span> <br>
+                            <span class="head-text">Phone &nbsp;&nbsp;  :  </span> <span><%=address[i].address.phone%></span><br>
+
+                        </div>
+                    </div> 
+                </div>
+            </div>
+            <div class="col-lg-3 mt-3">
+              <br>
+                <button  class="btn btn-default btn-sm"  style="border: solid 1px" data-toggle="modal" data-target="#modal<%=address[i].address._id%>" >
+                    <i class="bi bi-pencil-fill"></i></span> Edit
+                  </button>
+                  <br>
+                  <button type="button" class="btn  btn-sm mt-2" style="border: solid 1px" data-toggle="modal" data-target="#delete<%=address[i].address._id%>">
+                    <i class="bi bi-trash"></i> Remove
+                  </button>
+
+            </div>
+        </div>
+    </div>
+    <%}%>
+    <%}%>
+</section>
+
+
+<!-- edit modal -->
+
+<%for(var i=0;i<address.length;i++){%>
+  <!-- Modal -->
+  <div class="modal fade" id="modal<%=address[i].address._id%>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content ">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        
+        <div class="modal-body">
+          <form  action="/edit-address/<%=address[i].address._id%>" method="post">
+                <div class="form-row">
+                  <div class="form-group col-md-6">
+                    <label for="first Name">First Name</label>
+                    <input type="text" class="form-control" name="firstName" id="firstName" placeholder="first name" value="<%=address[i].address. firstName%>" >
+                  </div>
+                  <div class="form-group col-md-6">
+                    <label for="last Name">Last Name</label>
+                    <input type="text" class="form-control" name="lastName" placeholder="last name" value="<%=address[i].address.lastName%>">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="inputAddress">Address</label>
+                  <input type="text" class="form-control" id="inputAddress" name="address" placeholder="address" value="<%=address[i].address.address%>" >
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="inputState">District</label>
+                        <select id="" class="form-control" name="district" >
+                          <option value="<%=address[i].address.district%>"><%=address[i].address.district%></option>
+                                <option >Calicut</option>
+                                <option >Malappuaram</option>
+                                <option >Palakkad</option>
+                                <option >Thrissur</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                      <label for="inputZip">City</label>
+                      <input type="text" class="form-control" name="city" value="<%=address[i].address.city%>" >
+                    </div>
+                  </div>
+
+
+                <div class="form-row">
+                  <div class="form-group col-md-6">
+                    <label for="forPincode">pincode</label>
+                    <input type="text" class="form-control" name="pincode" value="<%=address[i].address.pincode%>" >
+                  </div>
+                  <div class="form-group col-md-6">
+                    <label for="phone">phone</label>
+                    <input type="text" class="form-control" name="phone" minlength="10" maxlength="10" value="<%=address[i].address.phone%>" >
+                  </div>
+                </div>
+          </div>
+          <hr>
+          <div style="margin-left: 73%;">
+         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+         <button type="submit" class="btn btn-primary">Save changes</button>
+         </div>
+           </form>
+      </div>
+    </div>
+    </div>
+  </div>
+  <%}%>
+
+
+
+
+  
+
+<!-- delete modal -->
+  <%for(var i=0;i<address.length;i++){%>
+
+<div class="modal fade" id="delete<%=address[i].address._id%>" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header bg-danger">
+          <h5 class="modal-title text-white" id="deleteModalLabel">Delete Confirmation</h5>
+          <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure you want to delete this item? This action cannot be undone.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <a href="/delete-address/<%=address[i].address._id%>"  class="btn btn-danger">Delete</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <%}%>
+  
+  

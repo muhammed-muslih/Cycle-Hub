@@ -135,7 +135,7 @@
                         <div class="product__item">
                             <div class="product__item__pic set-bg" data-setbg="<%=products[i].productDetails.images[0]%>">
                                 <ul class="product__hover">
-                                    <li><a class="whishList" data-productid="<%=products[i].productDetails._id%>" style="background-color: white;"><i class="fa fa-close" style="padding-left: .8rem;padding-right: .8rem;"></i></a></li>
+                                    <li><a class="whishList" data-productid="<%=products[i].productDetails._id%>" data-userid="<%=locals.userId%>" style="background-color: white;"><i class="fa fa-close" style="padding-left: .8rem;padding-right: .8rem;"></i></a></li>
                                     <li><a href="#"><img src="/images/icon/compare.png" alt=""> <span>Compare</span></a>
                                     </li>
                                     <li><a href=""><img src="/images/icon/search.png" alt=""></a></li>
@@ -220,12 +220,12 @@
    document.querySelectorAll('.whishList').forEach(function(whishBtn){
        whishBtn.addEventListener('click',function(event){
            event.preventDefault()
-           console.log(this.dataset.productid);
-           addToWhisList(this.dataset.productid)
+           console.log(event);
+           addToWhisList(this.dataset.productid,this.dataset.userid)
        })
    })
 
-   const addToWhisList = async(productId)=>{
+   const addToWhisList = async(productId,userId)=>{
     //    console.log("heloooo");
        console.log(productId);
        try{
@@ -238,7 +238,7 @@
        console.log(res);
        if(res.data.status==='removed'){
             // document.getElementById(productId).style.backgroundColor='white'  
-            localStorage.setItem(productId,'white')
+            localStorage.setItem(productId+userId,'white')
            Toastify({
                    text: "product removed from whishList",
                    duration: 3000,

@@ -1,0 +1,338 @@
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<link rel="stylesheet" href="/stylesheets/userprofil.css">
+<link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+
+<style>
+    .textBox{
+        border: none;
+    }
+</style>
+<section>
+    <div class="container emp-profile">
+        <form method="post">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="profile-img">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS52y5aInsxSm31CvHOFHWujqUx_wWTS9iM6s7BAm21oEN_RiGoog" alt=""/>
+                        <div class="file btn btn-lg btn-secondary">
+                            Change Photo
+                            <input type="file" name="file"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="profile-head">
+                                <h5 style="font-weight: 700; font-size: larger; text-transform: uppercase;" >
+                                    <%=userDetails.firstName%> <%=userDetails.lastName%>
+                                </h5>
+                                <h6>
+                                    <!-- Web Developer and Designer -->
+                                </h6>
+                                <!-- <p class="proile-rating">RANKINGS : <span>8/10</span></p> -->
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">About</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Address</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <input type="submit"  id="profile-add-btn" class="profile-edit-btn" name="btnAddMore" value="Add profile"/>
+                </div>
+
+                <div class="col-md-2">
+                    <input type="submit"  id="profile-edit-btn" class="profile-edit-btn" name="btnAddMore" value="Edit Profile"/>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="profile-work mt-1" style="border-right: solid 1px #212529b8;">
+                       
+                        <a href="">My Profile</a><br/><hr>
+                        <a href="/order-list">My Orders</a><br/><br>
+                        <a href="/rewards">My Rewards</a><br><br>
+                        <a href="/cart">My Cart</a><br><br>
+                        <hr>
+                    </div>
+                </div>
+                
+
+                <div class="col-md-8">
+                    <div class="tab-content profile-tab" id="myTabContent">
+                        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+
+                            <form action="">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>User Id</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p><%=userDetails._id%></p>
+                                        </div>
+                                    </div>
+                                </div> 
+                                
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>First Name</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input type="text" value="<%=userDetails.firstName%>" class="textBox"  id="fname" disabled > <br>
+                                            <span id="fname-error" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>Last Name</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input type="text" value="<%=userDetails.lastName%>" id="lname" class="textBox" disabled><br>
+                                            <span id="lname-error" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>Email</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input type="text" value="<%=userDetails.email%>" class="textBox" id="email" disabled><br>
+                                            <span id="email-error"  class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>Phone</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input type="text" value=" <%=userDetails.phoneno%>" class="textBox" id="phone" disabled><br>
+                                            <span id="phone-error"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                </form>
+                                    <div class="row">
+                                        <div class="col-md-6 ">
+                                            <a href="" id="changeBtn"> Change Password!</a>
+
+                                            <form>
+                                                <div class="form-group" style="display: none;" id="currentPassDiv">
+                                                  <label for="exampleInputPassword1">Enter Current Password</label>
+                                                  <input type="password" class="form-control" id="currentPassword" name="password" placeholder="Password">
+                                                </div>
+                                                <span id="pass-error" class="text-danger"></span>
+                                                <!-- <button type="submit" class="btn btn-primary">Submit</button> -->
+                                              </form>
+
+                                              <form>
+                                                <div id="newPasswordDiv" style="display: none;">
+                                                   <div class="form-group" >
+                                                     <label for="exampleInputPassword1">Enter New Password</label>
+                                                     <input type="password" class="form-control" id="newPassword" name="password" placeholder="new Password">
+                                                     <span id="newpass-error" class="text-danger"></span>
+                                                   </div>
+                                                   <div class="form-group" >
+                                                       <label for="exampleInputPassword1">Re Enter New Password</label>
+                                                       <input type="password" class="form-control" id="repassword" name="password" placeholder="new Password">
+                                                       <span id="repass-error" class="text-danger"></span>
+                                                     </div>
+                                                   <button type="submit" id="subBtn" class="btn btn-primary">change</button>
+                                                 </div>
+                                              </form>
+                                            
+                                        </div>
+                                    </div>
+                        </div>
+                        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+
+                            <%if(userDetails.address.length>0){%>
+
+                            <div class="row">
+                                <div class="col-md-12 " style="width: 103%;height: 10rem; padding: 3rem; margin-left: 1rem;
+                                box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;">
+                                    <div>
+                                        <span style="font-weight: 700;">  Name: </span> &nbsp;&nbsp;&nbsp;&nbsp;<span class="address"><%=userDetails.address[0].firstName%> <%=userDetails.address[0].lastName%></span> <br>
+                                        <span style="font-weight: 700;margin-top: 2rem;">  Address: </span> &nbsp;&nbsp;&nbsp;&nbsp;<span class="address"><%=userDetails.address[0].address%>,<%=userDetails.address[0].city%>,
+
+                                         <%=userDetails.address[0].district%>,<%=userDetails.address[0].pincode%>
+                                        </span><br>
+                                        <span style="font-weight: 700;">  Phone: </span> &nbsp;&nbsp;&nbsp;&nbsp;<span class="address"><%=userDetails.address[0].phone%></span> <br>
+                                        
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <%} else{%>
+                                  <p>there is no saved address</p>
+                                <%}%>
+
+                            <a href="/address-details" class="mt-5 ml-3" style="margin-top: 2rem;">Manage Address</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>           
+    </div>
+</section>
+<script src="/validation/validateuserProfile.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+<script>
+    var ischangeBtnClick = false
+    var passmatch = false
+    document.getElementById('changeBtn').addEventListener('click',(e)=>{
+        e.preventDefault()
+        if(ischangeBtnClick){
+            document.getElementById('currentPassDiv').style.display='none'
+            if(passmatch){
+                ischangeBtnClick=true
+            }else{
+                ischangeBtnClick=false
+            }
+            
+        }else{
+            document.getElementById('currentPassDiv').style.display='block'
+           ischangeBtnClick=true
+        }
+        
+    })
+
+   
+
+    document.getElementById('currentPassword').addEventListener('blur',async function(){
+        const currentPassword = document.getElementById('currentPassword').value
+        console.log(currentPassword);
+        if(currentPassword.length < 8){
+            document.getElementById('pass-error').innerText = "minimum 8 character required"
+        }else{
+            document.getElementById('pass-error').style.display= 'none'
+
+            const res = await axios({
+                method:'post',
+                url:'/check-password',
+                data:{password :currentPassword}
+            })
+
+            if(res.data.status ==='password match'){
+                passmatch = true
+                document.getElementById('pass-error').style.display= 'none'
+                document.getElementById('currentPassDiv').style.display='none'
+                document.getElementById('newPasswordDiv').style.display='block'
+
+
+            }else{
+            document.getElementById('pass-error').innerText = "password not match"
+            document.getElementById('pass-error').style.display= 'block'
+
+            }
+
+        }
+    })
+
+    var newpass
+    var passError = true
+    document.getElementById('newPassword').addEventListener('blur',function(){
+        passwordValidate()
+    })
+
+    var repass
+    var repassError = true
+    document.getElementById('repassword').addEventListener('blur',function(){
+        rePasswordValidate()
+    })
+
+
+
+    function passwordValidate(){
+        newpass = document.getElementById('newPassword').value.trim()
+        console.log(newpass);
+        if(newpass.length <8){
+            document.getElementById('newpass-error').innerText = "minimum 8 character required"
+            passError=true
+        }else{
+            document.getElementById('newpass-error').innerText =''
+            passError = false
+        }
+    }
+
+    function rePasswordValidate(){
+        repass = document.getElementById('repassword').value
+        console.log(repass);
+        if(repass === newpass){
+            document.getElementById('repass-error').innerText = ''
+            console.log('pass match');
+            repassError = false
+        }else{
+            document.getElementById('repass-error').innerText = 'enter correct password'
+            repassError=true
+        }
+    }
+
+
+    document.getElementById('subBtn').addEventListener('click',async function(e){
+        e.preventDefault()
+        passwordValidate()
+        rePasswordValidate()
+        if(!repassError && !passError){
+            console.log('update');
+            const res = await axios({
+                method:'post',
+                url:'/update-password',
+                data:{password:newpass}
+            })
+            document.getElementById('newPasswordDiv').style.display='none'
+            if(res.data.status ==='password updated'){
+
+                Toastify({
+                    text:"password updated",
+                    duration: 3000,
+                    gravity: "top", // `top` or `bottom`
+                    position: "center", // `left`, `center` or `right`
+                    stopOnFocus: false, // Prevents dismissing of toast on hover
+                    style: {
+                        background: "linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(25,192,36,1) 29%, rgba(27,210,36,0.9697128851540616) 35%,",
+                    },
+                }).showToast()
+            }
+        }else{
+            console.log('not match');
+
+            Toastify({
+                    text:"password not updated",
+                    duration: 3000,
+                    gravity: "top", // `top` or `bottom`
+                    position: "center", // `left`, `center` or `right`
+                    stopOnFocus: false, // Prevents dismissing of toast on hover
+                    style: {
+                        background: " linear-gradient(90deg, rgba(131,58,180,1) 0%, rgba(233,7,7,1) 9%, rgba(233,7,7,1) 90%, rgba(252,176,69,1) 100%);",
+                    },
+                }).showToast()
+        }
+
+    })
+
+ var inputFields = document.querySelectorAll('.textBox')
+  document.getElementById('profile-edit-btn').addEventListener('click',function(e){
+    e.preventDefault()
+    console.log('clicked');
+    inputFields.forEach(function (field) {
+        field.removeAttribute('disabled')
+        field.style.border ="solid 1px"
+        
+    })
+  })
+
+</script>

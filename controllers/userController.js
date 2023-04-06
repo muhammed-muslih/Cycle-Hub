@@ -14,7 +14,7 @@ const razorpay = require('../util/razorpay')
 
 module.exports = {
     homePageRender:async(req,res,next)=>{
-        const user=req.session.userName
+        const user=req.session.userName+" "+req.session.lastName
         // console.log(user);
         const banner = await bannerServices.findBanner()
         res.render('userView/homePage',{user,loggedIn:req.session.loggedIn,banner});
@@ -46,7 +46,8 @@ module.exports = {
         res.render('userView/otplogin')
     },
     renderShopePage :  async (req,res)=>{
-        const user=req.session.userName
+        const userId= req.session.userId
+        const user=req.session.userName+" "+req.session.lastName
         const categoryId = req.query.categoryId
         const brandId = req.query.brandId
         if(categoryId){
@@ -56,7 +57,7 @@ module.exports = {
             for (let i = 0; i < products.length; i++) {
                 products[i].price = products[i].price.toLocaleString('en-IN', { style: 'currency', currency: 'INR' });
               }
-            res.render('userView/shopePage',{products,category,brands,user,loggedIn:req.session.loggedIn})
+            res.render('userView/shopePage',{products,category,brands,user,loggedIn:req.session.loggedIn, userId})
 
         }else if(brandId){
             const products = await productServices.findBrandProduct(brandId)
@@ -65,7 +66,7 @@ module.exports = {
             for (let i = 0; i < products.length; i++) {
                 products[i].price = products[i].price.toLocaleString('en-IN', { style: 'currency', currency: 'INR' });
               }
-            res.render('userView/shopePage',{products,category,brands,user,loggedIn:req.session.loggedIn})
+            res.render('userView/shopePage',{products,category,brands,user,loggedIn:req.session.loggedIn,userId})
 
         }else{
             const brands = await brandService.findListedBrand()
@@ -74,13 +75,13 @@ module.exports = {
             for (let i = 0; i < products.length; i++) {
                 products[i].price = products[i].price.toLocaleString('en-IN', { style: 'currency', currency: 'INR' })
               }
-            res.render('userView/shopePage',{products,category,brands,user,loggedIn:req.session.loggedIn})
+            res.render('userView/shopePage',{products,category,brands,user,loggedIn:req.session.loggedIn,userId})
 
         }
             
     },
     renderSingleProductView : async(req,res)=>{
-        const user=req.session.userName
+        const user=req.session.userName+" "+req.session.lastName
         const productId = req.params.id
         const product = await productServices.findSingleProduct(productId)
         product[0].price=product[0].price.toLocaleString('en-IN',{style:'currency',currency:'INR'})
@@ -89,7 +90,7 @@ module.exports = {
 
     },
     cartpagerender : async(req,res)=>{
-        const user=req.session.userName
+        const user=req.session.userName+" "+req.session.lastName
         const userId= req.session.userId
         const cart = await cartServices.getCart(userId)
         let totalPrice =0
@@ -149,7 +150,7 @@ module.exports = {
 
     },
     checkoutPageRender : async (req,res)=>{
-        const user=req.session.userName
+        const user=req.session.userName+" "+req.session.lastName
         const userId = req.session.userId
         const product = await cartServices.getCart(userId)
 
@@ -237,7 +238,7 @@ module.exports = {
 
 
     orderListPageRender : async (req,res)=>{
-        const user=req.session.userName
+        const user=req.session.userName+" "+req.session.lastName
         const userId = req.session.userId
         const orders = await orderService.findUserAllOrders(userId)
         for(var i= 0;i<orders.length;i++){
@@ -250,7 +251,7 @@ module.exports = {
         res.render('userView/orderList',{user,loggedIn:req.session.loggedIn,orders})
     },
     orderDetailspageRender : async (req,res)=>{
-        const user=req.session.userName
+        const user=req.session.userName+" "+req.session.lastName
         const orderId = req.params.id
         const orders = await orderService.findOrderDetails(orderId)
         console.log(orders);
@@ -267,8 +268,8 @@ module.exports = {
         res.render('userView/orderDetails',{user,loggedIn:req.session.loggedIn,orders,total})
     },
     orderSuccessPage :(req,res)=>{
-        const user=req.session.userName
-        console.log("...........",req.query.orderId);
+        const user=req.session.userName+" "+req.session.lastName
+        // console.log("...........",req.query.orderId);
         const orderId = req.query.orderId
         res.render('userView/orderSuccess',{user,loggedIn:req.session.loggedIn,orderId})
     },
@@ -281,11 +282,11 @@ module.exports = {
         })
     },
     renderWhislist : async(req,res)=>{
-        const user = req.session.userName
+        const user=req.session.userName+" "+req.session.lastName
         const userId = req.session.userId
         const products = await whishListServices.getWhishList(userId)
         console.log(products);
-        res.render('userView/whishList',{user,loggedIn:req.session.loggedIn,products})
+        res.render('userView/whishList',{user,loggedIn:req.session.loggedIn,products,userId})
     },
 
     addWhishList : async (req,res)=>{
@@ -317,7 +318,7 @@ module.exports = {
     },
 
     renderRewardPage : async(req,res)=>{
-        const user = req.session.userName
+        const user=req.session.userName+" "+req.session.lastName
         const userId = req.session.userId
         await couponService.checkCouponExpired()
         const coupons =  await couponService.findUsercoupon(userId)
@@ -396,6 +397,63 @@ module.exports = {
               })
         }
 
+    },
+
+    userProfilePageRender : async (req,res)=>{
+        const userId = req.session.userId
+        const user=req.session.userName+" "+req.session.lastName
+        const userDetails = await userService.getUser(userId)
+        console.log(userDetails);
+        // userDetails.firstName = userDetails.firstName.toUpperCase()
+        // userDetails.lastName = userDetails.lastName.toUpperCase()
+        res.render('userView/userProfile',{user,loggedIn:req.session.loggedIn,userDetails})
+
+    },
+    changeProfileDetails : async(req,res)=>{
+        console.log('profile');
+        const userId = req.session.userId
+        let {firstName,lastName,email, phoneno} = req.body
+        const result = await userService.changeUserDerails(userId,firstName,lastName,email, phoneno)
+        console.log(result);
+        if(result.modifiedCount === 1){
+
+            res.json({
+                status:"changed"
+            })
+
+        }else{            
+            res.json({
+                status:"not changed"
+            })
+        }
+    },
+
+    userAddress:async (req,res)=>{
+        const userId = req.session.userId
+        const user=req.session.userName+" "+req.session.lastName
+        const address = await userService.findAddress(userId)
+        console.log(address);
+        res.render('userView/address',{user,loggedIn:req.session.loggedIn,address})
+    },
+
+    updateAddress: async (req,res)=>{
+        const addressId = req.params.id
+        const userId = req.session.userId
+        console.log(addressId);
+        console.log(req.body);
+        let {firstName, lastName, address, district,city,pincode, phone} = req.body
+        await userService.updateAddress(userId,addressId,firstName, lastName, address, district,city,pincode, phone)
+        res.redirect('/address-details')
+
+    },
+
+    deleteAddress: async (req,res)=>{
+        const addressId = req.params.id
+        const userId = req.session.userId
+        console.log(addressId);
+        await userService.deleteAddress(userId,addressId)
+        res.redirect('/address-details')
+        
     }
     
     

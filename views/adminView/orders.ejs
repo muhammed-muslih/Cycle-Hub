@@ -87,6 +87,8 @@
                             <!-- <a href="#" class="text-dark " style="font-weight:500;margin-bottom: 1rem;">Option 3</a> -->
                         </div>
                     </div>
+                    <% }else if(orders[i].status == 'deliverd'){%>
+                        <button class="dropOptions text-white">deliverd</button>
 
                     <% }else if(orders[i].paymentStatus == 'paid'){%>
                     
@@ -107,9 +109,6 @@
                             <!-- <a href="#" class="text-dark " style="font-weight:500;margin-bottom: 1rem;">Option 3</a> -->
                         </div>
                     </div>
-
-                <% }else if(orders[i].status == 'deliverd'){%>
-                    <button class="dropOptions text-white">deliverd</button>
                 <% }else if(orders[i].status == 'returned'){%> 
                         <button class="dropOptions text-primary">returned</button>    
                 <%} else {%>

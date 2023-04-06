@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt")
 const  userService = require('../services/userService')
-const adminServices = require('../services/adminServices')
+const adminServices = require('../services/adminServices');
+const { Db } = require("mongodb");
 module.exports = {
     userRegister : async (req,res)=>{
         console.log(req.body);
@@ -119,6 +120,47 @@ module.exports = {
             })
         }
            
-    }
+    },
+    checkPassord : async (req,res)=>{
+        console.log(req.body);
+        let{ password} = req.body
+        const userId = req.session.userId
+        console.log(userId);
+        const user = await userService.getUser(userId)
+        const isPasswordCorrect = await bcrypt.compare(password,user.password)
+        if(isPasswordCorrect){
+            console.log('password match');
+            res.json({
+                status:'password match'
+            })
+        }else{
+            console.log('password not match');
+            res.json({
+                status:'password not match'
+            })
+        }
+        
+    },
+
+    changePassword : async (req,res)=>{
+        console.log(req.body);
+        const userId = req.session.userId
+        let{password} = req.body
+        password = await bcrypt.hash(password,10)
+        console.log(password);
+        const result = await userService.updatePassword(userId,password)
+        if(result.modifiedCount === 1){
+            res.json({
+                status:"password updated"
+            })
+        }else{
+
+            res.json({
+                status:"password not updated"
+            })
+
+        }
+        
+    } 
    
 }

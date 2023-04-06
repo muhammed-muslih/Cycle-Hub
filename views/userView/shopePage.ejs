@@ -140,8 +140,8 @@
                         <div class="product__item">
                             <div class="product__item__pic set-bg" data-setbg="<%=products[i].images[0]%>">
                                 <ul class="product__hover">
-                                    <li><a class="whishList" data-productid="<%=products[i]._id%>"><img src="/images/icon/heart.png" alt="" class="whish"   data-productid="<%=products[i]._id%>" 
-                                        id="<%=products[i]._id%>"></a></li>
+                                    <li><a class="whishList" data-productid="<%=products[i]._id%>" data-userid="<%=locals.userId%>"><img src="/images/icon/heart.png" alt="" class="whish"   data-productid="<%=products[i]._id%>" 
+                                        id="<%=products[i]._id%><%=locals.userId%>" data-userid="<%=locals.userId%>"></a></li>
                                     <li><a href="#"><img src="/images/icon/compare.png" alt=""> <span>Compare</span></a>
                                     </li>
                                     <li><a href="/singleProductView/<%=products[i]._id%>"><img src="/images/icon/search.png" alt=""></a></li>
@@ -332,23 +332,26 @@
 
 <script>
      document.querySelectorAll('.whish').forEach(function(whish){
-        console.log(whish.dataset.productid);
-        const color = localStorage.getItem(whish.dataset.productid)
-        document.getElementById(whish.dataset.productid).style.backgroundColor =color
+        // console.log(whish);
+        // console.log(whish.dataset.productid+whish.dataset.userid);
+        const color = localStorage.getItem(whish.dataset.productid+whish.dataset.userid)
+        document.getElementById(whish.dataset.productid+whish.dataset.userid).style.backgroundColor =color
      })
     
 
     document.querySelectorAll('.whishList').forEach(function(whishBtn){
         whishBtn.addEventListener('click',function(event){
             event.preventDefault()
+            // console.log("hello");
             console.log(this.dataset.productid);
-            addToWhisList(this.dataset.productid)
+            addToWhisList(this.dataset.productid,this.dataset.userid)
         })
     })
 
-    const addToWhisList = async(productId)=>{
-        console.log("heloooo");
-        console.log(productId);
+    const addToWhisList = async(productId,userId)=>{
+        // console.log(productId+userId);
+        // console.log("heloooo");
+        // console.log(productId);
         try{
 
             const res= await axios({
@@ -358,8 +361,8 @@
             })
         console.log(res);
         if(res.data.status==='added'){
-            document.getElementById(productId).style.backgroundColor='#5CDDAB'
-            localStorage.setItem(productId,'#5CDDAB')
+            document.getElementById(productId+userId).style.backgroundColor='#5CDDAB'
+            localStorage.setItem(productId+userId,'#5CDDAB')
             Toastify({
                     text: "product added to whishList",
                     duration: 3000,
@@ -372,8 +375,8 @@
                     },
                 }).showToast()
         }else{
-            document.getElementById(productId).style.backgroundColor='white'  
-            localStorage.setItem(productId,'white')
+            document.getElementById(productId+userId).style.backgroundColor='white'  
+            localStorage.setItem(productId+userId,'white')
             Toastify({
                     text: "product removed from whishList",
                     duration: 3000,

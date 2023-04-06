@@ -81,6 +81,10 @@ router.post('/add-coupon',adminAuth.adminAuth,adminController.addCoupon)
 
 router.get('/delete-coupon/:id',adminAuth.adminAuth,adminController.deleteCoupon)
 
+router.get('/sales-report',adminAuth.adminAuth,adminController.salesReport)
+
+router.post('/filter-date',adminAuth.adminAuth,adminController.filterDate)
+
 
 
 

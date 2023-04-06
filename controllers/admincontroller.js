@@ -403,6 +403,31 @@ module.exports={
     const couponId = req.params.id
     await couponService.deleteCoupon(couponId)
     res.redirect('/admin/coupon-list')
+   },
+
+   salesReport :async (req,res)=>{
+    const salesClass='active'
+    const orders =  await orderService.deliverdOrders()
+    // console.log(orders);
+     orders.forEach((order) => {
+        order.grandTotal = order.grandTotal.toLocaleString('en-IN',{style:'currency',currency:'INR'})
+        order.date = order.date.toLocaleString()
+        
+    });
+    res.render('adminView/salesReport',{layout:"adminlayout",salesClass,orders})
+
+   },
+   filterDate : async (req,res)=>{
+    const salesClass='active'
+    console.log(req.body);
+    let{startDate,endDate} = req.body
+    const orders = await orderService.filterOrderDate(startDate,endDate)
+    orders.forEach((order) => {
+        order.grandTotal = order.grandTotal.toLocaleString('en-IN',{style:'currency',currency:'INR'})
+        order.date = order.date.toLocaleString()
+        
+    });
+   res.render('adminView/salesReport',{layout:"adminlayout",salesClass,orders})
    }
 
 
