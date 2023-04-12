@@ -85,6 +85,11 @@ router.get('/sales-report',adminAuth.adminAuth,adminController.salesReport)
 
 router.post('/filter-date',adminAuth.adminAuth,adminController.filterDate)
 
+router.get('/brand-banner',adminAuth.adminAuth,adminController.renderBrandBanner)
+
+
+router.post('/add-banner-image/:id',adminAuth.adminAuth,upload.single('image'),adminController.addBrandImage)
+
 
 
 

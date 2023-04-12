@@ -6,14 +6,107 @@ const brandService = require('../services/brandService')
 const orderService = require('../services/orderServices')
 const bannerService = require('../services/bannerServices')
 const couponService = require("../services/couponServices")
+const walletService = require('../services/walletService')
 
 
 
 module.exports={
-    adminDashboardRender:(req,res)=>{
-
+    adminDashboardRender:async (req,res)=>{
        const dashBoardClass='active'
-        res.render('adminView/dashBoard',{layout:"adminLayout",dashBoardClass})
+       let deliverdOrders = await orderService.deliverdOrdersCount()
+       if(deliverdOrders){
+       deliverdOrders=deliverdOrders.toLocaleString()
+       }else{
+        deliverdOrders=000
+       }
+
+
+       let totalCustomers = await userService.totalCustomers()
+       if(totalCustomers){
+        totalCustomers = totalCustomers.toLocaleString()
+       }else{
+        totalCustomers=000
+       }
+
+       let totalProducts = await productService.totalProducts()
+       if(totalProducts){
+        totalProducts=totalProducts.toLocaleString()
+       }else{
+        totalProducts=000
+       }
+
+       let todaySales = await orderService.currentDayTotalSale()
+       console.log(todaySales);
+       let todaysAmount = 0
+       if(todaySales){
+        todaySales.forEach((sales)=>{
+         todaysAmount=todaysAmount+sales.grandTotal
+        })
+        todaysAmount=todaysAmount.toLocaleString('en-IN',{ style: 'currency', currency:'INR' })
+       }else{
+        todaysAmount="₹000"
+       }
+      
+
+       let startDate= new Date()
+       startDate.setDate(startDate.getDate() - 7)
+       startDate = startDate.toISOString().slice(0,10)
+       let weekSale =await orderService.weekSale(startDate)
+       if(weekSale){
+        weekSale=weekSale.toLocaleString('en-IN',{style:'currency',currency:'INR'})
+       }else{
+        weekSale="₹000"
+       }
+
+
+       let startMonthDate = new Date(new Date().getFullYear() ,new Date().getMonth())
+       startMonthDate.setUTCHours(startMonthDate.getUTCHours() + 5, startMonthDate.getUTCMinutes() + 30); // Add 5 hours and 30 minutes for IST timezone
+       startMonthDate = startMonthDate.toISOString().slice(0, 10);
+
+       let endMonthDate = new Date(new Date().getFullYear(),new Date().getMonth() + 1)
+       endMonthDate.setUTCHours(endMonthDate.getUTCHours() + 5, endMonthDate.getUTCMinutes() + 30); // Add 5 hours and 30 minutes for IST timezone
+       endMonthDate = endMonthDate.toISOString().slice(0, 10);
+
+       console.log(startMonthDate);
+       console.log(endMonthDate);
+       let monthlyAmount= await orderService.filterSales(startMonthDate,endMonthDate)
+       if(monthlyAmount){
+        monthlyAmount=monthlyAmount[0].total.toLocaleString('en-IN',{style:'currency',currency:'INR'})
+       }else{
+        monthlyAmount="₹000"
+       }
+       console.log(monthlyAmount);
+
+      
+
+       const date = new Date().getFullYear()
+       let startYearDate = new Date(date, 0, 1);  // January is 0 and December is 11.
+       startYearDate.setUTCHours(startYearDate.getUTCHours() + 5, startYearDate.getUTCMinutes() + 30); // Add 5 hours and 30 minutes for IST timezone
+       startYearDate = startYearDate.toISOString().slice(0, 10);
+       console.log(startYearDate);
+
+       let  endYearDate = new Date(date+1,0,1)
+       endYearDate.setUTCHours(endYearDate.getUTCHours() + 5,endYearDate.getUTCMinutes() + 30 )
+       endYearDate= endYearDate.toISOString().slice(0,10)
+       console.log(endYearDate);
+
+       let  yearAmount = await orderService.filterSales(startYearDate,endYearDate)
+       if(yearAmount){
+       yearAmount=yearAmount[0].total.toLocaleString('en-IN',{style:'currency',currency:'INR'})
+       }else{
+        yearAmount="₹000"
+       }
+       console.log(yearAmount);
+
+
+       let totalSale = await orderService.totalSale()
+       if(totalSale){
+        totalSale = totalSale[0].total.toLocaleString('en-IN',{style:'currency',currency:'INR'})
+       }else{
+        totalSale="₹000"
+       }
+       console.log(totalSale);
+       res.render('adminView/dashBoard',{layout:"adminLayout",dashBoardClass,deliverdOrders,totalCustomers,totalProducts,todaysAmount, weekSale,monthlyAmount,yearAmount,totalSale})
        
     },
 
@@ -58,9 +151,10 @@ module.exports={
 
 
     renderProductAddPage : async (req,res)=>{
+        const productClass='active'
         const category = await categoryService.findListedAllCategory()
         const brand = await brandService.findListedBrand()
-        res.render('adminView/addProduct',{layout:"adminLayout",category,brand})
+        res.render('adminView/addProduct',{layout:"adminLayout",category,brand,productClass})
     },
 
 
@@ -166,6 +260,7 @@ module.exports={
 
 
    renderEditproductPage :async (req,res)=>{
+    const productClass='active'
     try{
         const productId= req.params.id
     const [product,category,brand] = await Promise.all([
@@ -174,7 +269,7 @@ module.exports={
         await categoryService.findAllCategory(),
         await brandService.findAllBrand()
     ])
-    res.render('adminView/editProduct',{layout:"adminlayout",product,category,brand})
+    res.render('adminView/editProduct',{layout:"adminlayout",product,category,brand,productClass})
 
     }catch(err){
         console.log(err);
@@ -275,11 +370,44 @@ module.exports={
 
 
    changeOrderStatus : async(req,res)=>{
-    let {orderId,status}=req.body
+    let {orderId,paymentStatus,status,userId}=req.body
     console.log(orderId);
     console.log(status);
+    console.log(paymentStatus);
+    console.log(userId);
+    if(status==='cancelled' &&paymentStatus ==='paid'){
+     const order = await orderService.findPriceOfOneOrder(orderId)
+     const amount = order[0].grandTotal
+     const isWalletExist = await walletService.findOneWallet(userId)
+     if(isWalletExist){
+        await walletService.updateWallet(userId,amount)
+        await orderService.orderStatusChange(orderId,status)
+        await orderService.paymentStatusChange(orderId,'refund')
+     }else{
+     await  walletService.createWallet(userId,amount)
      await orderService.orderStatusChange(orderId,status)
-    
+     await orderService.paymentStatusChange(orderId,'refund')
+     }
+
+    }else if(status ==='returned'){
+        const order = await orderService.findPriceOfOneOrder(orderId)
+        const amount = order[0].grandTotal
+        const isWalletExist = await walletService.findOneWallet(userId)
+        if(isWalletExist){
+        await walletService.updateWallet(userId,amount)
+        await orderService.orderStatusChange(orderId,status)
+        await orderService.paymentStatusChange(orderId,'refund')
+        }else{
+        await  walletService.createWallet(userId,amount)
+        await orderService.orderStatusChange(orderId,status)
+        await orderService.paymentStatusChange(orderId,'refund')
+        }
+
+    }else{
+
+    await orderService.orderStatusChange(orderId,status)
+
+    }
         res.json({
             status:"status changed"
         })
@@ -365,6 +493,25 @@ module.exports={
     res.redirect('/admin/add-banner')
    },
 
+   renderBrandBanner :async (req,res)=>{
+    const brandClass='active'
+    const brands = await brandService.findAllBrand()
+    console.log(brands);
+    res.render('adminView/brandBanner',{layout:"adminlayout", brandClass,brands})
+
+   },
+
+   addBrandImage : async (req,res)=>{
+    const brandId = req.params.id
+    console.log(brandId);
+    // console.log(req.file);
+    const {url}= await cloudinary.uploader.upload(req.file.path)
+    console.log(url);
+    const image = url
+    await brandService.addImage(brandId,image)
+   res.redirect('/admin/brand-banner')
+
+   },
 
    renderCouponPage : async (req,res)=>{
     let message = req.query.message

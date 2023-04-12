@@ -3,7 +3,7 @@
     <div class="loader"></div>
 </div>
 
-<section class="breadcrumb-option">
+<section class="breadcrumb-option mt-5">
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
@@ -66,10 +66,14 @@
                   class="fw-bold">Date:<%=orders[0].date%> </span></li>
               <li class="text-muted"><i class="fa fa-circle" style="color:black ;"></i> <span
                   class="me-1 fw-bold">Status:<%=orders[0].status%></li>
+                  <li class="text-muted"><i class="fa fa-circle" style="color:black ;"></i> <span
+                    class="me-1 fw-bold">Payment Method:<%=orders[0].paymentMethod%></li>
+              <li class="text-muted"><i class="fa fa-circle" style="color:black ;"></i> <span
+                class="me-1 fw-bold">Payment Status:<%=orders[0].paymentStatus%></li>
             </ul>
           </div>
         </div>
-
+        <div class="table-responsive">
         <div class="row my-2 mx-1 justify-content-center">
             <table class="table table-hover">
                 <thead class="thead-dark">
@@ -96,6 +100,7 @@
                     <% }%>
             </table>
         </div>
+      </div>
         <div class="row">
           <div class="col-xl-8">
             <!-- <p class="ms-3">Add additional notes and payment information</p> -->

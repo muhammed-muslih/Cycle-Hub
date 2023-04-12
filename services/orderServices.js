@@ -6,8 +6,9 @@ const collections = require("../config/collections")
 module.exports={
     addOrder: async(userId,address,paymentMethod,subtotal,offerPrice,grandTotal,products,date,status)=>{
         const paymentStatus = 'pending'
+        const orderDate=new Date().toISOString().slice(0,10)
        const result= await db.getDB().collection(collections.order_collection).insertOne(
-            {userId:userId,deliveryDetails:address,products:products,subtotal:subtotal,offerPrice,grandTotal,paymentMethod,paymentStatus,date,status}
+            {userId:userId,deliveryDetails:address,products:products,subtotal:subtotal,offerPrice,grandTotal,paymentMethod,paymentStatus,date,orderDate,status}
         )
         return result
     },
@@ -143,7 +144,91 @@ module.exports={
       ]).toArray()
       return orders
 
+    },
+
+    findOrderProductAndQuantity : async (orderId)=>{
+      const products =await db.getDB().collection(collection.order_collection).aggregate([
+        {$match:{_id:new ObjectId(orderId)}},
+        {$unwind:{path:'$products'}},
+        {$project:{products:1}}
+      ]).toArray()
+
+      return products
+      
+
+  },
+  findPriceOfOneOrder : async (orderId)=>{
+    const order =await db.getDB().collection(collection.order_collection).aggregate([
+      {$match:{_id:new ObjectId(orderId)}},
+      {$project:{ grandTotal:1}}
+    ]).toArray()
+    return order
+
+  },
+
+  deliverdOrdersCount : async ()=>{
+    const deliverdOrder = await db.getDB().collection(collection.order_collection).countDocuments({status:'deliverd'})
+    return deliverdOrder
+
+  },
+
+  currentDayTotalSale : async()=>{
+    const sales = await db.getDB().collection(collection.order_collection).aggregate([
+      {$match:{status:'deliverd'}},
+      {$match:{orderDate:new Date().toISOString().slice(0,10)}}
+    ]).toArray()
+    return sales
+  },
+
+  weekSale : async(startDate)=>{
+    console.log(startDate);
+    let endDate = new Date()
+    endDate=endDate.toISOString().slice(0,10)
+    console.log(endDate);
+    const sales = await db.getDB().collection(collection.order_collection).aggregate([
+      {$match:{status:'deliverd'}},
+      {$match:{
+        orderDate:{$gte:startDate,$lte:endDate}
+      }},
+      {$project:{grandTotal:1,orderDate:1}}
+    ]).toArray()
+     
+    if(sales){
+      let amount = 0
+    sales.forEach(sale => {
+      amount=amount+sale.grandTotal
+    });
+    return amount
+
     }
+  },
+
+  filterSales : async(startDate,endDate)=>{
+    const salesAmount = await db.getDB().collection(collection.order_collection).aggregate([
+      {$match:{status:'deliverd'}},
+      {$match:{  orderDate:{$gte:startDate,$lt:endDate}} },
+      { $group: {_id: null, total: {$sum: '$grandTotal'}}},
+    ]).toArray()
+    console.log(salesAmount);
+    return salesAmount
+
+  },
+
+  totalSale : async ()=>{
+    const totalSale = await db.getDB().collection(collection.order_collection).aggregate([
+      {$match: {
+        status:'deliverd'
+      }},
+      {$group: {
+        _id: null,
+        total: {
+          $sum: '$grandTotal'
+        }
+      }}
+    ]).toArray()
+    return totalSale
+
+  }
 
    
 

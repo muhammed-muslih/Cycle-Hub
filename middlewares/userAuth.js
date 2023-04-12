@@ -1,5 +1,9 @@
 const userServices = require('../services/userService')
 const bannerServices = require('../services/bannerServices')
+const brandService = require('../services/brandService')
+const productServices = require('../services/productServices')
+
+
 
 module.exports={
     userAuth: async(req,res,next)=>{
@@ -11,8 +15,14 @@ module.exports={
         next()
       }else{
         const banner = await bannerServices.findBanner()
+        const brands = await brandService.findListedBrand()
+        const newProducts = await productServices.newArrivals()
+        console.log(brands);
         console.log("...............",banner);
-        res.render('userView/homePage',{loggedIn:req.session.loggedIn,banner});
+        for (let i = 0; i < newProducts.length; i++) {
+          newProducts[i].price = newProducts[i].price.toLocaleString('en-IN', { style: 'currency', currency: 'INR' });
+         }
+        res.render('userView/homePage',{loggedIn:req.session.loggedIn,banner,brands,newProducts});
       }
     },
     

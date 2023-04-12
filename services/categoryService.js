@@ -1,7 +1,7 @@
 const { ObjectId } = require('mongodb')
 const db = require('../db')
 const collecton = require('../config/collections')
-
+const  slugify = require('slugify')
 module.exports = {
     addCategory : async(categoryName)=>{
       const isList =true
@@ -38,9 +38,11 @@ module.exports = {
 
     },
     updateCategory:async (categoryId,categoryName)=>{
+      const slug = slugify(categoryName)
+
       await db.getDB().collection(collecton.category_collection).updateOne({_id:new ObjectId(categoryId)},{
         $set:{
-          categoryName:categoryName
+          categoryName:categoryName,slug
         }
       })
     },

@@ -5,12 +5,12 @@ const collecton = require('../config/collections')
 module.exports={
 
     addProduct : async (productName,productId,productDescription,category,brand,price,quantity,isDelete,images,variants)=>{
-        
+        const date = new Date()
         price=parseInt(price)
         quantity=parseInt(quantity)
         category = new ObjectId(category)
         brand = new ObjectId(brand)
-        await db.getDB().collection(collecton.product_collection).insertOne({productName,productId,productDescription,category,brand,price,quantity,isDelete,images,variants})
+        await db.getDB().collection(collecton.product_collection).insertOne({productName,productId,productDescription,category,brand,price,quantity,isDelete,images,variants,date})
     },
 
     findAllProduct:async()=>{
@@ -95,28 +95,84 @@ module.exports={
         brand = new ObjectId(brand)
         quantity=parseInt(quantity)
         price=parseInt(price)
-
-
+        
        await db.getDB().collection(collecton.product_collection).updateOne({_id:new ObjectId(productID)},{
             $set:{
 
-                productName: productName,productId,productDescription:productDescription,category:category,brand:brand,price:price,quantity:quantity,images:newImages,variants
+                productName: productName,productId,productDescription:productDescription,category:category,brand:brand,price:price,
+                quantity:quantity,images:newImages,variants
             }
         })
       
     },
+
     findCategoryProduct : async(categoryId)=>{
         const products = await db.getDB().collection(collecton.product_collection).find({category:new ObjectId(categoryId)}).toArray()
         return products
     },
+
     findBrandProduct : async(brandId)=>{
         const products= await db.getDB().collection(collecton.product_collection).find({brand:new ObjectId(brandId)}).toArray()
         return products
     },
+
     productIdExist : async(productId)=>{
         const product = await db.getDB().collection(collecton.product_collection).findOne({productId:productId})
         return  product
+    },
+
+    updateStock: async  (productId,quantity)=>{
+
+        await db.getDB().collection(collecton.product_collection).updateOne({_id:productId},{
+            $inc:{quantity:quantity}
+        })
+    },
+
+    newArrivals : async ()=>{
+        const products = await db.getDB().collection(collecton.product_collection).find({}).sort({date:-1}).limit(8).toArray()
+        return products
+    },
+
+    totalProducts : async()=>{
+        const totalProducts = await db.getDB().collection(collecton.product_collection).countDocuments({})
+        return totalProducts
+
+    },
+
+    filterPrice : async(minPrice,maxPrice)=>{
+        console.log(minPrice);
+        console.log(maxPrice);
+
+        const  product  =  await db.getDB().collection(collecton.product_collection).aggregate([
+            {
+                $match: {
+                    price:{$lte:maxPrice,$gte:minPrice}
+                }
+
+            },
+            {
+                $lookup:{
+                    from :"category",
+                    localField :"category",
+                    foreignField :"_id",
+                    as:"categoryDetails"
+                }
+            },
+            {
+                 $lookup :{
+                    from:"brand",
+                    localField:"brand",
+                    foreignField : "_id",
+                    as:"brandDetails"
+                 }
+    
+            }
+        ]).toArray()
+        console.log(product);
+        return product
     }
+
+    
 
 
 }

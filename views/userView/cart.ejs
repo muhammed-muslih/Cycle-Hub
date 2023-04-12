@@ -10,7 +10,7 @@
     <div class="loader"></div>
 </div>
 
-<section class="breadcrumb-option">
+<section class="breadcrumb-option mt-5">
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
@@ -68,13 +68,13 @@
                                     <td>
                                     <div>
                                         <span class="btn" style="background-color: gray;" 
-                                        onclick="changeQuantity('<%=cart[i]._id%>','<%= cart[i].productDetails._id%>','<%= cart[i].productDetails.price%>',-1)">
+                                        onclick="changeQuantity('<%=cart[i]._id%>','<%= cart[i].productDetails._id%>','<%= cart[i].productDetails.price%>',-1,'<%=cart[i].productDetails.quantity%>')">
                                         <i class="fa fa-minus"></i></span>
 
                                        <div class="btn btn-light" style="cursor: none;font-weight: 700;" id="<%= cart[i].productDetails._id%>"><%=cart[i].products.quantity%></div>
 
                                         <span class="btn"style="background-color: gray;"
-                                         onclick="changeQuantity('<%=cart[i]._id%>','<%= cart[i].productDetails._id%>','<%= cart[i].productDetails.price%>',1)">
+                                         onclick="changeQuantity('<%=cart[i]._id%>','<%= cart[i].productDetails._id%>','<%= cart[i].productDetails.price%>',1,'<%=cart[i].productDetails.quantity%>')">
                                          <i class="fa fa-plus"></i></span>
                                     </div>
                                     </td>
@@ -96,15 +96,33 @@
                         </div>
                     </div>
 
-                    <!-- <div class="col-lg-6 col-md-6 col-sm-6">
-                        <div class="continue__btn update__btn">
-                            <a href="#"><i class="fa fa-spinner"></i> Update cart</a>
-                        </div>
-                    </div> -->
 
                 </div>
             </div>
             <div class="col-lg-4">
+                <%if(locals.wallet){%>
+                    <div class="cart__total" style="margin-bottom: 1rem; margin-top: 2rem;">
+                        <h5 style="font-weight: 900;">My Wallet</h5>
+                        <ul>
+                            <li >wallet Amount <span class="text-dark"><%=locals.wallet.amount%></span></li>
+                            
+                        </ul>
+                    </div>
+
+                <%}else{%>
+
+                    <div class="cart__total" style="margin-bottom: 1rem;">
+                        <h5 style="font-weight: 900;">My Wallet</h5>
+                        <ul>
+                            <li >wallet Amount <span class="totalAmount text-dark">₹000,00</span></li>
+                            
+                        </ul>
+                    </div>
+
+
+               <% }%>
+                
+
                 <div class="cart__total">
                     <h5 style="font-weight: 900;">Cart total</h5>
                     <ul>
@@ -152,13 +170,29 @@
 
 
 <!-- swal -->
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!-- Shopping Cart Section End -->
 <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
 <script>
-    const changeQuantity = async (cartId,productId,price,count)=>{
+    quantity = 1
+    const changeQuantity = async (cartId,productId,price,count,stock)=>{
+
+        console.log(stock);
+        let quantity = document.getElementById(productId).innerText
+        quantity = parseInt(quantity)+count
+        console.log(quantity);
         
-     const res = await  axios({
+       
+     if(stock < quantity){
+        Swal.fire({
+               icon: 'error',
+               title: 'Oops...',
+               text: 'out of stock!',
+               })
+
+     }else{
+
+        const res = await  axios({
         method:"post",
         url:'/change-product-quantity',
         data :{cartId,productId,count}
@@ -193,6 +227,10 @@
         totalAmount.innerText=total.toLocaleString('en-IN',{style:'currency',currency:'INR'})
        }) 
      }
+
+
+     }
+
     }
 </script>
 
@@ -213,7 +251,7 @@
 
 function confirmDelete(productName,productId) {
     try{
-        swal({
+       new  swal({
         title: "Are you sure?",
         text: `you want to remove "${productName}" from your cart`,
         icon: "warning",

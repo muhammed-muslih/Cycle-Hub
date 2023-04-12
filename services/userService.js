@@ -106,6 +106,12 @@ module.exports= {
             $pull:{address:{_id:new ObjectId(addressId)}}
         })
 
+    },
+
+    totalCustomers : async ()=>{
+        const totalCustomer = await db.getDB().collection(collection.user_collection).countDocuments({})
+        return totalCustomer
+
     }
 
 

@@ -1,10 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const userAuth = require('../middlewares/userAuth')
 const userController = require('../controllers/userController');
 const authController = require('../controllers/authController');
-const adminAuth = require('../middlewares/adminAuth');
-
+const userAuth = require('../middlewares/userAuth')
 
 router.get('/',userAuth.userAuth,userController.homePageRender)
 
@@ -33,6 +31,9 @@ router.get('/categoryProducts',userController.renderShopePage)
 router.get('/brandProducts',userController.renderShopePage)
 
 router.get('/singleProductView/:id',userController.renderSingleProductView)
+
+router.get('/brand-products/:id',userController.renderBrandProducts)
+
 
 //cart pages
 router.get('/cart',userAuth.userAuth,userController.cartpagerender)
@@ -81,6 +82,14 @@ router.get('/address-details',userAuth.userAuth,userController.userAddress)
 router.post('/edit-address/:id',userAuth.userAuth,userController.updateAddress)
 
 router.get('/delete-address/:id',userAuth.userAuth,userController.deleteAddress)
+
+router.post('/cancel-order',userAuth.userAuth,userController.cancelOrder)
+
+
+router.get('/wallet',userAuth.userAuth,userController.renderWalletPage)
+
+
+
 
 
 module.exports = router;

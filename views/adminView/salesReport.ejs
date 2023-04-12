@@ -39,9 +39,9 @@
      
 
  
+  <div class="table-responsive mt-3" > 
 
-
-    <table class="table table-hover table-striped table-fixed mt-5">
+    <table class="table table-hover table-striped table-fixed mt-5" id="myTable">
         <thead>
             <tr>
               <th class="text-nowrap">#</th>
@@ -68,8 +68,16 @@
           </tbody>
         </table>
 
-
+    </div>
 </div>
+
+
+<script>
+    $(document).ready( function () {
+      $('#myTable').DataTable();
+    } );
+    
+    </script>
 <!-- <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
 <script>
     document.getElementById('submit').addEventListener('click',function(e){

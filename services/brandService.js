@@ -44,6 +44,15 @@ module.exports={
     isBrandExist : async (brandName)=>{
         const brand = await db.getDB().collection(collecton.brand_collection).findOne({brandName:brandName})
         return brand
+    },
+
+    addImage : async (brandId,image)=>{
+
+        await db.getDB().collection(collecton.brand_collection).updateOne({_id:new ObjectId(brandId)},{
+            $set:{image}
+
+        })
+
     }
 
 }

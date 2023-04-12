@@ -36,8 +36,8 @@
 </div>
 
 <!-- modal add category end -->
-
-    <table class="table table-hover table-fixed" style="margin-top: 7rem;">
+<div  style="margin-top: 7rem;">
+    <table class="table table-hover table-fixed" id="myTable">
     <thead>
         <tr>
           <th>Index</th>
@@ -65,7 +65,7 @@
     </table>
 
 
-
+  </div>
 
 <% for(var i=0;i<category.length;i++) {%>
 <!-- Modal -->
@@ -121,3 +121,10 @@
     modal.style.display="none"
   }
 </script>
+
+<script>
+  $(document).ready( function () {
+    $('#myTable').DataTable();
+  } );
+  
+  </script>

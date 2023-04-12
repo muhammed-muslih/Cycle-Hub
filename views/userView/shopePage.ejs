@@ -2,6 +2,32 @@
     .whish{
         background-color: rgb(133, 219, 133);
     }
+
+
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        z-index: 1;
+        width: 200px;
+    }
+
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+    .dropOptions {
+    border-radius: 6px;
+    padding: 6px;
+    width: 100px;
+    background-color: #ffffff;
+    border: solid 1px #525260;
+    color: white;
+    }
+   
  </style>
  
  <!-- Page Preloder -->
@@ -9,7 +35,8 @@
     <div class="loader"></div>
 </div>
 
-<!-- Offcanvas Menu Begin -->
+<!-- Offcanvas Menu Begin
+<div>
 <div class="offcanvas-menu-overlay"></div>
 <div class="offcanvas-menu-wrapper">
     <div class="offcanvas__option">
@@ -37,11 +64,12 @@
         <p>Free shipping, 30-day return or refund guarantee.</p>
     </div>
 </div>
+</div> -->
 <!-- Offcanvas Menu End -->
 
 
 <!-- Breadcrumb Section Begin -->
-<section class="breadcrumb-option">
+<section class="breadcrumb-option mt-5">
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
@@ -113,20 +141,38 @@
             <div class="col-lg-9">
                 <div class="shop__product__option">
                     <div class="row">
-                        <div class="col-lg-6 col-md-6 col-sm-6">
-                            <div class="shop__product__option__left">
+                        <div class="col-lg-7 col-md-6 col-sm-6">
+                            <!-- <div class="shop__product__option__left">
                                 <p>Showing 1–12 of 126 results</p>
-                            </div>
+                            </div> -->
                         </div>
-                        <div class="col-lg-6 col-md-6 col-sm-6">
-                            <div class="shop__product__option__right">
-                                <p>Sort by Price:</p>
-                                <select>
+                        <div class="col-lg-5 col-md-6 col-sm-6">
+                          
+                                <!-- <p>Sort by Price:</p> -->
+            
+                                <!-- <select id="filterPrice">
                                     <option value="">Low To High</option>
-                                    <option value="">$0 - $55</option>
-                                    <option value="">$55 - $100</option>
-                                </select>
-                            </div>
+                                    <option value="10000" >₹0 - ₹10,000</option>
+                                    <option value="25000">₹10,000 - ₹25,000</option>
+                                    <option value="50000" >₹25,000 - ₹50,000</option>
+                                    <option value="100000" >₹50,000 - ₹1,00,000</option>
+                                    <option value="200000" >1,00,000 - ₹2,00,000</option>
+
+                                </select> -->
+                                <span style="font-weight: 900;">Filter :</span>
+
+                                <div class="dropdown">
+                                <button class="dropOptions text-dark" style="width: 168%; border: none; font-weight: 700;" id="dropBtn">Sort by Price:</button>
+                                    <div class="dropdown-content p-3 bg-white text-dark">
+                                        <a  class="text-dark priceFilter" style="font-weight:500;margin-bottom: 1rem;cursor: pointer;" data-price="10000" >₹0 - ₹10,000</a><hr style="border: solid 1px #1e1e2f ;">
+                                        <a  class="text-dark priceFilter" style="font-weight:500;margin-bottom: 1rem;cursor: pointer;"  data-price="25000">₹10,000 - ₹25,000</a><hr style="border: solid 1px #1e1e2f ;">
+                                        <a  class="text-dark priceFilter" style="font-weight:500;margin-bottom: 1rem;cursor: pointer;" data-price="50000" >"₹25,000 - ₹50,000</a><hr style="border: solid 1px #1e1e2f ;">
+                                        <a  class="text-dark priceFilter" style="font-weight:500;margin-bottom: 1rem;cursor: pointer;" data-price="100000" >₹50,000 - ₹1,00,000</a><hr style="border: solid 1px #1e1e2f ;">
+                                        <a  class="text-dark priceFilter" style="font-weight:500;margin-bottom: 1rem;cursor: pointer;" data-price="200000">1,00,000 - ₹2,00,000</a><hr style="border: solid 1px #1e1e2f ;">
+                                    </div>
+                                </div>  
+
+
                         </div>
                     </div>
                 </div>
@@ -135,6 +181,8 @@
 
 
                     <%for(var i=0;i<products.length;i++){%>
+
+                        
 
                     <div class="col-lg-4 col-md-6 col-sm-6">
                         <div class="product__item">
@@ -171,8 +219,11 @@
                                 </div> -->
                             </div>
                             <!-- <a href="/add-to-cart/" class="btn btn-dark" id="addtocart" >add to cart</a> -->
-                            <button  class="btn btn-dark addTocart" data-productid="<%=products[i]._id%>">add to Cart</button>
-                           
+                            <%if(products[i].quantity ===0){%>
+                                <button  class="btn btn-danger addTocart" data-productid=""><span style="text-decoration: line-through;">Out of stock</span></button>
+                            <%}else{%>
+                            <button  class="btn btn-dark addTocart" data-productid="<%=products[i]._id%>" data-quantity="<%=products[i]._id%>">add to Cart</button>
+                           <%}%>
                         </div>
                     </div>
                     <%}%>
@@ -275,6 +326,9 @@
 
   <!-- axios -->
 <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+
+
+
 <script type="text/javascript">
    document.querySelectorAll('.addTocart').forEach(function(button){
     button.addEventListener('click',function(event){
@@ -287,6 +341,7 @@
     })
 
     const addToCart = async(productId)=>{
+
         try{
             console.log(productId);
             const res = await axios({
@@ -313,10 +368,10 @@
                     duration: 3000,
                     // close: true,
                     gravity: "top", // `top` or `bottom`
-                    position: "right", // `left`, `center` or `right`
-                    stopOnFocus: true, // Prevents dismissing of toast on hover
+                    position: "center", // `left`, `center` or `right`
+                    stopOnFocus: false, // Prevents dismissing of toast on hover
                     style: {
-                        background: "linear-gradient(to right, #00b09b, #96c93d)",
+                        background: "linear-gradient(to right, #870000, #190a05);",
                     },
                 }).showToast()
             }
@@ -396,3 +451,55 @@
 
     }
 </script>
+
+
+<script>
+    document.querySelectorAll('.priceFilter').forEach(function(priceFilter){
+        priceFilter.addEventListener('click',function(e){
+            e.preventDefault()
+            console.log("hello");
+            console.log(priceFilter.innerText);
+            const selectPrice = priceFilter.innerText
+            document.getElementById('dropBtn').innerText=selectPrice
+            console.log(priceFilter.dataset.price);
+            sortUsingPrice(priceFilter.dataset.price)
+           
+
+        })
+    })
+   
+
+    const sortUsingPrice = async (maxPrice)=>{
+        var minPrice = 0
+        maxPrice=parseInt(maxPrice)
+        if(maxPrice===200000){
+            minPrice=100000
+            console.log(minPrice,"   " ,maxPrice);
+            
+        }else if(maxPrice===100000){
+            minPrice=50000
+            console.log(minPrice,"   " ,maxPrice);
+
+        }else if(maxPrice===50000){
+            minPrice=25000
+            console.log(minPrice,"   " ,maxPrice);
+        }else if(maxPrice ===25000){
+            minPrice=10000
+            console.log(minPrice,"   " ,maxPrice);
+        }else{
+            minPrice=0
+            console.log(minPrice,"   " ,maxPrice);
+        }
+
+
+       location.assign(`/shopepage?minPrice=${minPrice}&maxPrice=${maxPrice}`)
+        
+    }
+
+
+
+
+
+  </script>
+
+

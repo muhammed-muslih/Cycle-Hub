@@ -8,7 +8,8 @@ const ObjectId = require('mongodb').ObjectId
 const bannerServices = require('../services/bannerServices')
 const whishListServices = require('../services/whishListService')
 const couponService = require('../services/couponServices')
-const razorpay = require('../util/razorpay')
+const razorpay = require('../util/razorpay');
+const walletService = require('../services/walletService')
 
 
 
@@ -17,7 +18,12 @@ module.exports = {
         const user=req.session.userName+" "+req.session.lastName
         // console.log(user);
         const banner = await bannerServices.findBanner()
-        res.render('userView/homePage',{user,loggedIn:req.session.loggedIn,banner});
+        const brands = await brandService.findListedBrand()
+        const newProducts = await productServices.newArrivals()
+       for (let i = 0; i < newProducts.length; i++) {
+        newProducts[i].price = newProducts[i].price.toLocaleString('en-IN', { style: 'currency', currency: 'INR' });
+       }
+        res.render('userView/homePage',{user,loggedIn:req.session.loggedIn,banner,brands,newProducts});
     },
     loginPageRender:(req,res)=>{
         const message= req.query.message
@@ -46,17 +52,37 @@ module.exports = {
         res.render('userView/otplogin')
     },
     renderShopePage :  async (req,res)=>{
+        
         const userId= req.session.userId
         const user=req.session.userName+" "+req.session.lastName
         const categoryId = req.query.categoryId
         const brandId = req.query.brandId
-        if(categoryId){
+
+        const maxPrice=  parseInt(req.query.maxPrice) 
+        console.log(maxPrice);
+        const minPrice = parseInt(req.query.minPrice)  
+        console.log(minPrice);
+
+        if(maxPrice && minPrice){
+
+            const brands = await brandService.findListedBrand()
+            const products=await productServices.filterPrice(minPrice,maxPrice)
+            const category = await categoryServices.findListedAllCategory()
+            for (let i = 0; i < products.length; i++) {
+                products[i].price = products[i].price.toLocaleString('en-IN', { style: 'currency', currency: 'INR' })
+              }
+              console.log(products);
+            res.render('userView/shopePage',{products,category,brands,user,loggedIn:req.session.loggedIn,userId})
+
+
+        }else if(categoryId){
             const products = await productServices.findCategoryProduct(categoryId)
             const category = await categoryServices.findListedAllCategory()
             const brands = await brandService.findListedBrand()
             for (let i = 0; i < products.length; i++) {
                 products[i].price = products[i].price.toLocaleString('en-IN', { style: 'currency', currency: 'INR' });
               }
+              
             res.render('userView/shopePage',{products,category,brands,user,loggedIn:req.session.loggedIn, userId})
 
         }else if(brandId){
@@ -75,11 +101,26 @@ module.exports = {
             for (let i = 0; i < products.length; i++) {
                 products[i].price = products[i].price.toLocaleString('en-IN', { style: 'currency', currency: 'INR' })
               }
+              console.log(products);
             res.render('userView/shopePage',{products,category,brands,user,loggedIn:req.session.loggedIn,userId})
 
         }
             
     },
+
+    renderBrandProducts : async (req,res)=>{
+        const brandId = req.params.id
+        const user=req.session.userName+" "+req.session.lastName
+        const userId= req.session.userId
+        const products = await productServices.findBrandProduct(brandId)
+        const category = await categoryServices.findListedAllCategory()
+        const brands = await brandService.findListedBrand()
+        for (let i = 0; i < products.length; i++) {
+            products[i].price = products[i].price.toLocaleString('en-IN', { style: 'currency', currency: 'INR' });
+          }
+        res.render('userView/shopePage',{products,category,brands,user,loggedIn:req.session.loggedIn,userId})
+    },
+
     renderSingleProductView : async(req,res)=>{
         const user=req.session.userName+" "+req.session.lastName
         const productId = req.params.id
@@ -99,9 +140,17 @@ module.exports = {
             cart[i].productDetails.price = cart[i].productDetails.price.toLocaleString('en-IN', { style: 'currency', currency: 'INR' })
             cart[i].subTotal = cart[i].subTotal.toLocaleString('en-IN',{ style: 'currency', currency:'INR' })
         }
+        const wallet = await walletService.findOneWallet(userId)
+        if(wallet){
+            wallet.amount = wallet.amount.toLocaleString('en-IN',{ style: 'currency', currency:'INR' })
+        }
+        
         // console.log(cart);
         totalPrice=totalPrice.toLocaleString('en-IN',{ style: 'currency', currency:'INR' })
-        res.render('userView/cart',{loggedIn:req.session.loggedIn,user,cart,totalPrice})
+        console.log(cart);
+
+        
+        res.render('userView/cart',{loggedIn:req.session.loggedIn,user,cart,totalPrice,wallet})
     },
     addToCart:async (req,res)=>{
         const productId = req.params.id
@@ -163,8 +212,17 @@ module.exports = {
         totalPrice=totalPrice.toLocaleString('en-IN',{ style: 'currency', currency:'INR' })
         const address = await userService.findAddress(userId)
         // console.log(address[0].address.firstName);
+        const wallet = await walletService.findOneWallet(userId)
+        var walletAmount
+        if(wallet){
+            walletAmount = wallet.amount
+        }else{
+             walletAmount = 0000
+            
+        }
+
        
-        res.render('userView/checkOut',{loggedIn:req.session.loggedIn,user,product,totalPrice,address})
+        res.render('userView/checkOut',{loggedIn:req.session.loggedIn,user,product,totalPrice,address,walletAmount})
     },
     addAddress : async(req,res)=>{
         console.log( "address",req.body);
@@ -176,22 +234,28 @@ module.exports = {
     },
     placeOrder : async(req,res)=>{
 
-        console.log(".........",req.body);
        let {products,addressid,paymentMethod,subtotal,offerPrice,grandTotal,couponCode}=req.body
        let userId=req.session.userId
+       console.log(req.body);
        let address = await userService.findOneAddress(userId,addressid)
        address=address[0].address
        for(var i = 0;i<products.length;i++){
         products[i].productId = new ObjectId(products[i].productId )
        }
 
+       
 
-       let status = "pending"
        const date = new Date()
-       const result = await orderService.addOrder(userId,address,paymentMethod,subtotal,offerPrice,grandTotal,products,date,status)
-       var  orderId = result.insertedId
-
        if(paymentMethod === 'cod'){
+        let status = "pending"
+        const result = await orderService.addOrder(userId,address,paymentMethod,subtotal,offerPrice,grandTotal,products,date,status)
+        var  orderId = result.insertedId
+
+        products.forEach(async (product) => {
+            product.quantity = product.quantity *-1
+            await productServices.updateStock(product.productId,product.quantity)
+        });
+
 
         if(couponCode){
             await couponService.usedCoupon(userId,couponCode)
@@ -203,7 +267,6 @@ module.exports = {
           if(coupon){
            iscouponExist=true
           }
-
         status="placed"
         await orderService.orderStatusChange(orderId,status)
         await cartServices.deleteCart(userId)
@@ -232,6 +295,46 @@ module.exports = {
             userPhone:user.phoneno
         })
 
+       }else if(paymentMethod==='wallet'){
+
+        let status = "pending"
+        const result = await orderService.addOrder(userId,address,paymentMethod,subtotal,offerPrice,grandTotal,products,date,status)
+        var  orderId = result.insertedId
+
+        products.forEach(async (product) => {
+            product.quantity = product.quantity *-1
+            await productServices.updateStock(product.productId,product.quantity)
+        });
+
+        await orderService.paymentStatusChange(orderId,'paid')
+        // update wallet
+        let amount = grandTotal*-1
+        await walletService.updateWallet(userId,amount)
+
+        if(couponCode){
+            await couponService.usedCoupon(userId,couponCode)
+          }
+   
+         var iscouponExist=false
+          const coupon = await couponService.getcoupon(userId,grandTotal)
+          console.log("coupon",coupon);
+          if(coupon){
+           iscouponExist=true
+          }
+        status="placed"
+        await orderService.orderStatusChange(orderId,status)
+        await cartServices.deleteCart(userId)
+        console.log(result);
+        if(result){
+         res.json({
+             status:"success",
+             message:"order placed successfuly",
+             orderId:result.insertedId,
+             iscouponExist:iscouponExist
+         })
+ 
+        }
+
        }
         
     },
@@ -253,6 +356,7 @@ module.exports = {
     orderDetailspageRender : async (req,res)=>{
         const user=req.session.userName+" "+req.session.lastName
         const orderId = req.params.id
+        console.log("..",orderId);
         const orders = await orderService.findOrderDetails(orderId)
         console.log(orders);
         var total = 0
@@ -271,6 +375,7 @@ module.exports = {
         const user=req.session.userName+" "+req.session.lastName
         // console.log("...........",req.query.orderId);
         const orderId = req.query.orderId
+        console.log("success",orderId);
         res.render('userView/orderSuccess',{user,loggedIn:req.session.loggedIn,orderId})
     },
     ChangeBanner :async(req,res)=>{
@@ -361,16 +466,40 @@ module.exports = {
 
     verifyPayment : async (req,res)=>{
         
-        let {razorResponse, orderId,amount,couponCode}=req.body
-        console.log(" verifyPayment",req.body);
-        console.log("verify",couponCode);
+        let {razorResponse, orderId,amount,couponCode,order}=req.body
+        let { products,addressid,paymentMethod,subtotal,offerPrice,grandTotal} = order
+        console.log(products);
+        console.log(addressid);
+        console.log(paymentMethod);
+
         const userId = req.session.userId
         const isPaymentSuccess =  razorpay.verifyPayment(razorResponse)
+        
         if(isPaymentSuccess){
-          console.log("success");
-          await orderService.paymentStatusChange(orderId,'paid')
-          await cartServices.deleteCart(userId)
-         await orderService.orderStatusChange(orderId,"placed")
+
+        products.forEach((product)=>{
+            product.productId = new ObjectId( product.productId)
+        })
+        console.log("success");
+        let address = await userService.findOneAddress(userId,addressid)
+        address=address[0].address
+        console.log(address);
+         const date = new Date()
+        const status = 'placed'
+        const result = await orderService.addOrder(userId,address,paymentMethod,subtotal,offerPrice,grandTotal,products,date,status)
+         var orderid = result.insertedId
+         await orderService.paymentStatusChange(orderid,'paid')
+         products.forEach(async(product)=>{
+            product.quantity = product.quantity*-1
+            await productServices.updateStock(product.productId,product.quantity)
+         })
+  
+        
+        await cartServices.deleteCart(userId)
+          
+
+
+
         if(couponCode){
             await couponService.usedCoupon(userId,couponCode)
           }
@@ -384,13 +513,13 @@ module.exports = {
             res.json({
                 status: "success",
                 message: "order placed",
-                orderId:orderId,
+                orderId:orderid,
                 iscouponExist:iscouponExist
               })
 
         }else{
-            console.log(orderId);
-            await orderService.paymentStatusChange(orderId,"cancelled")
+            console.log(orderid);
+            await orderService.paymentStatusChange(orderid,"cancelled")
             res.json({
                 status: "cancelled",
                 message: "payment failed"
@@ -454,7 +583,39 @@ module.exports = {
         await userService.deleteAddress(userId,addressId)
         res.redirect('/address-details')
         
-    }
+    },
+
+    cancelOrder : async (req,res)=>{
+        let{orderId,status}=req.body
+        console.log(req.body);
+        const products = await orderService.findOrderProductAndQuantity(orderId)
+        console.log(products);
+        products.forEach(async (product)=>{
+            await productServices.updateStock(product.products.productId,product.products.quantity)
+            await orderService.orderStatusChange(orderId,status)
+
+        })
+        res.json({
+            status:'changed'
+        })
+
+    },
+
+    renderWalletPage : async(req,res)=>{
+        const userId = req.session.userId
+        const user=req.session.userName+" "+req.session.lastName
+        const wallet = await walletService.findOneWallet(userId)
+        if(wallet){
+        wallet.amount = wallet.amount.toLocaleString('en-IN',{ style: 'currency', currency:'INR' })
+        }
+        console.log(wallet);
+        res.render('userView/myWallet',{user,loggedIn:req.session.loggedIn,wallet})
+
+
+    },
+
+
+
     
     
 }

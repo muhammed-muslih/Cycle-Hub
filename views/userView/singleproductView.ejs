@@ -238,12 +238,16 @@ input:disabled{
                                 <span class="plus bg-dark"> - </span>
                             </div>
                           </div> -->
-
+                          <%if(product[0].quantity===0){%>
+                            <button class="primary-btn btn-danger"  style="text-decoration: line-through;">Out of stock</button>
+                         <% }else{%>
                             <button class="primary-btn addTOCart" data-product="<%=product[0]._id%>">add to cart</button>
+                         <%}%>
+
                         </div>
                         <div class="product__details__btns__option">
-                            <a href="#"><i class="fa fa-heart"></i> add to wishlist</a>
-                            <a href="#"><i class="fa fa-exchange"></i> Add To Compare</a>
+                            <!-- <a href=""><i class="fa fa-heart"></i> add to wishlist</a>
+                            <a href="#"><i class="fa fa-exchange"></i> Add To Compare</a> -->
                         </div>
                     </div>
                 </div>

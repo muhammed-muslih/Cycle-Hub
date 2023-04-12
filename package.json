@@ -32,7 +32,8 @@
     "nocache": "^3.0.4",
     "nodemon": "^2.0.21",
     "otp-generator": "^4.0.1",
-    "razorpay": "^2.8.6"
+    "razorpay": "^2.8.6",
+    "slugify": "^1.6.6"
   },
   "main": "app.js",
   "author": "",

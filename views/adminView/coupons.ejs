@@ -65,9 +65,9 @@
             </div>
           </div>
 
-
+          <div class="table-responsive">
         
-          <table class="table table-hover table-fixed mt-5">
+          <table class="table table-hover table-fixed mt-5" id="myTable"> 
             <thead>
                 <tr>
                     <th scope="col">#</th>
@@ -96,6 +96,8 @@
               </tbody>
             </table>
 
+          </div>
+
      </div>         
 
 
@@ -123,3 +125,11 @@
 </div>
 
 <%}%> 
+
+
+<script>
+  $(document).ready( function () {
+    $('#myTable').DataTable();
+  } );
+  
+  </script>

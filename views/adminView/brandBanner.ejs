@@ -1,0 +1,83 @@
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous"/>
+<div class="content">
+  <h1 style="text-align: center;font-weight: 900;">BRAND BANNER</h1>
+
+    <table class="table table-hover table-fixed mt-5" id="myTable">
+        <thead>
+            <tr>
+              <th>Index</th>
+              <th>BRAND NAME</th>
+              <th>IMAGE</th>
+              <th>EDIT OR ADD IMAGE</th>
+             
+            </tr>
+          </thead>
+          <tbody>
+            <% for(var i =0;i<brands.length;i++) { %>
+            <tr>
+            <td><%= i+1 %></td>
+            <td><%=brands[i].brandName %></td>
+            <td>
+                <%if(brands[i].image){%>
+                  <img src="<%=brands[i].image%>" alt="" width="120">
+
+              <% } else{%>
+
+                <i class="fa-solid fa-image-slash"></i> image not found
+
+             <% }%>
+ 
+            </td>
+            <td style="cursor: pointer;"> <i class="tim-icons icon-pencil" data-toggle="modal" data-target="#modal<%=brands[i]._id%>"></i></td>
+            </tr>
+            <% } %>
+          </tbody>
+        </table>
+    
+       </div>
+</div>
+
+<% for(var j =0;j<brands.length;j++) { %>
+
+<!-- Modal -->
+<div class="modal fade" id="modal<%=brands[j]._id%>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">IMAGE UPLOAD</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      
+      <div class="modal-body p-4">
+        <form action="/admin/add-banner-image/<%=brands[j]._id%>" method="post" enctype="multipart/form-data">
+            <div class="form-outline mb-4">
+              <label class="form-label" for="image">Image</label>
+                <input type="file" class="form-control-file" id="banners" name="image" style="color: black;">
+            </div>
+            <!-- Submit button -->
+           
+
+              <button type="button" class="btn " data-dismiss="modal" >Close</button>
+               <button type="submit" class="btn ">save</button>
+           
+          </form>
+    </div>
+    </div>
+  </div>
+</div>
+<% } %>
+
+
+
+
+
+
+
+<script>
+  $(document).ready( function () {
+    $('#myTable').DataTable();
+  } );
+  
+  </script>

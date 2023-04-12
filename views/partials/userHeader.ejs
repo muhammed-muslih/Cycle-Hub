@@ -46,6 +46,7 @@
 <!-- Offcanvas Menu End -->
 
 <header class="header nav-fix">
+    <!-- <header> -->
     <div class="container">
         <div class="row">
             <div class="col-lg-3 col-md-3">
@@ -128,6 +129,7 @@
                             <% if(locals.loggedIn) { %>
                             <li><a href="/user-profile"><%= user %></a></li>
                             <li><a href="/rewards">my rewards</a></li>
+                            <li><a href="/wallet">my wallet</a></li>
                             <li><a href="/logout">logout</a></li>
                             <% }else{ %>
                                 <li><a href="/login">login</a></li>
