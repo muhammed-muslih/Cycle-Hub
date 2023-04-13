@@ -13,7 +13,7 @@ module.exports={
         await db.getDB().collection(collecton.product_collection).insertOne({productName,productId,productDescription,category,brand,price,quantity,isDelete,images,variants,date})
     },
 
-    findAllProduct:async()=>{
+    findAllProduct:async(skip,limit)=>{
     const  product  =  await db.getDB().collection(collecton.product_collection).aggregate([
 
         {
@@ -32,7 +32,9 @@ module.exports={
                 as:"brandDetails"
              }
 
-        }
+        },
+        { $skip : skip},
+        { $limit : limit }
     ]).toArray()
     return product
 
@@ -106,15 +108,27 @@ module.exports={
       
     },
 
-    findCategoryProduct : async(categoryId)=>{
-        const products = await db.getDB().collection(collecton.product_collection).find({category:new ObjectId(categoryId)}).toArray()
+    findCategoryProduct : async(categoryId,skip,limit)=>{
+        const products = await db.getDB().collection(collecton.product_collection).find({category:new ObjectId(categoryId)}).skip(skip).limit(limit).toArray()
         return products
     },
 
-    findBrandProduct : async(brandId)=>{
-        const products= await db.getDB().collection(collecton.product_collection).find({brand:new ObjectId(brandId)}).toArray()
+    findTotalCategoryProduct : async(categoryId)=>{
+        const products = await db.getDB().collection(collecton.product_collection).countDocuments({category:new ObjectId(categoryId)})
         return products
     },
+
+    findBrandProduct : async(brandId,skip,limit)=>{
+        const products= await db.getDB().collection(collecton.product_collection).find({brand:new ObjectId(brandId)}).skip(skip).limit(limit).toArray()
+        return products
+    },
+
+    findTotalBrandProduct : async(brandId)=>{
+        const products= await db.getDB().collection(collecton.product_collection).countDocuments({brand:new ObjectId(brandId)})
+        return products
+    },
+
+
 
     productIdExist : async(productId)=>{
         const product = await db.getDB().collection(collecton.product_collection).findOne({productId:productId})
@@ -134,16 +148,22 @@ module.exports={
     },
 
     totalProducts : async()=>{
-        const totalProducts = await db.getDB().collection(collecton.product_collection).countDocuments({})
+        const totalProducts = await db.getDB().collection(collecton.product_collection).countDocuments({isDelete:false})
         return totalProducts
 
     },
 
-    filterPrice : async(minPrice,maxPrice)=>{
+    filterPrice : async(minPrice,maxPrice,skip,limit)=>{
         console.log(minPrice);
         console.log(maxPrice);
 
         const  product  =  await db.getDB().collection(collecton.product_collection).aggregate([
+            {
+                $match: {
+                    isDelete:false
+                }
+
+            },
             {
                 $match: {
                     price:{$lte:maxPrice,$gte:minPrice}
@@ -166,11 +186,37 @@ module.exports={
                     as:"brandDetails"
                  }
     
-            }
+            },
+            {$skip:skip},
+            {$limit:limit}
         ]).toArray()
         console.log(product);
         return product
+    },
+    totalFilterProducts : async(minPrice,maxPrice)=>{
+        const totalProducts = await db.getDB().collection(collecton.product_collection).countDocuments({isDelete:false, price:{$lte:maxPrice,$gte:minPrice}})
+        return totalProducts
+
+    },
+
+    productQuantity : async (productId)=>{
+
+        const productQuantity = await db.getDB().collection(collecton.product_collection).aggregate([
+            {
+                $match: {
+                  _id:new ObjectId(productId)
+                }
+            },
+            {
+                $project :{quantity:1}
+
+            }
+        ]).toArray()
+        return productQuantity
+
     }
+    
+    
 
     
 

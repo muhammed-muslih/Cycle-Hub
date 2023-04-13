@@ -254,17 +254,18 @@ function confirmDelete(productName,productId) {
        new  swal({
         title: "Are you sure?",
         text: `you want to remove "${productName}" from your cart`,
-        icon: "warning",
-        buttons: true,
-        dangerMode: true,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
       })
-      .then((willDelete) => {
-        if (willDelete) {
-          
+      .then((result) => {
+        if (result.isConfirmed) {
           deleteProduct(productId)
           //axios function
         } else {
-            location.reload()
+            result.dismiss === Swal.DismissReason.cancel
         }
       });
 

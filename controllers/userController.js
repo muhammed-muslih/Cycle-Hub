@@ -57,52 +57,56 @@ module.exports = {
         const user=req.session.userName+" "+req.session.lastName
         const categoryId = req.query.categoryId
         const brandId = req.query.brandId
-
         const maxPrice=  parseInt(req.query.maxPrice) 
-        console.log(maxPrice);
+        
         const minPrice = parseInt(req.query.minPrice)  
-        console.log(minPrice);
+        let page = req.query.page || 1
+        let limit = 9
+        let skip = (page-1)*limit
+        const totalProduct = await productServices.totalProducts()
+        const totalPage = Math.ceil(totalProduct/limit)
+        let currentPage = parseInt(page) 
+        console.log(currentPage);
 
-        if(maxPrice && minPrice){
-
+        var sortMessage='Sort by Price'
+        if(maxPrice){
             const brands = await brandService.findListedBrand()
-            const products=await productServices.filterPrice(minPrice,maxPrice)
+            const products=await productServices.filterPrice(minPrice,maxPrice,skip,limit)
             const category = await categoryServices.findListedAllCategory()
             for (let i = 0; i < products.length; i++) {
                 products[i].price = products[i].price.toLocaleString('en-IN', { style: 'currency', currency: 'INR' })
               }
-              console.log(products);
-            res.render('userView/shopePage',{products,category,brands,user,loggedIn:req.session.loggedIn,userId})
-
+              sortMessage=`₹${minPrice} - ₹${maxPrice}`
+            res.render('userView/shopePage',{products,category,brands,user,loggedIn:req.session.loggedIn,userId,currentPage,totalPage,sortMessage})
 
         }else if(categoryId){
-            const products = await productServices.findCategoryProduct(categoryId)
+            const products = await productServices.findCategoryProduct(categoryId,skip,limit)
             const category = await categoryServices.findListedAllCategory()
             const brands = await brandService.findListedBrand()
             for (let i = 0; i < products.length; i++) {
                 products[i].price = products[i].price.toLocaleString('en-IN', { style: 'currency', currency: 'INR' });
               }
               
-            res.render('userView/shopePage',{products,category,brands,user,loggedIn:req.session.loggedIn, userId})
+            res.render('userView/shopePage',{products,category,brands,user,loggedIn:req.session.loggedIn, userId,currentPage,totalPage,sortMessage})
 
         }else if(brandId){
-            const products = await productServices.findBrandProduct(brandId)
+            const products = await productServices.findBrandProduct(brandId,skip,limit)
             const category = await categoryServices.findListedAllCategory()
             const brands = await brandService.findListedBrand()
             for (let i = 0; i < products.length; i++) {
                 products[i].price = products[i].price.toLocaleString('en-IN', { style: 'currency', currency: 'INR' });
               }
-            res.render('userView/shopePage',{products,category,brands,user,loggedIn:req.session.loggedIn,userId})
+            res.render('userView/shopePage',{products,category,brands,user,loggedIn:req.session.loggedIn,userId,currentPage,totalPage,sortMessage})
 
         }else{
             const brands = await brandService.findListedBrand()
-            const products=await productServices.findAllProduct()
+            const products=await productServices.findAllProduct(skip,limit)
             const category = await categoryServices.findListedAllCategory()
             for (let i = 0; i < products.length; i++) {
                 products[i].price = products[i].price.toLocaleString('en-IN', { style: 'currency', currency: 'INR' })
               }
-              console.log(products);
-            res.render('userView/shopePage',{products,category,brands,user,loggedIn:req.session.loggedIn,userId})
+            //   console.log(products);
+            res.render('userView/shopePage',{products,category,brands,user,loggedIn:req.session.loggedIn,userId,currentPage,totalPage,sortMessage})
 
         }
             
@@ -155,18 +159,39 @@ module.exports = {
     addToCart:async (req,res)=>{
         const productId = req.params.id
         const userId = req.session.userId
+       
+        let cart= await cartServices.findOneCartProduct(userId,productId)
+        var  cartQuantity= cart[0]?cart[0].products.quantity:0
+        const productQuantity = await productServices.productQuantity(productId)
+       
         const iscartExist = await cartServices.findCart(userId)
         if(iscartExist){
-            await cartServices.updateCart(userId,productId)
+            console.log("product",productQuantity[0].quantity);
+            console.log("cart",cartQuantity+1);  
 
+            if((productQuantity[0].quantity) - (cartQuantity+1 ) < 0 ){
+                 res.json({
+                    status: "failed",
+                    message: "product out of stock"
+                    })
+
+            }else{
+                await cartServices.updateCart(userId,productId)
+                res.json({
+                    status: "success",
+                    message: "product added to cart"
+                  })
+            }
         }else{
             await cartServices.addToCart(userId,productId)
+            res.json({
+                status: "success",
+                message: "product added to cart"
+              })
         }
-        res.json({
-            status: "success",
-            message: "product added to cart"
-          })
+        
     },
+
     changeCartProductQuantity:async(req,res)=>{
         let {cartId,productId,count}=req.body
         // console.log(req.body);
@@ -245,10 +270,10 @@ module.exports = {
 
        
 
-       const date = new Date()
+       
        if(paymentMethod === 'cod'){
         let status = "pending"
-        const result = await orderService.addOrder(userId,address,paymentMethod,subtotal,offerPrice,grandTotal,products,date,status)
+        const result = await orderService.addOrder(userId,address,paymentMethod,subtotal,offerPrice,grandTotal,products,status)
         var  orderId = result.insertedId
 
         products.forEach(async (product) => {
@@ -298,7 +323,7 @@ module.exports = {
        }else if(paymentMethod==='wallet'){
 
         let status = "pending"
-        const result = await orderService.addOrder(userId,address,paymentMethod,subtotal,offerPrice,grandTotal,products,date,status)
+        const result = await orderService.addOrder(userId,address,paymentMethod,subtotal,offerPrice,grandTotal,products,status)
         var  orderId = result.insertedId
 
         products.forEach(async (product) => {
@@ -484,9 +509,8 @@ module.exports = {
         let address = await userService.findOneAddress(userId,addressid)
         address=address[0].address
         console.log(address);
-         const date = new Date()
         const status = 'placed'
-        const result = await orderService.addOrder(userId,address,paymentMethod,subtotal,offerPrice,grandTotal,products,date,status)
+        const result = await orderService.addOrder(userId,address,paymentMethod,subtotal,offerPrice,grandTotal,products,status)
          var orderid = result.insertedId
          await orderService.paymentStatusChange(orderid,'paid')
          products.forEach(async(product)=>{

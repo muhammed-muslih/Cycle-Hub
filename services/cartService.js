@@ -107,5 +107,37 @@ module.exports={
         console.log("user",userId);
         const result = await db.getDB().collection(collection.cart_collection).deleteOne({user:userId})
         console.log(result);
+    },
+
+    findOneCartProduct : async (userId,productId)=>{
+        console.log(userId);
+        console.log(productId);
+
+        const cartProduct = await db.getDB().collection(collection.cart_collection).aggregate([
+            {
+                $match: {
+                  user:userId
+                }
+            },
+            {
+                $unwind: {
+                  path: "$products"
+                }
+            },
+            {
+                $match: {
+                  'products.productId':new ObjectId(productId)
+                }
+
+            },
+            {
+                $project: {
+                    'products.quantity' : 1
+                }
+
+            }
+        ]).toArray()
+        return cartProduct
+
     }
 }

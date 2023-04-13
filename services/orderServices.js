@@ -4,9 +4,10 @@ const collection = require('../config/collections')
 const collections = require("../config/collections")
 
 module.exports={
-    addOrder: async(userId,address,paymentMethod,subtotal,offerPrice,grandTotal,products,date,status)=>{
+    addOrder: async(userId,address,paymentMethod,subtotal,offerPrice,grandTotal,products,status)=>{
         const paymentStatus = 'pending'
         const orderDate=new Date().toISOString().slice(0,10)
+        const date = new Date()
        const result= await db.getDB().collection(collections.order_collection).insertOne(
             {userId:userId,deliveryDetails:address,products:products,subtotal:subtotal,offerPrice,grandTotal,paymentMethod,paymentStatus,date,orderDate,status}
         )
@@ -49,7 +50,8 @@ module.exports={
        
     },
     findAllOrders : async()=>{
-        const orders = await db.getDB().collection(collection.order_collection).find({}).sort({date:-1}).toArray() 
+        const orders = await db.getDB().collection(collection.order_collection).find().sort({date:-1}).toArray() 
+        // console.log(orders);
         return orders
     },
     orderStatusChange : async (orderId,status)=>{

@@ -156,8 +156,9 @@
                                     </div>
                         </div>
                         <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                           <!-- <% if(userDetails.address){%> -->
 
-                            <%if(userDetails.address.length>0){%>
+                            <%if(userDetails.address){%>
 
                             <div class="row">
                                 <div class="col-md-12 " style="width: 103%;height: 10rem; padding: 3rem; margin-left: 1rem;
@@ -180,6 +181,7 @@
                                 <%}%>
 
                             <a href="/address-details" class="mt-5 ml-3" style="margin-top: 2rem;">Manage Address</a>
+                            <!-- <%}%> -->
                         </div>
                     </div>
                 </div>

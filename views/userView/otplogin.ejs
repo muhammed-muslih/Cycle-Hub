@@ -112,8 +112,8 @@ async function phoneAuth() {
         console.log('OTP Sent');
         document.getElementById('sender').style.display="none"
         document.getElementById('verifier').style.display="block"
-        // document.getElementsByClassName('p-conf')[0].style.display='none'
-        // document.getElementsByClassName('n-conf')[0].style.display='block'
+        document.getElementsByClassName('p-conf')[0].style.display='none'
+        document.getElementsByClassName('n-conf')[0].style.display='none'
     }).catch(function (error) {
         // error in sending OTP
         // alert(error.message);

@@ -365,6 +365,7 @@ module.exports={
         orders[i].grandTotal = orders[i].grandTotal.toLocaleString('en-IN',{style:'currency',currency:'INR'})
         orders[i].date =  orders[i].date.toLocaleString()
     }
+    // console.log(orders);
     res.render('adminView/orders',{layout:"adminlayout",orders,orderClass})
    },
 

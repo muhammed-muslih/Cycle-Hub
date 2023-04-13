@@ -70,6 +70,7 @@ th, td {
        
                     <thead>
                       <tr>
+                        <th>#</th>
                         <th>ORDER_ID</th>
                         <th>CUSTOMER_ID</th>
                         <th>AMOUNT</th>
@@ -84,6 +85,7 @@ th, td {
                     <tbody>
                         <%for(var i=0;i<orders.length;i++){%>
                          <tr>
+                            <td><%=i+1%></td>
                            <td><%=orders[i]._id%></td>
                            <td><%=orders[i].userId%></td>
                            <td><%=orders[i].grandTotal%></td>
