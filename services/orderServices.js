@@ -230,6 +230,54 @@ module.exports={
     ]).toArray()
     return totalSale
 
+  },
+
+  salesPerMonth : async(startDate,endDate)=>{
+
+    const salesPerMonth = await db.getDB().collection(collection.order_collection).aggregate([
+      {
+        $match:{ 
+          status:'deliverd'
+          
+        }
+      },
+      {
+        $match :{
+          orderDate:{
+            $gte:startDate,
+            $lt:endDate
+          }
+        }
+      },
+      {
+        $group: {
+          _id: {
+            $month:'$date'
+          },
+          sale: {
+            $sum: '$grandTotal'
+          }
+        }
+
+      }
+    ]).toArray()
+    return salesPerMonth
+  },
+
+  getOrderStatusAndCount : async ()=>{
+
+    const orderStatusDetails = await db.getDB().collection(collection.order_collection).aggregate([
+      {
+        $group: {
+          _id:'$status',
+          count: {
+            "$sum": 1
+          }
+        }
+      }
+    ]).toArray()
+    return orderStatusDetails
+
   }
 
    

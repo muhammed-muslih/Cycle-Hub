@@ -97,8 +97,8 @@
             <div class="col-lg-3">
                 <div class="shop__sidebar">
                     <div class="shop__sidebar__search">
-                        <form action="#">
-                            <input type="text" placeholder="Search...">
+                        <form>
+                            <input type="text" placeholder="Search..." id="searchProduct">
                             <button type="submit"><span class="icon_search"></span></button>
                         </form>
                     </div>
@@ -332,16 +332,6 @@
 </footer>
 <!-- Footer Section End -->
 
-<!-- Search Begin -->
-<div class="search-model">
-    <div class="h-100 d-flex align-items-center justify-content-center">
-        <div class="search-close-switch">+</div>
-        <form class="search-model-form">
-            <input type="text" id="search-input" placeholder="Search here.....">
-        </form>
-    </div>
-</div>
-<!-- Search End -->
 
   <!-- axios -->
 <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
@@ -375,7 +365,7 @@
                     // close: true,
                     gravity: "top", // `top` or `bottom`
                     position: "right", // `left`, `center` or `right`
-                    stopOnFocus: true, // Prevents dismissing of toast on hover
+                    stopOnFocus: false, // Prevents dismissing of toast on hover
                     style: {
                         background: "linear-gradient(to right, #00b09b, #96c93d)",
                     },
@@ -387,7 +377,7 @@
                     // close: true,
                     gravity: "top", // `top` or `bottom`
                     position: "center", // `left`, `center` or `right`
-                    stopOnFocus: true, // Prevents dismissing of toast on hover
+                    stopOnFocus: false, // Prevents dismissing of toast on hover
                     style: {
                         background: "linear-gradient(to right, #870000, #190a05);",
                     },
@@ -529,9 +519,18 @@
     }
 
 
-
-
-
   </script>
+
+  <script>
+    $(document).ready(function(){
+        $('#searchProduct').blur(function(){
+          var  searchKey = $('#searchProduct').val()
+         location.assign(`/shopepage?q=${searchKey}`) 
+        })
+    })
+    
+  </script>
+
+
 
 

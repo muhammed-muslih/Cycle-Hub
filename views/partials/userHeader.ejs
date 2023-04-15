@@ -113,6 +113,7 @@
             <div class="col-lg-3 col-md-3 mt-1 header__menu mobile-menu" style="display: flex;">
                    <ul class="icon-side">
                     <li><a href="#" class="search-switch ml-3"><img src="/images/icon/search.png" alt=""></a></li>
+
                     <li><a href="/whishlist" class="ml-3"><img src="/images/icon/heart.png" alt=""></a></li>
                     <!-- <li><a href="#" class="search-switch ml-3"><img src="/images/icon/cart.png" alt=""> <span></span></a></li> -->
 
@@ -150,4 +151,25 @@
     </div>
 </header>
 <!-- Header Section End -->
+
+<!-- Search Begin -->
+<div class="search-model">
+    <div class="h-100 d-flex align-items-center justify-content-center">
+        <div class="search-close-switch">+</div>
+        <form class="search-model-form">
+            <input type="text" class="search-input" placeholder="Search here.....">
+        </form>
+    </div>
+</div>
+<!-- Search End -->
+
+<script>
+    $(document).ready(function(){
+        $('.search-input').blur(function(){
+            var  searchKey = $('.search-input').val()
+            console.log(searchKey);
+           location.assign(`/shopepage?q=${searchKey}`)             
+        })
+    })
+</script>
 

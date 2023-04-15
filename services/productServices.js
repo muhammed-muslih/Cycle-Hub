@@ -13,7 +13,7 @@ module.exports={
         await db.getDB().collection(collecton.product_collection).insertOne({productName,productId,productDescription,category,brand,price,quantity,isDelete,images,variants,date})
     },
 
-    findAllProduct:async(skip,limit)=>{
+    findAllProduct:async()=>{
     const  product  =  await db.getDB().collection(collecton.product_collection).aggregate([
 
         {
@@ -32,13 +32,45 @@ module.exports={
                 as:"brandDetails"
              }
 
-        },
-        { $skip : skip},
-        { $limit : limit }
+        }
     ]).toArray()
     return product
 
     },
+
+    findAllUserProduct:async(skip,limit,searchkey)=>{
+        const  product  =  await db.getDB().collection(collecton.product_collection).aggregate([
+            {
+                $match: {
+                    isDelete:false
+                }
+
+            },
+            {
+                $lookup:{
+                    from :"category",
+                    localField :"category",
+                    foreignField :"_id",
+                    as:"categoryDetails"
+                }
+            },
+            {
+                 $lookup :{
+                    from:"brand",
+                    localField:"brand",
+                    foreignField : "_id",
+                    as:"brandDetails"
+                 }
+    
+            },
+            {$skip: skip},
+            {$limit:limit}
+        ]).toArray()
+        return product
+    
+        },
+
+
     productStatus: async (productId)=>{
         const product = await db.getDB().collection(collecton.product_collection).findOne({_id:new ObjectId(productId)})
         if(product.isDelete){
@@ -214,7 +246,61 @@ module.exports={
         ]).toArray()
         return productQuantity
 
-    }
+    },
+
+    findAllSearchProduct:async(skip,limit,searchkey)=>{
+        const  product  =  await db.getDB().collection(collecton.product_collection).aggregate([
+            {
+                $match: {
+                    isDelete:false
+                }
+
+            },
+            {
+                $lookup:{
+                    from :"category",
+                    localField :"category",
+                    foreignField :"_id",
+                    as:"categoryDetails"
+                }
+            },
+            {
+                 $lookup :{
+                    from:"brand",
+                    localField:"brand",
+                    foreignField : "_id",
+                    as:"brandDetails"
+                 }
+    
+            },
+            {
+                $unwind: {
+                  path: '$brandDetails',
+                 
+                }
+            },
+            {
+                $unwind: {
+                  path: '$categoryDetails',
+                }
+    
+            },
+            {
+                $match: {
+                  $or:[
+                    {productName:{$regex:searchkey,$options:'i'}},
+                    {'brandDetails.brandName':{$regex:searchkey,$options:'i'}},
+                    {'categoryDetails.categoryName':{$regex:searchkey,$options:'i'}},
+                  ]
+                }
+
+            },
+            {$skip: skip},
+            {$limit:limit}
+        ]).toArray()
+        return product
+    
+        },
     
     
 

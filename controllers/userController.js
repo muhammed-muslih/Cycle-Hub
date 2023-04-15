@@ -55,10 +55,11 @@ module.exports = {
         
         const userId= req.session.userId
         const user=req.session.userName+" "+req.session.lastName
+
+        var searchkey = req.query.q
         const categoryId = req.query.categoryId
         const brandId = req.query.brandId
         const maxPrice=  parseInt(req.query.maxPrice) 
-        
         const minPrice = parseInt(req.query.minPrice)  
         let page = req.query.page || 1
         let limit = 9
@@ -98,7 +99,20 @@ module.exports = {
               }
             res.render('userView/shopePage',{products,category,brands,user,loggedIn:req.session.loggedIn,userId,currentPage,totalPage,sortMessage})
 
-        }else{
+        }else if(searchkey){
+            console.log(req.query.searchkey);
+            const brands = await brandService.findListedBrand()
+            const category = await categoryServices.findListedAllCategory()
+            const products=await productServices.findAllSearchProduct(skip,limit,searchkey)
+            console.log(products);
+            for (let i = 0; i < products.length; i++) {
+                products[i].price = products[i].price.toLocaleString('en-IN', { style: 'currency', currency: 'INR' })
+              }
+            //   console.log(products);
+            res.render('userView/shopePage',{products,category,brands,user,loggedIn:req.session.loggedIn,userId,currentPage,totalPage,sortMessage})
+    
+        
+            }else{
             const brands = await brandService.findListedBrand()
             const products=await productServices.findAllProduct(skip,limit)
             const category = await categoryServices.findListedAllCategory()

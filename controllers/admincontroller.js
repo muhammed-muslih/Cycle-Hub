@@ -13,6 +13,8 @@ const walletService = require('../services/walletService')
 module.exports={
     adminDashboardRender:async (req,res)=>{
        const dashBoardClass='active'
+       
+    //    orderCount
        let deliverdOrders = await orderService.deliverdOrdersCount()
        if(deliverdOrders){
        deliverdOrders=deliverdOrders.toLocaleString()
@@ -20,14 +22,15 @@ module.exports={
         deliverdOrders=000
        }
 
-
+        //total customers
        let totalCustomers = await userService.totalCustomers()
        if(totalCustomers){
         totalCustomers = totalCustomers.toLocaleString()
        }else{
         totalCustomers=000
        }
-
+        
+       //total product
        let totalProducts = await productService.totalProducts()
        if(totalProducts){
         totalProducts=totalProducts.toLocaleString()
@@ -35,6 +38,8 @@ module.exports={
         totalProducts=000
        }
 
+
+       //today sale
        let todaySales = await orderService.currentDayTotalSale()
        console.log(todaySales);
        let todaysAmount = 0
@@ -47,7 +52,7 @@ module.exports={
         todaysAmount="₹000"
        }
       
-
+        // week sale
        let startDate= new Date()
        startDate.setDate(startDate.getDate() - 7)
        startDate = startDate.toISOString().slice(0,10)
@@ -58,7 +63,7 @@ module.exports={
         weekSale="₹000"
        }
 
-
+        //month sale
        let startMonthDate = new Date(new Date().getFullYear() ,new Date().getMonth())
        startMonthDate.setUTCHours(startMonthDate.getUTCHours() + 5, startMonthDate.getUTCMinutes() + 30); // Add 5 hours and 30 minutes for IST timezone
        startMonthDate = startMonthDate.toISOString().slice(0, 10);
@@ -78,7 +83,7 @@ module.exports={
        console.log(monthlyAmount);
 
       
-
+       //year sale
        const date = new Date().getFullYear()
        let startYearDate = new Date(date, 0, 1);  // January is 0 and December is 11.
        startYearDate.setUTCHours(startYearDate.getUTCHours() + 5, startYearDate.getUTCMinutes() + 30); // Add 5 hours and 30 minutes for IST timezone
@@ -98,7 +103,8 @@ module.exports={
        }
        console.log(yearAmount);
 
-
+       
+       //total sale
        let totalSale = await orderService.totalSale()
        if(totalSale){
         totalSale = totalSale[0].total.toLocaleString('en-IN',{style:'currency',currency:'INR'})
@@ -106,10 +112,35 @@ module.exports={
         totalSale="₹000"
        }
        console.log(totalSale);
-       res.render('adminView/dashBoard',{layout:"adminLayout",dashBoardClass,deliverdOrders,totalCustomers,totalProducts,todaysAmount, weekSale,monthlyAmount,yearAmount,totalSale})
+        
+       res.render('adminView/dashBoard',{layout:"adminLayout",dashBoardClass,deliverdOrders,totalCustomers,totalProducts,todaysAmount,
+        weekSale,monthlyAmount,yearAmount,totalSale})
        
     },
 
+    dashBoardData : async (req,res)=>{
+        //sales permonth
+        const date = new Date().getFullYear()
+       let startYearDate = new Date(date, 0, 1);  // January is 0 and December is 11.
+       startYearDate.setUTCHours(startYearDate.getUTCHours() + 5, startYearDate.getUTCMinutes() + 30); // Add 5 hours and 30 minutes for IST timezone
+       startYearDate = startYearDate.toISOString().slice(0, 10);
+       
+       let  endYearDate = new Date(date+1,0,1)
+       endYearDate.setUTCHours(endYearDate.getUTCHours() + 5,endYearDate.getUTCMinutes() + 30 )
+       endYearDate= endYearDate.toISOString().slice(0,10)
+
+       const salesPerMonth = await orderService.salesPerMonth(startYearDate,endYearDate)
+       console.log(salesPerMonth);
+
+       const orderStatusDetails = await orderService.getOrderStatusAndCount()
+       console.log(orderStatusDetails);
+       res.json({
+        salesPerMonth,
+        orderStatusDetails
+       })
+
+
+    },
 
     renderUserList : async (req,res)=>{
         const userClass='active'

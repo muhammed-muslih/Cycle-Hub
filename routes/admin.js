@@ -90,6 +90,8 @@ router.get('/brand-banner',adminAuth.adminAuth,adminController.renderBrandBanner
 
 router.post('/add-banner-image/:id',adminAuth.adminAuth,upload.single('image'),adminController.addBrandImage)
 
+router.get('/getDashboardData',adminAuth.adminAuth,adminController.dashBoardData)
+
 
 
 
