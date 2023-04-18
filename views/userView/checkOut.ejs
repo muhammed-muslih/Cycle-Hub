@@ -1,4 +1,12 @@
-     
+<style>
+  body{
+    overflow-x: hidden;
+  }
+  .errors{
+    color: red;
+    border-color: red;
+  }
+</style>     
 
   <!-- Modal -->
   <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -11,7 +19,7 @@
           </button>
         </div>
         <div class="modal-body">
-            <form  action="/add-Address" method="post" class="p-4">
+            <form  action="/add-Address" method="post" id="address-form" class="p-4">
                 <div class="form-row">
                   <div class="form-group col-md-6">
                     <label for="first Name">First Name</label>
@@ -30,7 +38,7 @@
                     <div class="form-group col-md-6">
                         <label for="inputState">District</label>
                         <select id="" class="form-control" name="district" required>
-                          <option value="">...........................select district..........................</option>
+                          <!-- <option value="">...........................select district..........................</option> -->
                                 <option >Calicut</option>
                                 <option >Malappuaram</option>
                                 <option >Palakkad</option>
@@ -51,7 +59,7 @@
                   </div>
                   <div class="form-group col-md-6">
                     <label for="phone">phone</label>
-                    <input type="text" class="form-control" name="phone" minlength="10" maxlength="10">
+                    <input type="text" class="form-control" name="phone">
                   </div>
                 </div>
                 <hr>
@@ -96,7 +104,7 @@
                             <button type="submit" class="site-btn" data-toggle="modal" data-target="#exampleModalCenter">ADD ADDRESS</button>
                             <!-- <h6 class="coupon__code"><span class="icon_tag_alt"></span> Have a coupon? <a href="#">Click
                             here</a> to enter your code</h6> -->
-
+                              <div class="table-responsive">
                             <table class="table mt-3 p-3 table-bordered " style="background-color: #f3f2ee;;">
                                 <thead>
                                   <tr>
@@ -120,6 +128,8 @@
                                   
                                 </tbody>
                               </table>
+
+                            </div>
                             
                               <hr>
                         </div>
@@ -140,6 +150,7 @@
                         
 
                             <div class="checkout__order">
+                              <div class="table-responsive">
                                 <table class="table table-bordered ">
                                     <h4 style="font-weight: 800;">Your order</h4>
                                     <thead>
@@ -165,6 +176,7 @@
                                        <% }%>
                                     </tbody>
                                   </table>
+                                </div>
                                 <ul class="checkout__total__all">
                                     <li>Subtotal <span class=" text-dark" id="total"><%=locals.totalPrice%></span></li>
                                     <li >OfferPrice <span class=" text-dark" id="offerPrice">₹000.00</span></li>
@@ -195,73 +207,60 @@
     </section>
     <!-- Checkout Section End -->
 
-    <!-- Footer Section Begin -->
-    <footer class="footer">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="footer__about">
-                        <div class="footer__logo">
-                            <a href="#"><img src="" alt=""></a>
-                        </div>
-                        <p>The customer is at the heart of our unique business model, which includes design.</p>
-                        <a href="#"><img src="" alt=""></a>
-                    </div>
-                </div>
-                <div class="col-lg-2 offset-lg-1 col-md-3 col-sm-6">
-                    <div class="footer__widget">
-                        <h6>Shopping</h6>
-                        <ul>
-                            <li><a href="#">Clothing Store</a></li>
-                            <li><a href="#">Trending Shoes</a></li>
-                            <li><a href="#">Accessories</a></li>
-                            <li><a href="#">Sale</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-3 col-sm-6">
-                    <div class="footer__widget">
-                        <h6>Shopping</h6>
-                        <ul>
-                            <li><a href="#">Contact Us</a></li>
-                            <li><a href="#">Payment Methods</a></li>
-                            <li><a href="#">Delivary</a></li>
-                            <li><a href="#">Return & Exchanges</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-lg-3 offset-lg-1 col-md-6 col-sm-6">
-                    <div class="footer__widget">
-                        <h6>NewLetter</h6>
-                        <div class="footer__newslatter">
-                            <p>Be the first to know about new arrivals, look books, sales & promos!</p>
-                            <form action="#">
-                                <input type="text" placeholder="Your email">
-                                <button type="submit"><span class="icon_mail_alt"></span></button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-12 text-center">
-                    <div class="footer__copyright__text">
-                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                        <p>Copyright ©
-                            <script>
-                                document.write(new Date().getFullYear());
-                            </script>2020
-                            All rights reserved | This template is made with <i class="fa fa-heart-o"
-                            aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-                        </p>
-                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
-    <!-- Footer Section End -->
-
+   <!-- Footer Section Begin -->
+<footer class="footer">
+  <div class="container">
+      <div class="row">
+          <div class="col-lg-3 col-md-6 col-sm-6">
+              <div class="footer__about">
+                  <div class="footer__logo">
+                      <!-- <a href="#"><img src="/images/footer-logo.png" alt=""></a> -->
+                      <h2 class="text-white" style="font-weight: 900;font-weight: 900;">CYCLE HUB</h2>
+                  </div>
+                  <p>The customer is at the heart of our unique business model, which includes design.</p>
+                  <a href="#"><img src="/images/payment.png" alt=""></a>
+              </div>
+          </div>
+          <div class="col-lg-2 offset-lg-1 col-md-3 col-sm-6">
+              <div class="footer__widget">
+                  <h6>Shopping</h6>
+                  <ul>
+                      <li><a href="#">Cycle Store</a></li>
+                      <li><a href="#">City cycles</a></li>
+                      <li><a href="#">Mountain cycle</a></li>
+                      <li><a href="#">Road Cycle</a></li>
+                  </ul>
+              </div>
+          </div>
+          <div class="col-lg-2 col-md-3 col-sm-6">
+              <div class="footer__widget">
+                  <h6>Shopping</h6>
+                  <ul>
+                      <li><a href="#">Contact Us</a></li>
+                      <li><a href="#">Payment Methods</a></li>
+                      <li><a href="#">Delivary</a></li>
+                      <li><a href="#">Return & Exchanges</a></li>
+                  </ul>
+              </div>
+          </div>
+          <div class="col-lg-3 offset-lg-1 col-md-6 col-sm-6">
+              <div class="footer__widget">
+                  <h6>NewLetter</h6>
+                  <div class="footer__newslatter">
+                      <p>Be the first to know about new arrivals, look books, sales & promos!</p>
+                      <!-- <form action="#">
+                          <input type="text" placeholder="Your email">
+                          <button type="submit"><span class="icon_mail_alt"></span></button>
+                      </form> -->
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</footer>
+<!-- Footer Section End -->
+    <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+    <script src="/validation/addressForm.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
@@ -289,7 +288,6 @@
 
        document.getElementById('placeorder').addEventListener('click',function(event){
         event.preventDefault()
-        console.log("hello");
         placeOrder()
        })
       
@@ -321,10 +319,25 @@
         })
 
           }else{
-            window.alert('allfield required')
+
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'All Fields  are Required !',
+            })
+            
           }
-        
-         if(paymentMethod === 'cod'){
+          if(res.data.status ==='out of stock'){
+            // console.log("out of stock");
+            Swal.fire({
+               icon: 'error',
+               title: 'out of stock',
+               text:`${res.data.product} is out of stock, ${res.data.product_quantuty} products left`,
+               })
+
+
+          }else if(paymentMethod === 'cod'){
+
           if(res.data.iscouponExist){
           
           Swal.fire({
@@ -351,7 +364,7 @@
           console.log("razproduct",orderDetails);
           localStorage.setItem('order', JSON.stringify(orderDetails))
           couponCode=localStorage.getItem('coupencode')
-          console.log(couponCode);
+          // console.log(couponCode);
           razorpayPayment(res.data,couponCode)
       
          }else if(paymentMethod === 'wallet'){
@@ -370,7 +383,7 @@
       
         setTimeout(function(){
           if(res.data.status==='success'){
-              console.log(res.data.orderId);
+              // console.log(res.data.orderId);
               location.assign(`/order-success?orderId=${res.data.orderId}`)
              } 
         },2500)
@@ -393,7 +406,7 @@
       addressId.forEach(function(address){
         address.addEventListener('click',function(){
           addressid=this.value
-          console.log(addressid);
+          // console.log(addressid);
         
         })
       })
@@ -421,7 +434,7 @@
          product= {productId:productId[i],quantity:quantity[i]}
           products.push(product)
         }
-        console.log(products);
+        // console.log(products);
 
 
 
@@ -436,7 +449,7 @@
             console.log(walletAmount);
 
           }
-          console.log(paymentMethod);
+          // console.log(paymentMethod);
         })
         })
 
@@ -444,14 +457,13 @@
         subtotal=subtotal.replace(/,/g,"")
         subtotal=subtotal.replace('₹','')
         subtotal = parseInt(subtotal)
-        console.log("subtotal",subtotal);
 
 
         var isclicked = false
         var couponCode 
        document.getElementById('applyCoupon').addEventListener('click',function(){
         couponCode  = document.getElementById('coupon').value
-           console.log(couponCode);
+          //  console.log(couponCode);
          if(!isclicked){
            applyCoupon(couponCode)
          }  
@@ -460,7 +472,6 @@
        })
        
        const applyCoupon =async(couponCode)=>{
-           console.log("hello");
            const res = await  axios({
            method:"post",
            url:'/apply-coupon',
@@ -471,25 +482,24 @@
         if(res.data.status ==="success"){
            isclicked=true
            document.getElementById('errorCoupon').style.display='none'
-          console.log(res.data.percentage);
           let percentage = res.data.percentage
           let total= document.getElementById('total').innerText
           total=total.replace(/,/g,"")
           total=total.replace('₹','')
           total=Number(total)
-          console.log(total);
+          
           offerPrice = (total*percentage)/100
-          console.log(offerPrice);
+          
           document.getElementById('offerPrice').innerText=offerPrice.toLocaleString('en-IN',{style:'currency',currency:'INR'})
           grandTotal = total-offerPrice
-          console.log(grandTotal);
+          
           document.getElementById('grandTotal').innerText = grandTotal.toLocaleString('en-IN',{style:'currency',currency:'INR'})
           localStorage.setItem('coupencode',couponCode)
         }else{
          
            document.getElementById('errorCoupon').style.display='block'
         }
-        console.log(res);
+       
        }
        
                
@@ -547,7 +557,7 @@
       url:'/verify-payment',
       data:{razorResponse,orderId,amount,couponCode,order}
     })
-    console.log(res);
+    // console.log(res);
 
     if(res.data.status ==='success'){
       if(res.data.iscouponExist){
@@ -560,7 +570,7 @@
           })
       }
       setTimeout(function(){
-          console.log(res.data.orderId);
+          // console.log(res.data.orderId);
           location.assign(`/order-success?orderId=${res.data.orderId}`)
         },1000)
     

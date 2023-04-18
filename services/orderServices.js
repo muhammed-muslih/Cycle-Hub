@@ -183,10 +183,9 @@ module.exports={
   },
 
   weekSale : async(startDate)=>{
-    console.log(startDate);
+    
     let endDate = new Date()
     endDate=endDate.toISOString().slice(0,10)
-    console.log(endDate);
     const sales = await db.getDB().collection(collection.order_collection).aggregate([
       {$match:{status:'deliverd'}},
       {$match:{
@@ -211,7 +210,6 @@ module.exports={
       {$match:{  orderDate:{$gte:startDate,$lt:endDate}} },
       { $group: {_id: null, total: {$sum: '$grandTotal'}}},
     ]).toArray()
-    console.log(salesAmount);
     return salesAmount
 
   },

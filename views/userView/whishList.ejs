@@ -3,44 +3,14 @@
     <div class="loader"></div>
 </div>
 
-<!-- Offcanvas Menu Begin -->
-<div class="offcanvas-menu-overlay"></div>
-<div class="offcanvas-menu-wrapper">
-    <div class="offcanvas__option">
-        <div class="offcanvas__links">
-            <a href="#">Sign in</a>
-            <a href="#">FAQs</a>
-        </div>
-        <div class="offcanvas__top__hover">
-            <span>Usd <i class="arrow_carrot-down"></i></span>
-            <ul>
-                <li>USD</li>
-                <li>EUR</li>
-                <li>USD</li>
-            </ul>
-        </div>
-    </div>
-    <div class="offcanvas__nav__option">
-        <a href="#" class="search-switch"><img src="/images/icon/search.png" alt=""></a>
-        <a href="#"><img src="/images/icon/heart.png" alt=""></a>
-        <a href="#"><img src="/images/icon/cart.png" alt=""> <span>0</span></a>
-        <div class="price">$0.00</div>
-    </div>
-    <div id="mobile-menu-wrap"></div>
-    <div class="offcanvas__text">
-        <p>Free shipping, 30-day return or refund guarantee.</p>
-    </div>
-</div>
-<!-- Offcanvas Menu End -->
-
 
 <!-- Breadcrumb Section Begin -->
-<section class="breadcrumb-option">
+<section class="breadcrumb-option mt-5">
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
                 <div class="breadcrumb__text">
-                    <h4>Shop</h4>
+                    <h4>Whishlist</h4>
                     <div class="breadcrumb__links">
                         <a href="/">Home</a>
                         <span>wishlist</span>
@@ -59,54 +29,6 @@
 <section class="shop spad">
     <div class="container">
         <div class="row">
-            <!-- <div class="col-lg-3"> -->
-                <!-- <div class="shop__sidebar">
-                    <div class="shop__sidebar__search">
-                        <form action="#">
-                            <input type="text" placeholder="Search...">
-                            <button type="submit"><span class="icon_search"></span></button>
-                        </form>
-                    </div>
-                    <div class="shop__sidebar__accordion">
-                        <div class="accordion" id="accordionExample">
-                            <div class="card">
-                                <div class="card-heading">
-                                    <a data-toggle="collapse" data-target="#collapseOne">Categories</a>
-                                </div>
-                                <div id="collapseOne" class="collapse show" data-parent="#accordionExample">
-                                    <div class="card-body">
-                                        <div class="shop__sidebar__categories">
-                                            <ul class="nice-scroll">
-                                              
-                                                    <li><a href=""></a></li>
-                                                  
-                                            </ul> 
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card">
-                                <div class="card-heading">
-                                    <a data-toggle="collapse" data-target="#collapseTwo">Branding</a>
-                                </div>
-                                <div id="collapseTwo" class="collapse show" data-parent="#accordionExample">
-                                    <div class="card-body">
-                                        <div class="shop__sidebar__brand">
-                                            <ul>
-                                               
-                                                    <li><a href=">">></a></li>
-                                              
-                                                
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                        </div>
-                    </div>
-                </div> -->
-            <!-- </div> -->
             <div class="col-lg-9">
                 <div class="shop__product__option">
                     <div class="row">
@@ -216,14 +138,13 @@
    document.querySelectorAll('.whishList').forEach(function(whishBtn){
        whishBtn.addEventListener('click',function(event){
            event.preventDefault()
-           console.log(event);
            addToWhisList(this.dataset.productid,this.dataset.userid)
        })
    })
 
    const addToWhisList = async(productId,userId)=>{
-    //    console.log("heloooo");
-       console.log(productId);
+    
+       
        try{
 
            const res= await axios({
@@ -232,8 +153,7 @@
                data:{productId}
            })
        console.log(res);
-       if(res.data.status==='removed'){
-            // document.getElementById(productId).style.backgroundColor='white'  
+       if(res.data.status==='removed'){ 
             localStorage.setItem(productId+userId,'white')
            Toastify({
                    text: "product removed from whishList",
@@ -270,12 +190,12 @@
  
      const addToCart = async(productId)=>{
          try{
-             console.log(productId);
+             
              const res = await axios({
                  method:'get',
                  url:`/add-to-cart/${productId}`
              })
-             console.log(res);
+            
              if(res.data.status==='success'){
                  Toastify({
                      text: res.data.message,

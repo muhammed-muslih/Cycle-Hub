@@ -1,16 +1,26 @@
-<div class="content" id="addProductModal">
-    <form action="/admin/add-product"  method="post" enctype="multipart/form-data">
+<style>
+  .errors{
+    color: red;
+    border-color: red;
+  }
+</style>
+
+<div class="content row " id="addProductModal">
+  <div class="col-md-8">
+  <h1 style="text-align: center;font-weight: 900;">Add Product</h1>
+
+    <form action="/admin/add-product"  method="post" enctype="multipart/form-data" id="product_form">
         <div class="form-group">
           <!-- <label for="exampleInputEmail1">Email address</label> -->
           <label  for="forProductName" class="text-white">PRODUCT NAME</label>  
           <input type="text" class="form-control" id="" name="productName">
           <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
         </div>
-
+<!-- 
         <div class="form-group">
           <label  for="forProductId" class="text-white">PRODUCT ID</label>  
           <input type="text" class="form-control" id="" name="productId">
-        </div>
+        </div> -->
 
         <div class="form-group">
            <label  for="product_description" class="text-white">DESCRIPTION</label>
@@ -67,8 +77,13 @@
         <button type="submit" class="btn btn-primary ">Submit</button>
         <a href="/admin/productList" class="btn submit text-white" id="btn">close</a>
       </form> 
+    </div>
+
+
+
 </div>
 <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
+<script src="/validation/addProduct.js"></script>
 <script>
     // Add the following code if you want the name of the file appear on select
     $(".custom-file-input").on("change", function() {

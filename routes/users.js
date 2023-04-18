@@ -85,7 +85,6 @@ router.get('/delete-address/:id',userAuth.userAuth,userController.deleteAddress)
 
 router.post('/cancel-order',userAuth.userAuth,userController.cancelOrder)
 
-
 router.get('/wallet',userAuth.userAuth,userController.renderWalletPage)
 
 

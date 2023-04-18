@@ -183,8 +183,6 @@ th, td {
     <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
     <script>
         const changeStatus =async (orderId,paymentStatus,status,userId)=>{
-            console.log(orderId);
-            console.log(status);
 
             if(status === 'placed'){
                 status='shipped'
@@ -212,7 +210,7 @@ th, td {
 
     </script>
 
-<script>
+  <script>
     $(document).ready( function () {
       $('#myTable').DataTable();
     } );

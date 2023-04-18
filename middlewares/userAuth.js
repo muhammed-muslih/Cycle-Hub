@@ -7,6 +7,7 @@ const productServices = require('../services/productServices')
 
 module.exports={
     userAuth: async(req,res,next)=>{
+      const homeClass = 'active'
 
       if(req.session.loggedIn){
         const user = await userServices.emailExistOrNot(req.session.email)
@@ -17,12 +18,10 @@ module.exports={
         const banner = await bannerServices.findBanner()
         const brands = await brandService.findListedBrand()
         const newProducts = await productServices.newArrivals()
-        console.log(brands);
-        console.log("...............",banner);
         for (let i = 0; i < newProducts.length; i++) {
           newProducts[i].price = newProducts[i].price.toLocaleString('en-IN', { style: 'currency', currency: 'INR' });
          }
-        res.render('userView/homePage',{loggedIn:req.session.loggedIn,banner,brands,newProducts});
+        res.render('userView/homePage',{loggedIn:req.session.loggedIn,banner,brands,newProducts,homeClass});
       }
     },
     

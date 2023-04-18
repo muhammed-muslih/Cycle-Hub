@@ -349,10 +349,10 @@
       amountofSalesPerMonth[ sales._id-1 ]= sales.sale
       
     });
-    console.log(amountofSalesPerMonth);
+    // console.log(amountofSalesPerMonth);
 
     const orderStatusDetails = res.data.orderStatusDetails
-    console.log(orderStatusDetails);
+    // console.log(orderStatusDetails);
      let orderStatuses=[];
      let orderStatusCount=[]
 
@@ -367,7 +367,7 @@
          data: {
            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
            datasets: [{
-             label: '₹amount per month',
+             label: '₹',
              data: amountofSalesPerMonth,
              borderWidth: 1,
              backgroundColor:' lightGreen',
@@ -422,9 +422,6 @@
     console.log(err);
 
   }
-
-
- 
 
 })();
 </script>

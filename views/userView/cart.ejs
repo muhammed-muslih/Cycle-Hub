@@ -114,9 +114,10 @@
                     <div class="cart__total" style="margin-bottom: 1rem;">
                         <h5 style="font-weight: 900;">My Wallet</h5>
                         <ul>
-                            <li >wallet Amount <span class="totalAmount text-dark">₹000,00</span></li>
+                            <li >wallet Amount <span class="text-dark">₹000,00</span></li>
                             
                         </ul>
+
                     </div>
 
 
@@ -177,10 +178,10 @@
     quantity = 1
     const changeQuantity = async (cartId,productId,price,count,stock)=>{
 
-        console.log(stock);
+        // console.log(stock);
         let quantity = document.getElementById(productId).innerText
         quantity = parseInt(quantity)+count
-        console.log(quantity);
+        // console.log(quantity);
         
        
      if(stock < quantity){

@@ -4,7 +4,7 @@
         display: inline-flex;
         margin-left: .7rem;
     }
-  
+
 </style>
 
 
@@ -60,9 +60,9 @@
 
                 <nav class="header__menu mobile-menu">
                     <ul>
-                        <li><a href="/"  style="text-decoration: none;">Home</a></li>
+                        <li class="<%=locals.homeClass%>"><a href="/"  style="text-decoration: none;">Home</a></li>
 
-                        <li><a href="/shopepage"  style="text-decoration: none;"> <i class="fa-solid fa-tricycle"> </i> Shop</a>
+                        <li class="<%=locals.shoppClass%>"><a href="/shopepage"  style="text-decoration: none;"> <i class="fa-solid fa-tricycle"> </i> Shop</a>
                         
                         <!-- <div class="shop-sub-menu">
                             <ul class="dropdown">
@@ -75,7 +75,7 @@
                         </li>
 
 
-                        <li><a href="/cart"  style="text-decoration: none;">Cart<span class="badge badge-light" style="background-color:#d8d8d8;border-radius: 50%;"><%=locals.cartCount%></span></a>
+                        <li class="<%=locals.cartClass%>"><a href="/cart"  style="text-decoration: none;">Cart<span class="badge badge-light" style="background-color:#d8d8d8;border-radius: 50%;"><%=locals.cartCount%></span></a>
                             <!-- <ul class="dropdown">
                                 <li><a href="">About Us</a></li>
                                 <li><a href="">Shop Details</a></li>
@@ -84,28 +84,8 @@
                                 <li><a href="">Blog Details</a></li>
                             </ul> -->
                         </li>
-                        <li><a href="/order-list" style="text-decoration: none;">Orders</a>
-
-                            <!-- <div class="shop-sub-menu">
-                                <ul class="dropdown">
-                                    <li><a href="">cycle 1</a></li>
-                                    <li><a href="">cycle 2</a></li>
-                                    <li><a href="">cycle 3</a></li>
-                                </ul>
-                            </div>
-                         -->
+                        <li class="<%=locals.orderClass%>"><a href="/order-list" style="text-decoration: none;">Orders</a>
                         </li>
-                        <!-- <li><a href="" style="text-decoration: none;">whishlist</a>
-
-                            <div class="shop-sub-menu">
-                                <ul class="dropdown">
-                                    <li><a href="/admin/shopepage">cycle 1</a></li>
-                                    <li><a href="/admin/shopepage">cycle 2</a></li>
-                                    <li><a href="/admin/shopepage">cycle 3</a></li>
-                                </ul>
-                            </div>
-
-                        </li> -->
                     </ul>
                 </nav>
             </div>
@@ -114,7 +94,7 @@
                    <ul class="icon-side">
                     <li><a href="#" class="search-switch ml-3"><img src="/images/icon/search.png" alt=""></a></li>
 
-                    <li><a href="/whishlist" class="ml-3"><img src="/images/icon/heart.png" alt=""></a></li>
+                    <li class="<%=locals.whishClass%>"><a href="/whishlist" class="ml-3"><img src="/images/icon/heart.png" alt=""></a></li>
                     <!-- <li><a href="#" class="search-switch ml-3"><img src="/images/icon/cart.png" alt=""> <span></span></a></li> -->
 
                     <!-- user profile drop down -->

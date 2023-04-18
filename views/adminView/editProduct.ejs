@@ -1,5 +1,14 @@
+<style>
+  .errors{
+    color: red;
+    border-color: red;
+  }
+</style>
+
 <div class="content" id="addProductModal">
-    <form action="/admin/editProduct/<%=product[0]._id %>"  method="post" enctype="multipart/form-data">
+  <div class="col-md-8">
+  <h1 style="text-align: center;font-weight: 900;">Edit Product</h1>
+    <form action="/admin/editProduct/<%=product[0]._id %>"  method="post" enctype="multipart/form-data" id="product_form">
         <div class="form-group">
           <!-- <label for="exampleInputEmail1">Email address</label> -->
           <label  for="forProductName" class="text-white">PRODUCT NAME</label>  
@@ -7,10 +16,10 @@
           <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
         </div>
 
-        <div class="form-group">
+        <!-- <div class="form-group">
           <label  for="forProductId" class="text-white">PRODUCT ID</label>  
           <input type="text" class="form-control" id="" name="productId" value="<%=product[0].productId%>">
-        </div>
+        </div> -->
 
         <div class="form-group">
            <label  for="product_description" class="text-white">PRODUCT DESCRIPTION</label>
@@ -36,21 +45,6 @@
               <% } %>
             </select>
            </div>
-
-
-           <div class="form-group">
-            <label  for="product_category" class="text-white">VARIANTS</label><br>
-           <input type="checkbox" id="variant1" name="variants" value="red">
-           <label for="variant1" class="text-white"> RED</label>&nbsp;&nbsp;&nbsp;&nbsp;
-           <input type="checkbox" id="variant2" name="variants" value="blue">
-           <label for="variant2" class="text-white"> BLUE</label>&nbsp;&nbsp;&nbsp;&nbsp;
-           <input type="checkbox" id="variant3" name="variants" value="white">
-           <label for="variant3" class="text-white"> WHITE</label>&nbsp;&nbsp;&nbsp;&nbsp;
-           <input type="checkbox" id="variant4" name="variants" value="black">
-           <label for="variant4" class="text-white"> BLACK</label>&nbsp;&nbsp;&nbsp;&nbsp;
-           <br>
-           <label for="">Selected variants:&nbsp;&nbsp;&nbsp;&nbsp;</label><span><%=product[0].variants%>&nbsp;&nbsp;&nbsp;&nbsp;</span>
-          </div>
           
            <div class="form-group">
             <label  for="product_categorie" class="text-white" >PRODUCT PRICE</label>
@@ -80,8 +74,12 @@
         <button type="submit" class="btn btn-primary ">Submit</button>
         <a href="/admin/productList" class="btn submit text-white" id="btn">close</a>
       </form> 
+
+
+    </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
+<script src="/validation/addProduct.js"></script>
 <script>
     // Add the following code if you want the name of the file appear on select
     $(".custom-file-input").on("change", function() {

@@ -104,15 +104,11 @@ module.exports={
 
     },
     deleteCart: async (userId)=>{
-        console.log("user",userId);
         const result = await db.getDB().collection(collection.cart_collection).deleteOne({user:userId})
-        console.log(result);
     },
 
     findOneCartProduct : async (userId,productId)=>{
-        console.log(userId);
-        console.log(productId);
-
+       
         const cartProduct = await db.getDB().collection(collection.cart_collection).aggregate([
             {
                 $match: {

@@ -12,14 +12,15 @@
     <div class="container emp-profile">
         <form method="post">
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-4 mt-2">
                     <div class="profile-img">
-                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS52y5aInsxSm31CvHOFHWujqUx_wWTS9iM6s7BAm21oEN_RiGoog" alt=""/>
+                        <!-- <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS52y5aInsxSm31CvHOFHWujqUx_wWTS9iM6s7BAm21oEN_RiGoog" alt=""/>
                         <div class="file btn btn-lg btn-secondary">
                             Change Photo
                             <input type="file" name="file"/>
-                        </div>
+                        </div> -->
                     </div>
+                    <h3 style="margin-left: 2rem;"> <b> PROFILE </b></h3>
                 </div>
                 <div class="col-md-4">
                     <div class="profile-head">
@@ -51,12 +52,14 @@
             </div>
             <div class="row">
                 <div class="col-md-4">
-                    <div class="profile-work mt-1" style="border-right: solid 1px #212529b8;">
+                    <div class="profile-work " style="border-right: solid 1px #212529b8;">
                        
                         <a href="">My Profile</a><br/><hr>
                         <a href="/order-list">My Orders</a><br/><br>
                         <a href="/rewards">My Rewards</a><br><br>
+                        <a href="/wallet">My Wallet</a><br><br>
                         <a href="/cart">My Cart</a><br><br>
+                        <a href="/logout" class="text-danger">Logout</a>
                         <hr>
                     </div>
                 </div>
@@ -216,7 +219,6 @@
 
     document.getElementById('currentPassword').addEventListener('blur',async function(){
         const currentPassword = document.getElementById('currentPassword').value
-        console.log(currentPassword);
         if(currentPassword.length < 8){
             document.getElementById('pass-error').innerText = "minimum 8 character required"
         }else{
@@ -260,7 +262,6 @@
 
     function passwordValidate(){
         newpass = document.getElementById('newPassword').value.trim()
-        console.log(newpass);
         if(newpass.length <8){
             document.getElementById('newpass-error').innerText = "minimum 8 character required"
             passError=true
@@ -272,7 +273,6 @@
 
     function rePasswordValidate(){
         repass = document.getElementById('repassword').value
-        console.log(repass);
         if(repass === newpass){
             document.getElementById('repass-error').innerText = ''
             console.log('pass match');
@@ -310,7 +310,6 @@
                 }).showToast()
             }
         }else{
-            console.log('not match');
 
             Toastify({
                     text:"password not updated",
@@ -329,7 +328,6 @@
  var inputFields = document.querySelectorAll('.textBox')
   document.getElementById('profile-edit-btn').addEventListener('click',function(e){
     e.preventDefault()
-    console.log('clicked');
     inputFields.forEach(function (field) {
         field.removeAttribute('disabled')
         field.style.border ="solid 1px"

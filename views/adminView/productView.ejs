@@ -24,7 +24,7 @@
           <tr>
             <th>INDEX</th>
             <th>PRODUCT NAME</th>
-            <th>PRO_ID</th>
+            <!-- <th>PRO_ID</th> -->
             <th>CATEGORY</th>
             <th>BRAND</th>
             <th>PRICE</th>
@@ -43,7 +43,7 @@
           <tr>
             <th scope="row"><%= i+1 %></th>
             <td><%= products[i].productName %></td>
-            <td><%= products[i].productId%></td>
+            <!-- <td><%= products[i].productId%></td> -->
             <td><%= products[i]. categoryDetails[0].categoryName %></td>
             <td><%= products[i].brandDetails[0].brandName%></td>
             <td><%= products[i]. price %></td>
@@ -101,21 +101,3 @@
   
   </script>
 
-<!-- <script>
- 
-
-var deleteButton = document.getElementById("deletmodal");
-
-// Add a click event listener to the button
- deleteButton.addEventListener("click", function() {
-  // Get the value of the "data-my-attribute" attribute
-  var myAttributeValue = deleteButton.getAttribute("href");
-  
-  // Get the element where you want to set the attribute value
-  var setElement = document.getElementById("cnfrmBtn");
-  
-  // Set the value of the "data-my-attribute" attribute of the element
-  myElement.setAttribute("href",setElement);
-});
-
-</script> -->

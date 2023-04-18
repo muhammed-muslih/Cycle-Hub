@@ -4,7 +4,7 @@ const adminServices = require('../services/adminServices');
 const { Db } = require("mongodb");
 module.exports = {
     userRegister : async (req,res)=>{
-        console.log(req.body);
+        // console.log(req.body);
         let {firstName,lastName,email, password, phoneno} = req.body;
         const isEmailAlreadyExist = await userService.emailExistOrNot(email)
         const isPhoneNoisAlreadyExist = await userService.phoneNoExistOrNOt(phoneno)
@@ -16,9 +16,8 @@ module.exports = {
         }else{
            
             password = await bcrypt.hash(password,10)
-            console.log(password);
+            // console.log(password);
             let user= await userService.addUser(firstName,lastName,email, password, phoneno)
-            console.log(user);
             req.session.userName=firstName
             req.session.lastName=lastName
             req.session.email=email
@@ -33,7 +32,7 @@ module.exports = {
     verifyUser :async (req,res)=>{
         let {email,password}=req.body
         const user = await userService.emailExistOrNot(email)
-        console.log(user);            
+        // console.log(user);            
             if(user){
 
                 if(user.isBlocked){
@@ -47,8 +46,6 @@ module.exports = {
                     req.session.userId=user._id
                     req.session.email=email
                     req.session.loggedIn=true
-                    console.log(req.session.userName);
-                    console.log("user is exist");
                     res.redirect('/')
 
                 }else{
@@ -85,10 +82,8 @@ module.exports = {
     },
     verifyPhoneNumber : async (req,res)=>{
       let=  { verifyNumber}=req.body;
-      console.log(verifyNumber);
     const isPhoneNoisExist = await userService.phoneNoExistOrNOt(verifyNumber)
-    console.log(isPhoneNoisExist);
-    if(isPhoneNoisExist){
+    if(isPhoneNoisExist || isPhoneNoisExist.isBlocked === true){
         res.json({
             status:"phoneExists"
         })
@@ -103,17 +98,13 @@ module.exports = {
     },
     otpSuccess : async (req,res)=>{
         let {verifyNumber} = req.body
-        console.log("body",req.body);
-        console.log(verifyNumber);
         const user = await userService.phoneNoExistOrNOt(verifyNumber)
-        console.log(user);
         if(user){
             req.session.userName=user.firstName
             req.session.userId=user._id
             req.session.lastName=user.lastName
             req.session.loggedIn=true
             req.session.email=user.email
-            console.log("user is exist");
             res.json({
                 status:'verified',
                 email:req.session.email
@@ -122,19 +113,15 @@ module.exports = {
            
     },
     checkPassord : async (req,res)=>{
-        console.log(req.body);
         let{ password} = req.body
         const userId = req.session.userId
-        console.log(userId);
         const user = await userService.getUser(userId)
         const isPasswordCorrect = await bcrypt.compare(password,user.password)
         if(isPasswordCorrect){
-            console.log('password match');
             res.json({
                 status:'password match'
             })
         }else{
-            console.log('password not match');
             res.json({
                 status:'password not match'
             })
@@ -143,11 +130,9 @@ module.exports = {
     },
 
     changePassword : async (req,res)=>{
-        console.log(req.body);
         const userId = req.session.userId
         let{password} = req.body
         password = await bcrypt.hash(password,10)
-        console.log(password);
         const result = await userService.updatePassword(userId,password)
         if(result.modifiedCount === 1){
             res.json({

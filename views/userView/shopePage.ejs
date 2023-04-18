@@ -272,7 +272,8 @@
             <div class="col-lg-3 col-md-6 col-sm-6">
                 <div class="footer__about">
                     <div class="footer__logo">
-                        <a href="#"><img src="/images/footer-logo.png" alt=""></a>
+                        <!-- <a href="#"><img src="/images/footer-logo.png" alt=""></a> -->
+                        <h2 class="text-white" style="font-weight: 900;font-weight: 900;">CYCLE HUB</h2>
                     </div>
                     <p>The customer is at the heart of our unique business model, which includes design.</p>
                     <a href="#"><img src="/images/payment.png" alt=""></a>
@@ -282,10 +283,10 @@
                 <div class="footer__widget">
                     <h6>Shopping</h6>
                     <ul>
-                        <li><a href="#">Clothing Store</a></li>
-                        <li><a href="#">Trending Shoes</a></li>
-                        <li><a href="#">Accessories</a></li>
-                        <li><a href="#">Sale</a></li>
+                        <li><a href="#">Cycle Store</a></li>
+                        <li><a href="#">City cycles</a></li>
+                        <li><a href="#">Mountain cycle</a></li>
+                        <li><a href="#">Road Cycle</a></li>
                     </ul>
                 </div>
             </div>
@@ -305,26 +306,11 @@
                     <h6>NewLetter</h6>
                     <div class="footer__newslatter">
                         <p>Be the first to know about new arrivals, look books, sales & promos!</p>
-                        <form action="#">
+                        <!-- <form action="#">
                             <input type="text" placeholder="Your email">
                             <button type="submit"><span class="icon_mail_alt"></span></button>
-                        </form>
+                        </form> -->
                     </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-12 text-center">
-                <div class="footer__copyright__text">
-                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                    <p>Copyright ©
-                        <script>
-                            document.write(new Date().getFullYear());
-                        </script>2020
-                        All rights reserved | This template is made with <i class="fa fa-heart-o"
-                        aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-                    </p>
-                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
                 </div>
             </div>
         </div>
@@ -357,7 +343,7 @@
                 method:'get',
                 url:`/add-to-cart/${productId}`
             })
-            console.log(res);
+            
             if(res.data.status==='success'){
                 Toastify({
                     text: res.data.message,
@@ -409,8 +395,6 @@
 
 <script>
      document.querySelectorAll('.whish').forEach(function(whish){
-        // console.log(whish);
-        // console.log(whish.dataset.productid+whish.dataset.userid);
         const color = localStorage.getItem(whish.dataset.productid+whish.dataset.userid)
         document.getElementById(whish.dataset.productid+whish.dataset.userid).style.backgroundColor =color
      })
@@ -419,16 +403,12 @@
     document.querySelectorAll('.whishList').forEach(function(whishBtn){
         whishBtn.addEventListener('click',function(event){
             event.preventDefault()
-            // console.log("hello");
             console.log(this.dataset.productid);
             addToWhisList(this.dataset.productid,this.dataset.userid)
         })
     })
 
     const addToWhisList = async(productId,userId)=>{
-        // console.log(productId+userId);
-        // console.log("heloooo");
-        // console.log(productId);
         try{
 
             const res= await axios({
@@ -444,9 +424,9 @@
                     text: "product added to whishList",
                     duration: 3000,
                     // close: true,
-                    gravity: "top", // `top` or `bottom`
-                    position: "right", // `left`, `center` or `right`
-                    stopOnFocus: true, // Prevents dismissing of toast on hover
+                    gravity: "top", 
+                    position: "center", 
+                    stopOnFocus: true, 
                     style: {
                         background: "linear-gradient(to right, #00b09b, #96c93d)",
                     },
@@ -459,7 +439,7 @@
                     duration: 3000,
                     // close: true,
                     gravity: "top", // `top` or `bottom`
-                    position: "right", // `left`, `center` or `right`
+                    position: "center", // `left`, `center` or `right`
                     stopOnFocus: true, // Prevents dismissing of toast on hover
                     style: {
                         background: "red",
@@ -479,11 +459,8 @@
     document.querySelectorAll('.priceFilter').forEach(function(priceFilter){
         priceFilter.addEventListener('click',function(e){
             e.preventDefault()
-            console.log("hello");
-            console.log(priceFilter.innerText);
             const selectPrice = priceFilter.innerText
             document.getElementById('dropBtn').innerText=selectPrice
-            console.log(priceFilter.dataset.price);
             sortUsingPrice(priceFilter.dataset.price)
            
 
@@ -496,29 +473,26 @@
         maxPrice=parseInt(maxPrice)
         if(maxPrice===200000){
             minPrice=100000
-            console.log(minPrice,"   " ,maxPrice);
+           
             
         }else if(maxPrice===100000){
             minPrice=50000
-            console.log(minPrice,"   " ,maxPrice);
-
+          
         }else if(maxPrice===50000){
             minPrice=25000
-            console.log(minPrice,"   " ,maxPrice);
+           
         }else if(maxPrice ===25000){
             minPrice=10000
-            console.log(minPrice,"   " ,maxPrice);
+           
         }else{
             minPrice=0
-            console.log(minPrice,"   " ,maxPrice);
+           
         }
 
 
        location.assign(`/shopepage?minPrice=${minPrice}&maxPrice=${maxPrice}`)
         
     }
-
-
   </script>
 
   <script>

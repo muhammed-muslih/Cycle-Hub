@@ -4,9 +4,8 @@ var router = express.Router();
 const adminController = require('../controllers/admincontroller')
 const authController = require('../controllers/authController')
 const upload = require('../util/multer')
-const adminAuth=require('../middlewares/adminAuth');
+const adminAuth=require('../middlewares/adminAuthentication');
 const admincontroller = require('../controllers/admincontroller');
-
 
 
 router.get('/',adminAuth.adminAuth,adminController.adminDashboardRender)

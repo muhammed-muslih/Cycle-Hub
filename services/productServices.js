@@ -150,8 +150,8 @@ module.exports={
         return products
     },
 
-    findBrandProduct : async(brandId,skip,limit)=>{
-        const products= await db.getDB().collection(collecton.product_collection).find({brand:new ObjectId(brandId)}).skip(skip).limit(limit).toArray()
+    findBrandProduct : async(brandId)=>{
+        const products= await db.getDB().collection(collecton.product_collection).find({brand:new ObjectId(brandId)}).toArray()
         return products
     },
 
@@ -162,8 +162,8 @@ module.exports={
 
 
 
-    productIdExist : async(productId)=>{
-        const product = await db.getDB().collection(collecton.product_collection).findOne({productId:productId})
+    productExist : async(productName)=>{
+        const product = await db.getDB().collection(collecton.product_collection).findOne({productName})
         return  product
     },
 
@@ -186,9 +186,6 @@ module.exports={
     },
 
     filterPrice : async(minPrice,maxPrice,skip,limit)=>{
-        console.log(minPrice);
-        console.log(maxPrice);
-
         const  product  =  await db.getDB().collection(collecton.product_collection).aggregate([
             {
                 $match: {

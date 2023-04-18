@@ -95,7 +95,7 @@ function render() {
 var verifyNumber
 async function phoneAuth() {
     verifyNumber=document.getElementById('number').value
-    console.log(verifyNumber);
+    // console.log(verifyNumber);
      number = '+91 '
      number = number+document.getElementById('number').value;
 
@@ -137,10 +137,10 @@ async function phoneAuth() {
 
 // function for OTP verify
 function codeverify() {
-    console.log("verify",verifyNumber);
+    // console.log("verify",verifyNumber);
     var code = document.getElementById('verificationcode').value;
     coderesult.confirm(code).then(async function () {
-        console.log('OTP Verified');
+        // console.log('OTP Verified');
         document.getElementsByClassName('p-conf')[0].style.display='block'
         document.getElementsByClassName('n-conf')[0].style.display='none'
 
@@ -153,7 +153,7 @@ function codeverify() {
     location.assign('/')
    
     }).catch(function () {
-        console.log('OTP Not correct');
+        // console.log('OTP Not correct');
         document.getElementsByClassName('p-conf')[0].style.display='none'
         document.getElementsByClassName('n-conf')[0].style.display='block'
     })

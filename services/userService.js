@@ -6,7 +6,6 @@ module.exports= {
     addUser : async (firstName,lastName,email, password, phoneno)=>{
       const isBlocked = false
       const userId = await db.getDB().collection(collection.user_collection).insertOne({firstName,lastName,email, password, phoneno,isBlocked});
-            console.log(userId);
             return userId;
     },
     emailExistOrNot : async (email)=>{
@@ -15,7 +14,6 @@ module.exports= {
     },
     phoneNoExistOrNOt : async (phoneno)=>{
         const phoneNoExistOrNot = db.getDB().collection(collection.user_collection).findOne({phoneno:phoneno})
-        // console.log("phone  : ",phoneNoExistOrNot);
         return phoneNoExistOrNot
 
     },

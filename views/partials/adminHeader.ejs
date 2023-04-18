@@ -3,6 +3,32 @@
     font-size: larger;
     font-weight: 900;
   }
+
+  .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        z-index: 1;
+        width: 350%;
+        background-color: #1e1e2f;
+        color: #fff;
+    }
+
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+    .dropOptions {
+    /* border-radius: 6px; */
+    /* padding: 6px; */
+    width: 60px;
+    background-color: #1e1e2f;
+    border: solid 2px #525260;
+    color: white;
+    }
 </style>
 
 
@@ -91,11 +117,26 @@
         <div class="container-fluid">
           <div class="navbar-wrapper">
             <div class="navbar-toggle d-inline">
-              <button type="button" class="navbar-toggler">
+              <div class="dropdown">
+              <button type="button" class="navbar-toggler  dropOptions"  id="dropdownMenuButton" >
                 <span class="navbar-toggler-bar bar1"></span>
                 <span class="navbar-toggler-bar bar2"></span>
                 <span class="navbar-toggler-bar bar3"></span>
               </button>
+                <div class="dropdown-content p-3 text-white">
+                <br><br>
+                <a href="/admin" class="text-white">DASHBOARD</a><br><hr color="white">
+                <a href="/admin/user-list" class="text-white">USERS</a><br><hr color="white">
+                <a href="/admin/productList" class="text-white">PRODUCTS</a><br><hr color="white">
+                <a href="/admin/categoryList" class="text-white">CATEGORIES</a><br><hr color="white">
+                <a href="/admin/addBrand" class="text-white">BRANDS</a><br><hr color="white">
+                <a href="/admin/order-list" class="text-white">ORDERS</a><br><hr color="white">
+                <a href="/admin/add-banner" class="text-white">BANNER</a><br><hr color="white">
+                <a href="/admin/coupon-list" class="text-white">COUPONS</a><br><hr color="white">
+                <a href="/admin/sales-report" class="text-white">SALES REPORT</a><br><hr color="white">
+                </div>
+            </div>
+
             </div>
             <a class="navbar-brand" href="/admin"><H2 style="font-weight: 900;margin-top: 2rem;">CYCLEHUB</H2></a>
           </div>
@@ -149,4 +190,6 @@
       })
         
       </script>
+
+
       

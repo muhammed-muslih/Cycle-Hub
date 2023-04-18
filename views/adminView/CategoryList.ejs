@@ -1,3 +1,10 @@
+<style>
+  .errors{
+    color: red;
+    border-color: red;
+  }
+</style>
+
 <div class="content">
 
 <h1 style="text-align: center;font-weight: 900;">CATEGORY LIST</h1>
@@ -23,10 +30,10 @@
   <div style="text-align: center;">
     <h4 style="font-weight: 400;">ADD CATEGORY</h4>
   </div>
-    <form action="/admin/addCategory"  method="post" >
+    <form action="/admin/addCategory"  method="post" id="category-form">
         <div class="form-group">
           <label  for="forProductName" class="text-white">CATEGORY NAME</label>  
-          <input type="text" class="form-control" id="jhu" name="categoryName">
+          <input type="text" class="form-control"  name="categoryName">
         </div>
            <div class="form-group" style="text-align: right;">
               <button type="submit" class="btn  btn-primary ">Submit</button>
@@ -58,7 +65,7 @@
         <a href="/admin/categoryListOrUnlist/<%=category[i]._id%>" class="btn btn-success">LIST</a>
       <%}%>
         </td>
-        <td> <a href="/admin/editCategory/<%=category[i]._id %>" class="btn btn-info" data-toggle="modal" data-target="#modal<%=category[i]._id %>">EDIT</a></td>
+        <td> <a href="/admin/editCategory/<%=category[i]._id %>" class="btn btn-info"  data-toggle="modal" data-target="#modal<%=category[i]._id %>">EDIT</a></td>
         </tr>
         <%}%>
       </tbody>
@@ -82,11 +89,11 @@
 
 
        
-            <h3 style="text-align: center; color: black;font-weight: 900;" >Edit Category</h3>
+            <h3 style="text-align: center; color: black;font-weight: 900;" id="edit-category" >Edit Category</h3>
             <form action="/admin/editCategory/<%=category[i]._id %>"  method="post" id="editCategoryForm">
                 <div class="form-group">
                   <label  for="forProductName" style="color: black;">CATEGORY NAME</label>  
-                  <input type="text" class="form-control" id="" name="categoryName" value="<%=category[i].categoryName%>" style="color: black;">
+                  <input type="text" class="form-control" id="" name="categoryName" value="<%=category[i].categoryName%>" style="color: black;" required>
                 </div>
 
                 <div class="form-group">
@@ -106,7 +113,7 @@
 
 </div>
 
-
+<script src="/validation/categoryForm.js"></script>
 
 
 <script>
@@ -128,3 +135,6 @@
   } );
   
   </script>
+
+  
+  

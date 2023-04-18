@@ -1,3 +1,10 @@
+<style>
+  .errors{
+    color: red;
+    border-color: red;
+  }
+</style>
+
 <div class="content">
 
     <h1 style="text-align: center;font-weight: 900;">COUPONS</h1>
@@ -26,7 +33,7 @@
                 </div>
                 <div class="modal-body">
 
-                  <form action="/admin/add-coupon" method="post">
+                  <form action="/admin/add-coupon" method="post" id="coupon-form">
                     <!-- Name input -->
                     <div class="row">
                     <div class=" mb-4 text-dark col-lg-12">
@@ -126,10 +133,44 @@
 
 <%}%> 
 
-
+<script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
 <script>
   $(document).ready( function () {
     $('#myTable').DataTable();
+
+    $('#coupon-form').validate({
+      errorClass: 'errors',   
+      rules:{
+        couponCode:{
+        required:true,
+        minlength:5,
+        maxlength:10
+        },
+       min_amount:{
+        required:true,
+        digits:true
+        },
+       discount:{
+        required:true,
+        digits:true
+
+      },
+      expiryDate:{
+        required:true
+      }
+
+    },
+    messages:{
+      discount:{
+        digits:'enter valid discount'
+
+      }
+
+    }
+
+      })
+
+
   } );
   
   </script>

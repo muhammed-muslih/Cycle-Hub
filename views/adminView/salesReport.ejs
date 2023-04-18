@@ -74,34 +74,18 @@
 
 <script>
     $(document).ready( function () {
-      $('#myTable').DataTable();
+      $('#myTable').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            'copyHtml5',
+            'excelHtml5',
+            'csvHtml5',
+            'pdfHtml5'
+        ]
+      });
     } );
     
     </script>
-<!-- <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
-<script>
-    document.getElementById('submit').addEventListener('click',function(e){
-        e.preventDefault()
-        var startDate = document.getElementById('startDate').value
-        var endDate = document.getElementById('endtDate').value
-        console.log(startDate);
-        console.log(endDate);
-        
-        filterDate(startDate,endDate)
-        
-    })
 
-    const filterDate= async (startDate,endDate)=>{
-
-        const res = await axios({
-            method:'post',
-            url:'/admin/filter-date',
-            data :""
-        })
-
-
-
-    }
-</script> -->
 
 
