@@ -83,7 +83,7 @@ module.exports = {
     verifyPhoneNumber : async (req,res)=>{
       let=  { verifyNumber}=req.body;
     const isPhoneNoisExist = await userService.phoneNoExistOrNOt(verifyNumber)
-    if(isPhoneNoisExist || isPhoneNoisExist.isBlocked === true){
+    if(isPhoneNoisExist && isPhoneNoisExist.isBlocked === false){
         res.json({
             status:"phoneExists"
         })
