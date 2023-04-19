@@ -156,7 +156,7 @@ module.exports = {
             
                 }else{
                 const brands = await brandService.findListedBrand()
-                const products=await productServices.findAllProduct(skip,limit)
+                const products=await productServices.findAllUserProduct(skip,limit)
                 const category = await categoryServices.findListedAllCategory()
                 for (let i = 0; i < products.length; i++) {
                     products[i].price = products[i].price.toLocaleString('en-IN', { style: 'currency', currency: 'INR' })

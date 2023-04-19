@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/userController');
 const authController = require('../controllers/authController');
-const userAuth = require('../middlewares/userAuth')
+const userAuth = require('../middlewares/userAuthentication')
 
 router.get('/',userAuth.userAuth,userController.homePageRender)
 
@@ -36,7 +36,7 @@ router.get('/brand-products/:id',userController.renderBrandProducts)
 
 
 //cart pages
-router.get('/cart',userAuth.userAuth,userController.cartpagerender)
+router.get('/cart',userAuth.cartAuth,userController.cartpagerender)
 
 router.get('/add-to-cart/:id',userAuth.userAuth,userController.addToCart)
 

@@ -749,7 +749,6 @@ module.exports={
         const couponClass = "active"
         await couponService.checkCouponExpired()
         const coupons =  await couponService.findAllCoupon()
-        console.log(coupons);
         for(var i=0;i<coupons.length;i++){
             coupons[i].createdDate = coupons[i].createdDate.toLocaleString()
             coupons[i].expiryDate =   coupons[i].expiryDate.toLocaleString()
