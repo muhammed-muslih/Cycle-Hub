@@ -70,7 +70,7 @@ app.use(function(err, req, res, next) {
 
 app.listen(process.env.PORT,function(err){
   if(err) console.log('error in connecting server');
-  console.log(`Server listening on Port ${process.env.PORT}`.magenta);
+  console.log(`Server listening on Port ${process.env.PORT}`.bgMagenta);
 })
 
 
