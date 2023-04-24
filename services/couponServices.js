@@ -1,5 +1,5 @@
 const db = require('../db')
-const collection = require('../config/collections')
+const collection = require('../config/collection')
 const ObjectId = require('mongodb-legacy').ObjectId
 
 const addCoupon = async (couponCode,min_amount,discount,expiryDate)=>{

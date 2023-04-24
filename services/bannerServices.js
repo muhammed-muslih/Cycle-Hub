@@ -1,6 +1,6 @@
 const db = require('../db')
 const ObjectId = require('mongodb-legacy').ObjectId
-const collection = require('../config/collections')
+const collection = require('../config/collection')
 
 const addBanner = async (bannerText,banners)=>{
     const isChoose=false;

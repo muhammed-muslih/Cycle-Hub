@@ -1,7 +1,7 @@
 const db = require("../db")
 const ObjectId = require('mongodb-legacy').ObjectId
-const collection = require('../config/collections')
-const collections = require("../config/collections")
+const collection = require('../config/collection')
+const collections = require("../config/collection")
 
 module.exports={
     addOrder: async(userId,address,paymentMethod,subtotal,offerPrice,grandTotal,products,status)=>{

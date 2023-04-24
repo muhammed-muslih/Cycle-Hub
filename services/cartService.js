@@ -1,5 +1,5 @@
 const db = require('../db')
-const collection = require('../config/collections')
+const collection = require('../config/collection')
 const { ObjectId } = require('mongodb')
 module.exports={
     findCart : async (userId)=>{

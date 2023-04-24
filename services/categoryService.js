@@ -1,6 +1,6 @@
 const { ObjectId } = require('mongodb')
 const db = require('../db')
-const collecton = require('../config/collections')
+const collecton = require('../config/collection')
 const  slugify = require('slugify')
 module.exports = {
     addCategory : async(categoryName)=>{

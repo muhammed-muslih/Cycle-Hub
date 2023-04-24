@@ -1,6 +1,6 @@
 const db = require("../db")
 const ObjectId = require('mongodb-legacy').ObjectId
-const collecton = require('../config/collections')
+const collecton = require('../config/collection')
 
 module.exports={
 

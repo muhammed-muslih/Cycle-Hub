@@ -1,6 +1,6 @@
 const db = require('../db')
 const ObjectId= require("mongodb-legacy").ObjectId
-const collection = require('../config/collections')
+const collection = require('../config/collection')
 
 module.exports= {
     addUser : async (firstName,lastName,email, password, phoneno)=>{

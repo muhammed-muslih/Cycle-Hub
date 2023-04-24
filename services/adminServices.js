@@ -1,7 +1,7 @@
 const db = require('../db')
 const dotenv= require("dotenv").config()
 const ObjectId= require("mongodb-legacy").ObjectId
-const collecton = require('../config/collections')
+const collecton = require('../config/collection')
 
 module.exports = {
     adminValidation : async(email)=>{
