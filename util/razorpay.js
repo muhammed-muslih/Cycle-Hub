@@ -3,15 +3,15 @@ const dotenv = require('dotenv').config();
 const crypto = require("crypto");
 
 const instance = new razorpay({
-    key_id:process.env.RAZORPAY_KEY_ID,
+    key_id:process.env.RAZORPAY_KEY_ID || "rzp_test_VS752rixDIPgT0",
     key_secret:process.env.RAZORPAY_KEY_SECRET,
   });
 
 const generateRazorpay = async (orderId,total)=>{
   
-    total = parseInt(total)
-    console.log(""+orderId);
-    console.log(total);
+    // total = parseInt(total)
+    // console.log(""+orderId);
+    // console.log(total);
     try{
 
       const order = await   instance.orders.create({

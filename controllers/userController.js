@@ -461,7 +461,7 @@ module.exports = {
 
         const razoResOrder = await razorpay.generateRazorpay(orderId,grandTotal)
         const user = await userService.getUser(userId)
-        console.log("razorpay",razoResOrder);
+        // console.log("razorpay",razoResOrder);
         res.json({
             orderId :orderId,
             razorpayId :razoResOrder.id,
