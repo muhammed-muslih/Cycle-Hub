@@ -55,6 +55,8 @@
   </div>
 
 
+<%if(brands.length >0){%>
+
 
    
   <table class="table table-hover table-fixed mt-5" id="myTable">
@@ -84,8 +86,8 @@
         <% } %>
       </tbody>
     </table>
-
-
+    <%}%>
+    
     <% for(var i =0;i<brands.length;i++) { %>
       <!-- Modal -->
   <div class="modal fade" id="editmodal<%=brands[i]._id%>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
