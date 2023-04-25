@@ -441,7 +441,7 @@ module.exports={
 
         const categoryId= req.params.id
         await categoryService.categoryListOrUnlist(categoryId)
-        res.redirect('/admin/CategoryList')
+        res.redirect('/admin/categoryList')
         
     } catch (error) {
         console.log(error);
