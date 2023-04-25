@@ -1,13 +1,14 @@
 const razorpay = require('razorpay')
-const dotenv = require('dotenv')
+const dotenv = require('dotenv').config();
 const crypto = require("crypto");
 
 const instance = new razorpay({
-    key_id: process.env.RAZORPAY_KEY_ID,
-    key_secret: process.env.RAZORPAY_KEY_SECRET,
+    key_id:process.env.RAZORPAY_KEY_ID,
+    key_secret:process.env.RAZORPAY_KEY_SECRET,
   });
 
 const generateRazorpay = async (orderId,total)=>{
+  
     total = parseInt(total)
     console.log(""+orderId);
     console.log(total);
@@ -26,7 +27,9 @@ const generateRazorpay = async (orderId,total)=>{
 }
 
 const verifyPayment = (razorResponse)=>{
-      console.log("verify");
+    //   console.log("verify heee");
+    //  console.log("heee util",process.env.RAZORPAY_KEY_ID);
+
     let hmac = crypto.createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
 
     hmac.update(razorResponse.razorpay_order_id + '|' + razorResponse.razorpay_payment_id)
