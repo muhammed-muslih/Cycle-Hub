@@ -304,6 +304,7 @@ module.exports={
         // console.log(message);
         const category= await categoryService.findAllCategory()
         // const oneCategory = await categoryService.findoneCategory(id)
+        console.log(category);
          res.render('adminview/CategoryList',{layout:"adminLayout",category,message,categoryClass})
         
     } catch (error) {

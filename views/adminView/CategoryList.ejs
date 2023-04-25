@@ -42,9 +42,9 @@
       </form> 
 </div>
 
-
-
 <!-- modal add category end -->
+<%if(category.length >0){%>
+
 <div  style="margin-top: 7rem;">
   
     <table class="table table-hover table-fixed" id="myTable">
@@ -74,6 +74,7 @@
       </tbody>
     </table>
   </div>
+  <%}%>
 
 
 <% for(var i=0;i<category.length;i++) {%>
