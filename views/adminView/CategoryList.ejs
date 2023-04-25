@@ -43,7 +43,7 @@
 </div>
 
 <!-- modal add category end -->
-<%if(category[0]){%>
+<%if(category.length > 0){%>
 
 <div  style="margin-top: 7rem;">
   
@@ -76,6 +76,7 @@
   </div>
   <%}%>
 
+  <%if(category.length > 0){%>
 
 <% for(var i=0;i<category.length;i++) {%>
 <!-- Modal -->
@@ -112,6 +113,7 @@
   </div>
 </div>
 
+<%}%>
 <%}%>
 
 
