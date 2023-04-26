@@ -3,7 +3,7 @@ const dotenv = require('dotenv').config();
 const crypto = require("crypto");
 
 const instance = new razorpay({
-    key_id:process.env.RAZORPAY_KEY_ID || "rzp_test_VS752rixDIPgT0",
+    key_id:process.env.RAZORPAY_KEY_ID,
     key_secret:process.env.RAZORPAY_KEY_SECRET,
   });
 
