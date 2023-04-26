@@ -517,8 +517,8 @@ module.exports={
         const productId = req.params.id
         console.log(productId);
         const product = await productService.findSingleProduct(productId)
-        console.log(product);
         product[0].price=product[0].price.toLocaleString('en-IN',{style:'currency',currency:'INR'})
+        console.log(product);
         res.render('adminView/singleproduct',{layout:"adminlayout",product})
         
     } catch (error) {
