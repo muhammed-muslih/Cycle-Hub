@@ -5,7 +5,7 @@ const  slugify = require('slugify')
 module.exports = {
     addCategory : async(categoryName)=>{
       const isList =true
-      await db.getDB().collection().insertOne({categoryName,isList})
+      await db.getDB().collection(collecton.category_collection).insertOne({categoryName,isList})
       
     },
 
