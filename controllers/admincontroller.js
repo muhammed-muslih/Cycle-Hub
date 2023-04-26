@@ -251,8 +251,8 @@ module.exports={
         }else{
 
             try{
-                // console.log("ctaegory add",req.files);
-                // console.log(req.body);
+                console.log("ctaegory add",req.files);
+                console.log(req.body);
                 let {productName,productId,productDescription,category,brand,price,quantity,variants}=req.body
                 console.log(variants);
                 console.log(brand[0]);
