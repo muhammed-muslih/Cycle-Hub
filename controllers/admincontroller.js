@@ -259,7 +259,7 @@ module.exports={
                 let isDelete = false
                 const images=[]
                 for(let i=0;i<req.files.length;i++){
-                    const {url} = (await cloudinary.uploader.upload(req.files[i].path))
+                    const {url} = await cloudinary.uploader.upload(req.files[i].path)
                     images.push(url)
                 }
                 await productService.addProduct(productName,productId,productDescription,category,brand,price,quantity,isDelete,images,variants)
