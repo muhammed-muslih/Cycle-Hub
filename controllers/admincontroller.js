@@ -519,7 +519,7 @@ module.exports={
         const product = await productService.findSingleProduct(productId)
         console.log(product);
         product[0].price=product[0].price.toLocaleString('en-IN',{style:'currency',currency:'INR'})
-        res.render('adminView/singleProduct',{layout:"adminlayout",product})
+        res.render('adminView/singleproduct',{layout:"adminlayout",product})
         
     } catch (error) {
 
@@ -537,7 +537,7 @@ module.exports={
         console.log("order");
         const orderClass='active'
         const orders = await orderService.findAllOrders()
-        // console.log(orders);
+        console.log(orders);
         for(var i=0;i<orders.length;i++){
            orders[i].grandTotal = orders[i].grandTotal.toLocaleString('en-IN',{style:'currency',currency:'INR'})
            orders[i].date =  orders[i].date.toLocaleString()
@@ -640,11 +640,11 @@ module.exports={
        console.log('banner');
         const bannerClass='active'
         const banners = await bannerService.findAllBanner()
+        console.log(banners);
         res.render('adminView/banner',{layout:"adminlayout",banners,bannerClass})
         
     } catch (error) {
         console.log(error);
-        
     }
 
    },
