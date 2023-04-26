@@ -31,7 +31,7 @@ app.use((req, res, next)=> {
   next();
 });
 app.use(session({
-  secret:process.env.SESSION_SECRET ,
+  secret:process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: true,
   cookie: { maxAge: 18000000 } 
