@@ -515,6 +515,7 @@ module.exports={
     try {
 
         const productId = req.params.id
+        console.log(productId);
         const product = await productService.findSingleProduct(productId)
         console.log(product);
         product[0].price=product[0].price.toLocaleString('en-IN',{style:'currency',currency:'INR'})
@@ -533,7 +534,7 @@ module.exports={
    renderOrderList : async(req,res)=>{
 
     try {
-
+        console.log("order");
         const orderClass='active'
         const orders = await orderService.findAllOrders()
         // console.log(orders);
@@ -636,7 +637,7 @@ module.exports={
    renderAddBanner : async (req,res)=>{
 
     try {
-
+       console.log('banner');
         const bannerClass='active'
         const banners = await bannerService.findAllBanner()
         res.render('adminView/banner',{layout:"adminlayout",banners,bannerClass})
@@ -745,7 +746,7 @@ module.exports={
    renderCouponPage : async (req,res)=>{
 
     try {
-
+        console.log("coupon");
         let message = req.query.message
         const couponClass = "active"
         await couponService.checkCouponExpired()
