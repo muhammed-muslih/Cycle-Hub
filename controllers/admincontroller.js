@@ -402,7 +402,7 @@ module.exports={
         await categoryService.findAllCategory(),
         await brandService.findAllBrand()
     ])
-    res.render('adminView/editProduct',{layout:"adminlayout",product,category,brand,productClass})
+    res.render('adminView/editProduct',{layout:"adminLayout",product,category,brand,productClass})
 
     }catch(err){
         console.log(err);
@@ -519,7 +519,7 @@ module.exports={
         const product = await productService.findSingleProduct(productId)
         product[0].price=product[0].price.toLocaleString('en-IN',{style:'currency',currency:'INR'})
         console.log(product);
-        res.render('adminView/singleproduct',{layout:"adminlayout",product})
+        res.render('adminView/singleproduct',{layout:"adminLayout",product})
         
     } catch (error) {
 
@@ -543,7 +543,7 @@ module.exports={
            orders[i].date =  orders[i].date.toLocaleString()
         }
          // console.log(orders);
-         res.render('adminView/orders',{layout:"adminlayout",orders,orderClass})
+         res.render('adminView/orders',{layout:"adminLayout",orders,orderClass})
         
     } catch (error) {
         console.log(error);
@@ -623,7 +623,7 @@ module.exports={
     
         }
         total=total.toLocaleString('en-IN',{style:'currency',currency:'INR'})
-        res.render('adminView/orderdetail',{layout:"adminlayout",orders,orderClass,total})
+        res.render('adminView/orderdetail',{layout:"adminLayout",orders,orderClass,total})
         
     } catch (error) {
 
@@ -641,7 +641,7 @@ module.exports={
         const bannerClass='active'
         const banners = await bannerService.findAllBanner()
         console.log(banners);
-        res.render('adminView/banner',{layout:"adminlayout",banners,bannerClass})
+        res.render('adminView/banner',{layout:"adminLayout",banners,bannerClass})
         
     } catch (error) {
         console.log(error);
@@ -714,7 +714,7 @@ module.exports={
         const brandClass='active'
         const brands = await brandService.findAllBrand()
         // console.log(brands);
-        res.render('adminView/brandBanner',{layout:"adminlayout", brandClass,brands})
+        res.render('adminView/brandBanner',{layout:"adminLayout", brandClass,brands})
         
     } catch (error) {
 
@@ -755,7 +755,7 @@ module.exports={
             coupons[i].createdDate = coupons[i].createdDate.toLocaleString()
             coupons[i].expiryDate =   coupons[i].expiryDate.toLocaleString()
         }
-        res.render('adminView/coupons',{layout:'adminlayout',couponClass,coupons,message})
+        res.render('adminView/coupons',{layout:'adminLayout',couponClass,coupons,message})
     
         
     } catch (error) {
@@ -822,7 +822,7 @@ module.exports={
            order.date = order.date.toLocaleString()
         
         });
-    res.render('adminView/salesReport',{layout:"adminlayout",salesClass,orders})
+    res.render('adminView/salesReport',{layout:"adminLayout",salesClass,orders})
         
     } catch (error) {
         console.log(error)
@@ -841,7 +841,7 @@ module.exports={
             order.date = order.date.toLocaleString()
             
         });
-       res.render('adminView/salesReport',{layout:"adminlayout",salesClass,orders})
+       res.render('adminView/salesReport',{layout:"adminLayout",salesClass,orders})
         
     } catch (error) {
         console.log(error);
