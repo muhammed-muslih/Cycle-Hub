@@ -105,7 +105,7 @@ module.exports = {
             const maxPrice=  parseInt(req.query.maxPrice) 
             const minPrice = parseInt(req.query.minPrice)  
             let page = req.query.page || 1
-            let limit = 9
+            let limit = 6
             let skip = (page-1)*limit
             const totalProduct = await productServices.totalProducts()
             const totalPage = Math.ceil(totalProduct/limit)
@@ -182,7 +182,7 @@ module.exports = {
             const userId= req.session.userId
   
             let page = req.query.page || 1
-            let limit = 9
+            let limit = 6
             let skip = (page-1)*limit
             const totalProduct = await productServices.totalProducts()
             const totalPage = Math.ceil(totalProduct/limit)
