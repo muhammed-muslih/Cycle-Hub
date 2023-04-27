@@ -422,7 +422,7 @@ module.exports={
         const {url} = await cloudinary.uploader.upload(req.files[i].path)
         images.push(url)
     }
-    console.log(images);
+    // console.log(images);
     const product = await productService.findProduct(productID)
     const newImages=[...product.images.slice(images.length),...images]
 
@@ -515,10 +515,10 @@ module.exports={
     try {
 
         const productId = req.params.id
-        console.log(productId);
+        // console.log(productId);
         const product = await productService.findSingleProduct(productId)
         product[0].price=product[0].price.toLocaleString('en-IN',{style:'currency',currency:'INR'})
-        console.log(product);
+        // console.log(product);
         res.render('adminView/singleproduct',{layout:"adminLayout",product})
         
     } catch (error) {
@@ -534,7 +534,7 @@ module.exports={
    renderOrderList : async(req,res)=>{
 
     try {
-        console.log("order");
+        // console.log("order");
         const orderClass='active'
         const orders = await orderService.findAllOrders()
         console.log(orders);
@@ -637,7 +637,7 @@ module.exports={
    renderAddBanner : async (req,res)=>{
 
     try {
-       console.log('banner');
+    //    console.log('banner');
         const bannerClass='active'
         const banners = await bannerService.findAllBanner()
         console.log(banners);
@@ -746,7 +746,7 @@ module.exports={
    renderCouponPage : async (req,res)=>{
 
     try {
-        console.log("coupon");
+        // console.log("coupon");
         let message = req.query.message
         const couponClass = "active"
         await couponService.checkCouponExpired()

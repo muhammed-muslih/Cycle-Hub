@@ -66,7 +66,7 @@ app.use(function(err, req, res, next) {
   res.render('error');  
 });
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT;
 app.listen(PORT,function(err){
   if(err) console.log('error in connecting server');
   console.log(`Server listening on Port ${PORT}`.bgMagenta);

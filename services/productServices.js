@@ -175,7 +175,7 @@ module.exports={
     },
 
     newArrivals : async ()=>{
-        const products = await db.getDB().collection(collecton.product_collection).find({}).sort({date:-1}).limit(8).toArray()
+        const products = await db.getDB().collection(collecton.product_collection).find({}).sort({date:-1}).limit(4).toArray()
         return products
     },
 
