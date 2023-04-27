@@ -246,13 +246,13 @@
 
 
  
-                              <%if(currentPage == 1){%>
+                              <%if(totalPage == 1){%>
                                 <a href="" class= 'active'>1</a>
 
                                 <%} else{%>
 
                                 <%for(var i = 1;i<=totalPage;i++){%>
-                                     <a href="?page=<%=i%>" class="<%=i===currentPage ? 'active' : '' %>"><%=i%></a>
+                                     <a href="?page=<%=i%>" class="<%=i===currentPage ? 'active' : '' %> text-dark"><%=i%></a>
                                 <%}%>
                                 <%}%>
 
