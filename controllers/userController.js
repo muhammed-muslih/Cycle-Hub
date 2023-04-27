@@ -121,7 +121,7 @@ module.exports = {
                     products[i].price = products[i].price.toLocaleString('en-IN', { style: 'currency', currency: 'INR' })
                   }
                   sortMessage=`₹${minPrice} - ₹${maxPrice}`
-                res.render('userView/shopePage',{products,category,brands,user,loggedIn:req.session.loggedIn,userId,currentPage,totalPage,sortMessage,shoppClass})
+                res.render('userView/shopePage',{products,category,brands,user,loggedIn:req.session.loggedIn,userId,currentPage,totalPage:1,sortMessage,shoppClass})
     
             }else if(categoryId){
                 const products = await productServices.findCategoryProduct(categoryId,skip,limit)
@@ -131,7 +131,7 @@ module.exports = {
                     products[i].price = products[i].price.toLocaleString('en-IN', { style: 'currency', currency: 'INR' });
                   }
                   
-                res.render('userView/shopePage',{products,category,brands,user,loggedIn:req.session.loggedIn, userId,currentPage,totalPage,sortMessage,shoppClass})
+                res.render('userView/shopePage',{products,category,brands,user,loggedIn:req.session.loggedIn, userId,currentPage,totalPage:1,sortMessage,shoppClass})
     
             }else if(brandId){
                 const products = await productServices.findBrandProduct(brandId,skip,limit)
@@ -140,7 +140,7 @@ module.exports = {
                 for (let i = 0; i < products.length; i++) {
                     products[i].price = products[i].price.toLocaleString('en-IN', { style: 'currency', currency: 'INR' });
                   }
-                res.render('userView/shopePage',{products,category,brands,user,loggedIn:req.session.loggedIn,userId,currentPage,totalPage,sortMessage,shoppClass})
+                res.render('userView/shopePage',{products,category,brands,user,loggedIn:req.session.loggedIn,userId,currentPage,totalPage:1,sortMessage,shoppClass})
     
             }else if(searchkey){
                 console.log(req.query.searchkey);
@@ -151,7 +151,7 @@ module.exports = {
                     products[i].price = products[i].price.toLocaleString('en-IN', { style: 'currency', currency: 'INR' })
                   }
                 //   console.log(products);
-                res.render('userView/shopePage',{products,category,brands,user,loggedIn:req.session.loggedIn,userId,currentPage,totalPage,sortMessage,shoppClass})
+                res.render('userView/shopePage',{products,category,brands,user,loggedIn:req.session.loggedIn,userId,currentPage,totalPage:1,sortMessage,shoppClass})
         
             
                 }else{
